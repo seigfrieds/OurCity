@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  format-and-lint-webapp:
+    runs-on: ubuntu-latest
+    container:
+      image: node:22-slim
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        working-directory: webapp
+        run: npm ci
+
+      - name: Run formatter
+        working-directory: webapp
+        run: npm run format
+
+      - name: Run lint
+        working-directory: webapp
+        run: npm run lint
+
+  format-and-lint-server:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:9.0
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get CSharpier formatter
+        working-directory: server
+        run: dotnet tool restore
+
+      - name: Run CSharpier formatter
+        working-directory: server
+        run: dotnet tool run csharpier check .
+
+      - name: Run analyzers on code (lint)
+        working-directory: server
+        run: dotnet build -p lint=true
+
+  test-webapp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: webapp
+        run: docker build -f Dockerfile.prod --target build -t webapp:latest .
+
+      - name: Run tests on Docker container
+        working-directory: webapp
+        run: docker run --rm webapp:latest npm run test
+
+  test-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: server
+        run: docker build -f Dockerfile.prod --target build -t server:latest .
+
+      # wormholing docker socket for testcontainers to work..
+      # feels ugly but its mentioned in their docs https://dotnet.testcontainers.org/dind/
+      - name: Run tests on Docker container
+        working-directory: server
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock server:latest dotnet test
