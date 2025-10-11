@@ -14,7 +14,6 @@ try
 
     //run migrations
     using var dbContext = new AppDbContext(options);
-    dbContext.Database.EnsureCreated();
     dbContext.Database.Migrate();
 
     Console.WriteLine("Migration complete");
