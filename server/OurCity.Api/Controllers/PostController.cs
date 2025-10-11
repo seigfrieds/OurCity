@@ -19,8 +19,8 @@ public class PostController : ControllerBase
 
     [HttpGet]
     [Route("Posts")]
-    [EndpointSummary("This is a summary for GetPosts")]
-    [EndpointDescription("This is a description for GetPosts")]
+    [EndpointSummary("Get all posts")]
+    [EndpointDescription("Gets a list of all posts")]
     [ProducesResponseType(typeof(List<PostResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPosts()
     {
