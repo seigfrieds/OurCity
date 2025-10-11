@@ -1,14 +1,14 @@
 <!-- Where the JS/TS goes -->
 <script setup lang="ts">
-import { ref } from "vue";
-import config from "./config.ts";
-import { useRouter } from "vue-router";
+// import { ref } from "vue";
+// import config from "./config.ts";
+// import { useRouter } from "vue-router";
 
-interface TypeScriptType {
-  prop: string;
-}
+// interface TypeScriptType {
+//   prop: string;
+// }
 
-const router = useRouter();
+// const router = useRouter();
 </script>
 
 <!-- Where the HTML goes -->
@@ -39,13 +39,22 @@ main {
 <style>
 /* Global styles - not scoped so they apply to the entire app */
 * {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 }
 
 /* Fallback for browsers that don't support variable fonts */
 @supports not (font-variation-settings: normal) {
   * {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
   }
 }
 </style>
