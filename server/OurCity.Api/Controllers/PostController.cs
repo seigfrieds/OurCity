@@ -34,9 +34,9 @@ public class PostController : ControllerBase
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostRequestDto postDto)
+    public async Task<IActionResult> CreatePost(PostRequestDto postRequestDto)
     {
-        var post = await _postService.CreatePost(postDto);
+        var post = await _postService.CreatePost(postRequestDto);
 
         if (!post.IsSuccess)
         {
