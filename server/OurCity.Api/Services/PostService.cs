@@ -1,12 +1,15 @@
 using OurCity.Api.Infrastructure;
+using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services.Dtos;
 using OurCity.Api.Services.Mappings;
+using OurCity.Api.Common; 
 
 namespace OurCity.Api.Services;
 
 public interface IPostService
 {
     Task<IEnumerable<PostDto>> GetPosts();
+    Task<Result<PostDto>> CreatePost(PostDto postDto);
 }
 
 public class PostService : IPostService
@@ -21,5 +24,21 @@ public class PostService : IPostService
     public async Task<IEnumerable<PostDto>> GetPosts()
     {
         return (await _postRepository.GetAllPosts()).ToDtos();
+    }
+
+    public async Task<Result<PostDto>> CreatePost(PostDto postDto)
+    {
+        if (postDto == null)
+        {
+            return Result<PostDto>.Failure("Invalid Post Data.");
+        }
+
+        var post = new Post
+        {
+            Title = postDto.Title,
+            Description = postDto.Description
+        };
+        var createdPost = await _postRepository.CreatePost(post);
+        return Result<PostDto>.Success(createdPost.ToDto());
     }
 }
