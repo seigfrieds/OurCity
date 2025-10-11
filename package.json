@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vee-validate/zod": "^4.15.1",
+    "vee-validate": "^4.15.1"
+  }
+}
