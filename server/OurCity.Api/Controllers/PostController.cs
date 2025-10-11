@@ -24,7 +24,7 @@ public class PostController : ControllerBase
     [Route("Posts")]
     [EndpointSummary("This is a summary for GetPosts")]
     [EndpointDescription("This is a description for GetPosts")]
-    [ProducesResponseType(typeof(List<PostDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PostResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPosts()
     {
         var posts = await _postService.GetPosts();
@@ -36,8 +36,8 @@ public class PostController : ControllerBase
     [Route("Posts")]
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
-    [ProducesResponseType(typeof(PostDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostDto postDto)
+    [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreatePost(PostRequestDto postDto, int id)
     {
         var post = await _postService.CreatePost(postDto);
 

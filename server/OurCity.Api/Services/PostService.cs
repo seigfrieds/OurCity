@@ -8,8 +8,8 @@ namespace OurCity.Api.Services;
 
 public interface IPostService
 {
-    Task<IEnumerable<PostDto>> GetPosts();
-    Task<Result<PostDto>> CreatePost(PostDto postDto);
+    Task<IEnumerable<PostResponseDto>> GetPosts();
+    Task<Result<PostResponseDto>> CreatePost(PostRequestDto postDto);
 }
 
 public class PostService : IPostService
@@ -21,16 +21,16 @@ public class PostService : IPostService
         _postRepository = postRepository;
     }
 
-    public async Task<IEnumerable<PostDto>> GetPosts()
+    public async Task<IEnumerable<PostResponseDto>> GetPosts()
     {
         return (await _postRepository.GetAllPosts()).ToDtos();
     }
 
-    public async Task<Result<PostDto>> CreatePost(PostDto postDto)
+    public async Task<Result<PostResponseDto>> CreatePost(PostRequestDto postDto)
     {
         if (postDto == null)
         {
-            return Result<PostDto>.Failure("Invalid Post Data.");
+            return Result<PostResponseDto>.Failure("Invalid Post Data.");
         }
 
         var post = new Post
@@ -39,6 +39,6 @@ public class PostService : IPostService
             Description = postDto.Description
         };
         var createdPost = await _postRepository.CreatePost(post);
-        return Result<PostDto>.Success(createdPost.ToDto());
+        return Result<PostResponseDto>.Success(createdPost.ToDto());
     }
 }

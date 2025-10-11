@@ -45,7 +45,7 @@ public class ExampleController : ControllerBase
     [Route("Posts")]
     [EndpointSummary("This is a summary for GetPosts")]
     [EndpointDescription("This is a description for GetPosts")]
-    [ProducesResponseType(typeof(List<PostDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<PostResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPosts()
     {
         var posts = await _postService.GetPosts();
