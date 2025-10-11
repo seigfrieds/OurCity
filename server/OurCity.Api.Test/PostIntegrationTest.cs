@@ -39,4 +39,18 @@ public class PostIntegrationTest : IAsyncLifetime
         var posts = await postService.GetPosts();
         Assert.Empty(posts);
     }
+
+    [Fact]
+    public async Task CreatePostShouldAddAndReturnPost()
+    {
+        var postService = new PostService(new PostRepository(_dbContext));
+        var post = await postService.CreatePost(new Services.Dtos.PostDto
+        {
+            Title = "Test Post",
+            Description = "This is a test post"
+        });
+        
+        Assert.Same(post.Data?.Title, "Test Post");
+        Assert.Same(post.Data?.Description, "This is a test post");
+    }
 }
