@@ -28,11 +28,6 @@ public class PostService : IPostService
 
     public async Task<Result<PostResponseDto>> CreatePost(PostRequestDto postRequestDto)
     {
-        if (postRequestDto == null)
-        {
-            return Result<PostResponseDto>.Failure("Invalid Post Data.");
-        }
-
         var post = new Post { Title = postRequestDto.Title, Description = postRequestDto.Description };
         var createdPost = await _postRepository.CreatePost(post);
         return Result<PostResponseDto>.Success(createdPost.ToDto());
