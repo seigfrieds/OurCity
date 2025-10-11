@@ -1,0 +1,44 @@
+services:
+  ourcity.api.prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env.production
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - ourcity.postgres.prod
+  ourcity.postgres.prod:
+    image: postgres:16.10
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ourcity
+    ports:
+      - "9100:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  ourcity.migrate.prod:
+    profiles: [ "migrate" ]
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      ourcity.postgres.prod:
+        condition: service_healthy
+    environment:
+      #TODO: I dont like this
+      CONNECTION_STRING: "Host=ourcity.postgres.prod;Port=5432;Username=postgres;Password=postgres;Database=ourcity"
+    restart: no
+
+volumes:
+  postgres_data:
