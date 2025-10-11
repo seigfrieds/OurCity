@@ -22,7 +22,7 @@ public class PostRepository : IPostRepository
     {
         return await _appDbContext.Posts.ToListAsync();
     }
- 
+
     public async Task<Post> CreatePost(Post post)
     {
         _appDbContext.Posts.Add(post);
