@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OurCity.Api.Services;
-using OurCity.Api.Services.Dtos;
+using OurCity.Api.Common.Dtos;
 
 namespace OurCity.Api.Controllers;
 
@@ -52,9 +52,9 @@ public class PostController : ControllerBase
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostCreateRequestDto postRequestDto)
+    public async Task<IActionResult> CreatePost(PostCreateRequestDto postCreateRequestDto)
     {
-        var post = await _postService.CreatePost(postRequestDto);
+        var post = await _postService.CreatePost(postCreateRequestDto);
 
         return CreatedAtAction(nameof(GetPosts), new { id = post.Data?.Id }, post.Data);
     }
@@ -65,9 +65,9 @@ public class PostController : ControllerBase
     [EndpointDescription("Updates an existing post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePost(int postId, PostUpdateRequestDto postRequestDto)
+    public async Task<IActionResult> UpdatePost(int postId, PostUpdateRequestDto postUpdateRequestDto)
     {
-        var post = await _postService.UpdatePost(postId, postRequestDto);
+        var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
         
         if (!post.IsSuccess)
         {
