@@ -1,4 +1,4 @@
-namespace OurCity.Api.Services;
+namespace OurCity.Api.Common;
 
 public class Result<T>
 {
