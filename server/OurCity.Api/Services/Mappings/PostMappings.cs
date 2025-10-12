@@ -19,7 +19,7 @@ public static class PostMappings
             Description = post.Description,
             Votes = post.Votes,
             Location = post.Location,
-            ImageUrls = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
+            Images = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
         };
     }
 
