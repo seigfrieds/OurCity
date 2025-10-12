@@ -19,7 +19,7 @@ public static class PostMappings
             Description = post.Description,
             Votes = post.Votes,
             Location = post.Location,
-            ImageUrls = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList()
+            ImageUrls = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
         };
     }
 
@@ -30,9 +30,11 @@ public static class PostMappings
             Title = postRequestDto.Title,
             Description = postRequestDto.Description,
             Location = postRequestDto.Location,
-            Images = postRequestDto.Images.Select(imgDto => new Image { Url = imgDto.Url }).ToList(),
+            Images = postRequestDto
+                .Images.Select(imgDto => new Image { Url = imgDto.Url })
+                .ToList(),
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
     }
 }

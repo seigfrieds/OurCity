@@ -9,5 +9,4 @@ public class Image
 
     public int PostId { get; set; }
     public Post? Post { get; set; }
-
 }

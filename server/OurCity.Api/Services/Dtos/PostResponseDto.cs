@@ -14,5 +14,5 @@ public class PostResponseDto
 
     public required string? Location { get; set; }
 
-    public required List<ImageDto> ImageUrls { get; set; } = new(); 
+    public required List<ImageDto> ImageUrls { get; set; } = new();
 }
