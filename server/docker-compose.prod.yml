@@ -1,5 +1,6 @@
 services:
   ourcity.api.prod:
+    container_name: ourcity.api.prod
     build:
       context: .
       dockerfile: Dockerfile.prod
@@ -12,6 +13,7 @@ services:
     depends_on:
       - ourcity.postgres.prod
   ourcity.postgres.prod:
+    container_name: ourcity.postgres.prod
     image: postgres:16.10
     restart: always
     environment:
@@ -28,6 +30,7 @@ services:
       timeout: 5s
       retries: 5
   ourcity.migrate.prod:
+    container_name: ourcity.migrate.prod
     profiles: [ "migrate" ]
     build:
       context: .
