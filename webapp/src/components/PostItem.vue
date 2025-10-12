@@ -54,7 +54,11 @@ export default {
         <div v-if="showVotes" class="post-votes">
           <VoteButton icon="pi pi-chevron-up" class="vote-btn upvote" @click.prevent="upvote" />
           <div class="vote-count">{{ votes }}</div>
-          <VoteButton icon="pi pi-chevron-down" class="vote-btn downvote" @click.prevent="downvote" />
+          <VoteButton
+            icon="pi pi-chevron-down"
+            class="vote-btn downvote"
+            @click.prevent="downvote"
+          />
         </div>
         <div class="post-text-content">
           <h2 class="post-title">{{ title }}</h2>

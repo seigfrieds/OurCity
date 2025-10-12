@@ -14,7 +14,7 @@ import "@/assets/styles/forms.css";
 type LoginFormValues = {
   email: string;
   password: string;
-}
+};
 
 const initialValues = {
   email: "",

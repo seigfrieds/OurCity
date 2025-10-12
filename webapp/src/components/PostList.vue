@@ -2,7 +2,7 @@
 import type { PropType } from "vue";
 import PostItem from "./PostItem.vue";
 
-interface PostProps{
+interface PostProps {
   id: string | number;
   title: string;
   location: string;

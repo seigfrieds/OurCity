@@ -17,11 +17,11 @@ type CreatePostFormValues = {
   location: string;
   description: string;
   image: File | undefined;
-}
+};
 
 type FileUploadEvent = {
   files: File[];
-}
+};
 
 const initialValues = {
   title: "",
@@ -47,7 +47,10 @@ const onFormSubmit = (values: unknown) => {
   // Here you would typically make an API call to create the post
 };
 
-const onFileSelect = (event: FileUploadEvent, setFieldValue: (name: string, value: File | undefined) => void) => {
+const onFileSelect = (
+  event: FileUploadEvent,
+  setFieldValue: (name: string, value: File | undefined) => void,
+) => {
   const file = event?.files && event.files[0];
   if (file) setFieldValue("image", file);
 };
