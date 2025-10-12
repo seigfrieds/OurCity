@@ -23,14 +23,14 @@ public static class PostMappings
         };
     }
 
-    public static Post ToEntity(this PostRequestDto postRequestDto)
+    public static Post CreateDtoToEntity(this PostCreateRequestDto postCreateRequestDto)
     {
         return new Post
         {
-            Title = postRequestDto.Title,
-            Description = postRequestDto.Description,
-            Location = postRequestDto.Location,
-            Images = postRequestDto
+            Title = postCreateRequestDto.Title,
+            Description = postCreateRequestDto.Description,
+            Location = postCreateRequestDto.Location,
+            Images = postCreateRequestDto
                 .Images.Select(imgDto => new Image { Url = imgDto.Url })
                 .ToList(),
             CreatedAt = DateTime.UtcNow,
