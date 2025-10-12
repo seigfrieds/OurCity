@@ -11,6 +11,11 @@ import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
 
+type LoginFormValues = {
+  email: string;
+  password: string;
+}
+
 const initialValues = {
   email: "",
   password: "",
@@ -23,8 +28,9 @@ const resolver = toTypedSchema(
   }),
 );
 
-const onFormSubmit = (values: any) => {
-  console.log("Login submit", values);
+const onFormSubmit = (values: unknown) => {
+  const inputtedValues = values as LoginFormValues;
+  console.log("Login submit", inputtedValues);
   // TODO: call API client to authenticate
 };
 </script>
@@ -41,7 +47,7 @@ const onFormSubmit = (values: any) => {
           <Form
             :initialValues="initialValues"
             :resolver="resolver"
-            v-slot="{ values, errors }"
+            v-slot="{ errors }"
             @submit="onFormSubmit"
           >
             <div class="field-common">

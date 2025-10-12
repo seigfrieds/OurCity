@@ -3,10 +3,10 @@ import Card from "primevue/card";
 import Button from "primevue/button";
 
 export default {
-  name: "Post",
+  name: "PostItem",
   components: {
     Card,
-    Button,
+    VoteButton: Button,
   },
   props: {
     title: {
@@ -52,9 +52,9 @@ export default {
     <template #content>
       <div class="post-content">
         <div v-if="showVotes" class="post-votes">
-          <Button icon="pi pi-chevron-up" class="vote-btn upvote" @click.prevent="upvote" />
+          <VoteButton icon="pi pi-chevron-up" class="vote-btn upvote" @click.prevent="upvote" />
           <div class="vote-count">{{ votes }}</div>
-          <Button icon="pi pi-chevron-down" class="vote-btn downvote" @click.prevent="downvote" />
+          <VoteButton icon="pi pi-chevron-down" class="vote-btn downvote" @click.prevent="downvote" />
         </div>
         <div class="post-text-content">
           <h2 class="post-title">{{ title }}</h2>

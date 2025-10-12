@@ -3,6 +3,12 @@ import { defineComponent } from "vue";
 import Menubar from "primevue/menubar";
 import InputText from "primevue/inputtext";
 
+type MenuItem = {
+  label: string;
+  icon: string;
+  command: () => void;
+};
+
 export default defineComponent({
   name: "PageHeader",
   components: {
@@ -15,7 +21,7 @@ export default defineComponent({
     };
   },
   computed: {
-    items(): any[] {
+    items(): MenuItem[] {
       return [
         {
           label: "Create",

@@ -11,6 +11,12 @@ import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
 
+type RegisterFormValues = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const initialValues = {
   email: "",
   password: "",
@@ -33,8 +39,9 @@ const resolver = toTypedSchema(
     }),
 );
 
-const onFormSubmit = (values: any) => {
-  console.log("Register submit", values);
+const onFormSubmit = (values: unknown) => {
+  const inputtedValues = values as RegisterFormValues;
+  console.log("Register submit", inputtedValues);
   // TODO: call API to register user
   // after success: router.push('/login') or auto-login
 };
@@ -52,7 +59,7 @@ const onFormSubmit = (values: any) => {
           <Form
             :initialValues="initialValues"
             :resolver="resolver"
-            v-slot="{ values, errors }"
+            v-slot="{ errors }"
             @submit="onFormSubmit"
           >
             <div class="field field-common">

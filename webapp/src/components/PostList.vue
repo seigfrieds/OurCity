@@ -1,8 +1,8 @@
 <script lang="ts">
 import type { PropType } from "vue";
-import Post from "./Post.vue";
+import PostItem from "./PostItem.vue";
 
-interface PostItem {
+interface PostProps{
   id: string | number;
   title: string;
   location: string;
@@ -14,11 +14,11 @@ interface PostItem {
 export default {
   name: "PostList",
   components: {
-    Post,
+    PostItem,
   },
   props: {
     posts: {
-      type: Array as PropType<PostItem[]>,
+      type: Array as PropType<PostProps[]>,
       required: true,
     },
   },
@@ -27,7 +27,7 @@ export default {
 
 <template>
   <div class="post-list">
-    <Post
+    <PostItem
       v-for="post in posts"
       :key="post.id"
       :title="post.title"
