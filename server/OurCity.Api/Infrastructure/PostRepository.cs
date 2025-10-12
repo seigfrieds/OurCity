@@ -6,6 +6,7 @@ namespace OurCity.Api.Infrastructure;
 public interface IPostRepository
 {
     Task<IEnumerable<Post>> GetAllPosts();
+    Task<Post> GetPostById(int postId);
     Task<Post> CreatePost(Post post);
 }
 
@@ -21,6 +22,11 @@ public class PostRepository : IPostRepository
     public async Task<IEnumerable<Post>> GetAllPosts()
     {
         return await _appDbContext.Posts.ToListAsync();
+    }
+
+    public async Task<Post> GetPostById(int postId)
+    {
+        return await _appDbContext.Posts.FindAsync(postId);
     }
 
     public async Task<Post> CreatePost(Post post)

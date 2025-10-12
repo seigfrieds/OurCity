@@ -29,6 +29,24 @@ public class PostController : ControllerBase
         return Ok(posts);
     }
 
+    [HttpGet]
+    [Route("Posts/{postId}")]
+    [EndpointSummary("Get a post by ID")]
+    [EndpointDescription("Gets a post by its ID")]
+    [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetPostById(int postId)
+    {
+        var post = await _postService.GetPostById(postId);
+        
+        if (!post.IsSuccess)
+        {
+            return NotFound(post.Error);
+        }
+
+        return Ok(post.Data);
+    }
+
     [HttpPost]
     [Route("Posts")]
     [EndpointSummary("Create a new post")]
