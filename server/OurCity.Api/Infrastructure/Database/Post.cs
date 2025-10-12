@@ -6,7 +6,10 @@ public class Post
     public required string Title { get; set; }
     public required string Description { get; set; }
     public int Votes { get; set; } = 0;
-    public string Location { get; set; } = "";
-    public List<string>? ImageUrls { get; set; } = new();
-    public List<Comment>? Comments { get; set; } = new();
+    public string? Location { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+
+    public List<Image> Images { get; set; } = new();
+    public List<Comment> Comments { get; set; } = new();
 }
