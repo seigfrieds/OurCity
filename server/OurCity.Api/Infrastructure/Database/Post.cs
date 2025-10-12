@@ -2,9 +2,14 @@ namespace OurCity.Api.Infrastructure.Database;
 
 public class Post
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required string Title { get; set; }
-    public string? Description { get; set; }
+    public required string Description { get; set; }
+    public int Votes { get; set; } = 0;
+    public string? Location { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
-    public List<Comment>? Comments { get; set; }
+    public List<Image> Images { get; set; } = new();
+    public List<Comment> Comments { get; set; } = new();
 }

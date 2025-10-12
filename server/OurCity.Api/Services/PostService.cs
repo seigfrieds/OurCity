@@ -1,4 +1,6 @@
+using OurCity.Api.Common;
 using OurCity.Api.Infrastructure;
+using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services.Dtos;
 using OurCity.Api.Services.Mappings;
 
@@ -6,7 +8,8 @@ namespace OurCity.Api.Services;
 
 public interface IPostService
 {
-    Task<IEnumerable<PostDto>> GetPosts();
+    Task<IEnumerable<PostResponseDto>> GetPosts();
+    Task<Result<PostResponseDto>> CreatePost(PostRequestDto postRequestDto);
 }
 
 public class PostService : IPostService
@@ -18,8 +21,14 @@ public class PostService : IPostService
         _postRepository = postRepository;
     }
 
-    public async Task<IEnumerable<PostDto>> GetPosts()
+    public async Task<IEnumerable<PostResponseDto>> GetPosts()
     {
         return (await _postRepository.GetAllPosts()).ToDtos();
+    }
+
+    public async Task<Result<PostResponseDto>> CreatePost(PostRequestDto postRequestDto)
+    {
+        var createdPost = await _postRepository.CreatePost(postRequestDto.ToEntity());
+        return Result<PostResponseDto>.Success(createdPost.ToDto());
     }
 }

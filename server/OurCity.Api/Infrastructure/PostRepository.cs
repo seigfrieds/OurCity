@@ -6,6 +6,7 @@ namespace OurCity.Api.Infrastructure;
 public interface IPostRepository
 {
     Task<IEnumerable<Post>> GetAllPosts();
+    Task<Post> CreatePost(Post post);
 }
 
 public class PostRepository : IPostRepository
@@ -20,5 +21,12 @@ public class PostRepository : IPostRepository
     public async Task<IEnumerable<Post>> GetAllPosts()
     {
         return await _appDbContext.Posts.ToListAsync();
+    }
+
+    public async Task<Post> CreatePost(Post post)
+    {
+        _appDbContext.Posts.Add(post);
+        await _appDbContext.SaveChangesAsync();
+        return post;
     }
 }
