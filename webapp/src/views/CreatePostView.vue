@@ -66,7 +66,7 @@ const onFileSelect = (
         </template>
         <template #content>
           <Form
-            v-slot="{ setFieldValue, values, errors }"
+            v-slot="{ setFieldValue, errors }"
             :initialValues="initialValues"
             :resolver="resolver"
             @submit="onFormSubmit"
