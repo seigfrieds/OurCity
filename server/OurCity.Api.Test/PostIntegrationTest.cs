@@ -54,5 +54,8 @@ public class PostIntegrationTest : IAsyncLifetime
 
         Assert.Same(post.Data?.Title, "Test Post");
         Assert.Same(post.Data?.Description, "This is a test post");
+        Assert.Equal(post.Data?.Votes, 0);
+        Assert.Null(post.Data?.Location);
+        Assert.Empty(post.Data?.Images ?? []);
     }
 }
