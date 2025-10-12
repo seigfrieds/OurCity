@@ -52,10 +52,28 @@ public class PostController : ControllerBase
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostRequestDto postRequestDto)
+    public async Task<IActionResult> CreatePost(PostCreateRequestDto postRequestDto)
     {
         var post = await _postService.CreatePost(postRequestDto);
 
         return CreatedAtAction(nameof(GetPosts), new { id = post.Data?.Id }, post.Data);
+    }
+
+    [HttpPut]
+    [Route("Posts/{postId}")]
+    [EndpointSummary("Update an existing post")]
+    [EndpointDescription("Updates an existing post with the provided data")]
+    [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdatePost(int postId, PostUpdateRequestDto postRequestDto)
+    {
+        var post = await _postService.UpdatePost(postId, postRequestDto);
+        
+        if (!post.IsSuccess)
+        {
+            return NotFound(post.Error);
+        }
+
+        return Ok(post.Data);
     }
 }

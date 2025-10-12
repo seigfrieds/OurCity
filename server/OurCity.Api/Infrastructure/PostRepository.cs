@@ -8,6 +8,7 @@ public interface IPostRepository
     Task<IEnumerable<Post>> GetAllPosts();
     Task<Post> GetPostById(int postId);
     Task<Post> CreatePost(Post post);
+    Task<Post> UpdatePost(Post post);
 }
 
 public class PostRepository : IPostRepository
@@ -32,6 +33,13 @@ public class PostRepository : IPostRepository
     public async Task<Post> CreatePost(Post post)
     {
         _appDbContext.Posts.Add(post);
+        await _appDbContext.SaveChangesAsync();
+        return post;
+    }
+
+    public async Task<Post> UpdatePost(Post post)
+    {
+        _appDbContext.Update(post);
         await _appDbContext.SaveChangesAsync();
         return post;
     }

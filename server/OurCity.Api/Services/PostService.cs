@@ -1,4 +1,3 @@
-using OurCity.Api.Common;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services.Dtos;
@@ -41,9 +40,22 @@ public class PostService : IPostService
         return Result<PostResponseDto>.Success(post.ToDto());
     }
 
-    public async Task<Result<PostResponseDto>> CreatePost(PostRequestDto postRequestDto)
+    public async Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postRequestDto)
     {
-        var createdPost = await _postRepository.CreatePost(postRequestDto.ToEntity());
+        var createdPost = await _postRepository.CreatePost(postRequestDto.CreateDtoToEntity());
         return Result<PostResponseDto>.Success(createdPost.ToDto());
+    }
+
+    public async Task<Result<PostResponseDto>> UpdatePost(int postId, PostUpdateRequestDto postRequestDto)
+    {
+        var post = await _postRepository.GetPostById(postId);
+
+        if (post == null)
+        {
+            return Result<PostResponseDto>.Failure("Post does not exist");
+        }
+
+        var updatedPost = await _postRepository.UpdatePost(postRequestDto.UpdateDtoToEntity(post));
+        return Result<PostResponseDto>.Success(updatedPost.ToDto());
     }
 }
