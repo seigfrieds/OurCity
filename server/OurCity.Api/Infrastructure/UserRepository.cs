@@ -1,0 +1,64 @@
+using Microsoft.EntityFrameworkCore;
+using OurCity.Api.Infrastructure.Database;
+
+namespace OurCity.Api.Infrastructure;
+
+public interface IUserRepository
+{
+    Task<IEnumerable<User>> GetAllUsers();
+    Task<User?> GetUserById(int id);
+    Task<User> CreateUser(User user);
+    Task<User> UpdateUser(User user);
+    Task DeleteUser(int id);
+}
+
+public class UserRepository : IUserRepository
+{
+    private readonly AppDbContext _appDbContext;
+
+    public UserRepository(AppDbContext appDbContext)
+    {
+        _appDbContext = appDbContext;
+    }
+
+    public async Task<IEnumerable<User>> GetAllUsers()
+    {
+        return await _appDbContext.Users
+            .Where(u => !u.IsDeleted)  // exclude soft-deleted users
+            .OrderBy(u => u.Id)
+            .ToListAsync();
+    }
+
+    public async Task<User?> GetUserById(int id)
+    {
+        return await _appDbContext.Users
+            .Where(u => u.Id == id && !u.IsDeleted)  // exclude soft-deleted users
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<User> CreateUser(User user)
+    {
+        _appDbContext.Users.Add(user);
+        await _appDbContext.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<User> UpdateUser(User user)
+    {
+        _appDbContext.Users.Update(user);
+        await _appDbContext.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task DeleteUser(int id)
+    {
+        var user = await _appDbContext.Users.FindAsync(id);
+        if (user != null)
+        {
+            // soft deletion in db (mark User as deleted)
+            user.IsDeleted = true;
+            user.UpdatedAt = DateTime.UtcNow;
+            await _appDbContext.SaveChangesAsync();
+        }
+    }
+}
