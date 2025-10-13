@@ -11,6 +11,7 @@ public interface IPostService
     Task<Result<PostResponseDto>> GetPostById(int postId);
     Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postRequestDto);
     Task<Result<PostResponseDto>> UpdatePost(int postId, PostUpdateRequestDto postRequestDto);
+    Task<Result<PostResponseDto>> DeletePost(int postId);
 }
 
 public class PostService : IPostService
@@ -57,5 +58,18 @@ public class PostService : IPostService
 
         var updatedPost = await _postRepository.UpdatePost(postUpdateRequestDto.UpdateDtoToEntity(post));
         return Result<PostResponseDto>.Success(updatedPost.ToDto());
+    }
+
+    public async Task<Result<PostResponseDto>> DeletePost(int postId)
+    {
+        var post = await _postRepository.GetPostById(postId);
+
+        if (post == null)
+        {
+            return Result<PostResponseDto>.Failure("Post does not exist");
+        }
+
+        await _postRepository.DeletePost(post);
+        return Result<PostResponseDto>.Success(post.ToDto());
     }
 }

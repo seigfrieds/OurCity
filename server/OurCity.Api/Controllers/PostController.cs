@@ -74,4 +74,22 @@ public class PostController : ControllerBase
 
         return Ok(post.Data);
     }
+
+    [HttpDelete]
+    [Route("{postId}")]
+    [EndpointSummary("Delete a post")]
+    [EndpointDescription("Deletes a post by its ID")]
+    [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeletePost(int postId)
+    {
+        var post = await _postService.DeletePost(postId);
+
+        if (!post.IsSuccess)
+        {
+            return NotFound(post.Error);
+        }
+
+        return Ok(post.Data);
+    }
 }

@@ -9,6 +9,7 @@ public interface IPostRepository
     Task<Post> GetPostById(int postId);
     Task<Post> CreatePost(Post post);
     Task<Post> UpdatePost(Post post);
+    Task<Post> DeletePost(Post post); 
 }
 
 public class PostRepository : IPostRepository
@@ -42,5 +43,12 @@ public class PostRepository : IPostRepository
         _appDbContext.Update(post);
         await _appDbContext.SaveChangesAsync();
         return post;
+    }
+
+    public async Task<Post> DeletePost(Post post)
+    {
+        _appDbContext.Posts.Remove(post);
+        await _appDbContext.SaveChangesAsync();
+        return post; 
     }
 }
