@@ -1,5 +1,5 @@
-using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Common.Dtos.User;
+using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services.Mappings;
 
@@ -21,7 +21,7 @@ public static class UserMappings
             Posts = user.Posts.Select(post => post.ToDto()).ToList(),
             CreatedAt = user.CreatedAt,
             UpdatedAt = user.UpdatedAt,
-            IsDeleted = user.IsDeleted
+            IsDeleted = user.IsDeleted,
         };
     }
 
@@ -34,7 +34,7 @@ public static class UserMappings
             Email = userRequestDto.Email,
             DisplayName = userRequestDto.DisplayName,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
     }
 }

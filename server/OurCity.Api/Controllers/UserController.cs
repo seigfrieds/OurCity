@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using OurCity.Api.Services;
 using OurCity.Api.Common.Dtos.User;
+using OurCity.Api.Services;
 
 namespace OurCity.Api.Controllers;
 
 [ApiController]
 [Route("[controller]s")]
-public class UserController: ControllerBase
+public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
     private readonly IUserService _userService;

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OurCity.Api.Services;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Services;
 
 namespace OurCity.Api.Controllers;
 

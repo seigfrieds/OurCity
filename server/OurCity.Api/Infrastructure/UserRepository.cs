@@ -23,16 +23,16 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllUsers()
     {
-        return await _appDbContext.Users
-            .Where(u => !u.IsDeleted)  // exclude soft-deleted users
+        return await _appDbContext
+            .Users.Where(u => !u.IsDeleted) // exclude soft-deleted users
             .OrderBy(u => u.Id)
             .ToListAsync();
     }
 
     public async Task<User?> GetUserById(int id)
     {
-        return await _appDbContext.Users
-            .Where(u => u.Id == id && !u.IsDeleted)  // exclude soft-deleted users
+        return await _appDbContext
+            .Users.Where(u => u.Id == id && !u.IsDeleted) // exclude soft-deleted users
             .FirstOrDefaultAsync();
     }
 

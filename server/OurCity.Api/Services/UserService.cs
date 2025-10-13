@@ -1,6 +1,6 @@
 using OurCity.Api.Common;
-using OurCity.Api.Infrastructure;
 using OurCity.Api.Common.Dtos.User;
+using OurCity.Api.Infrastructure;
 using OurCity.Api.Services.Mappings;
 
 namespace OurCity.Api.Services;
@@ -44,7 +44,10 @@ public class UserService : IUserService
         return Result<UserResponseDto>.Success(createdUser.ToDto());
     }
 
-    public async Task<Result<UserResponseDto>> UpdateUser(int id, UserPutRequestDto userPutRequestDto)
+    public async Task<Result<UserResponseDto>> UpdateUser(
+        int id,
+        UserPutRequestDto userPutRequestDto
+    )
     {
         // check if the user id exists in db
         var existingUser = await _userRepository.GetUserById(id);
