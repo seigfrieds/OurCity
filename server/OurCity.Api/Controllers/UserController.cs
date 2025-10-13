@@ -47,9 +47,9 @@ public class UserController : ControllerBase
     [EndpointSummary("Create a new user")]
     [EndpointDescription("Creates a new user with the provided data")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateUser(UserRequestDto userRequestDto)
+    public async Task<IActionResult> CreateUser(UserCreateRequestDto userCreateRequestDto)
     {
-        var user = await _userService.CreateUser(userRequestDto);
+        var user = await _userService.CreateUser(userCreateRequestDto);
 
         return CreatedAtAction(nameof(GetUsers), new { id = user.Data?.Id }, user.Data);
     }
@@ -59,10 +59,13 @@ public class UserController : ControllerBase
     [EndpointSummary("Update an existing user")]
     [EndpointDescription("Updates the user with the specified ID")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateUser(int id, UserPutRequestDto userPutRequestDto)
+    public async Task<IActionResult> UpdateUser(int id, UserUpdateRequestDto userUpdateRequestDto)
     {
-        var user = await _userService.UpdateUser(id, userPutRequestDto);
-
+        var user = await _userService.UpdateUser(id, userUpdateRequestDto);
+        if (!user.IsSuccess)
+        {
+            return NotFound(user.Error);
+        }
         return Ok(user.Data);
     }
 

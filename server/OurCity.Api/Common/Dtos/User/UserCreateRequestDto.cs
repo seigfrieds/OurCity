@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OurCity.Api.Common.Dtos.User;
 
-public class UserRequestDto
+public class UserCreateRequestDto
 {
     [Required(ErrorMessage = "Auth0Id is required")]
     public required string Auth0Id { get; set; }

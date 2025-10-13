@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OurCity.Api.Common.Dtos.User;
 
-public class UserPutRequestDto
+public class UserUpdateRequestDto
 {
-    [Required(ErrorMessage = "id is required")]
-    public required string id { get; set; }
+    [Required(ErrorMessage = "Id is required")]
+    public required int Id { get; set; }
 
     [StringLength(50, ErrorMessage = "Username cannot exceed 50 characters.")]
     public string? Username { get; set; } = null;

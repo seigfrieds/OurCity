@@ -25,16 +25,30 @@ public static class UserMappings
         };
     }
 
-    public static User ToEntity(this UserRequestDto userRequestDto)
+    public static User CreateDtoToEntity(this UserCreateRequestDto userCreateRequestDto)
     {
         return new User
         {
-            Auth0Id = userRequestDto.Auth0Id,
-            Username = userRequestDto.Username,
-            Email = userRequestDto.Email,
-            DisplayName = userRequestDto.DisplayName,
+            Auth0Id = userCreateRequestDto.Auth0Id,
+            Username = userCreateRequestDto.Username,
+            Email = userCreateRequestDto.Email,
+            DisplayName = userCreateRequestDto.DisplayName,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
     }
+
+    public static User UpdateDtoToEntity(
+        this UserUpdateRequestDto userUpdateRequestDto,
+        User existingUser
+    )
+    {
+        existingUser.Username = userUpdateRequestDto.Username ?? existingUser.Username;
+        existingUser.Email = userUpdateRequestDto.Email ?? existingUser.Email;
+        existingUser.DisplayName = userUpdateRequestDto.DisplayName ?? existingUser.DisplayName;
+        existingUser.UpdatedAt = DateTime.UtcNow;
+
+        return existingUser;
+    }
+    
 }
