@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OurCity.Api.Services;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Services;
 
 namespace OurCity.Api.Controllers;
 
@@ -37,7 +37,7 @@ public class PostController : ControllerBase
     public async Task<IActionResult> GetPostById(int postId)
     {
         var post = await _postService.GetPostById(postId);
-        
+
         if (!post.IsSuccess)
         {
             return NotFound(post.Error);
@@ -63,7 +63,10 @@ public class PostController : ControllerBase
     [EndpointDescription("Updates an existing post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePost(int postId, PostUpdateRequestDto postUpdateRequestDto)
+    public async Task<IActionResult> UpdatePost(
+        int postId,
+        PostUpdateRequestDto postUpdateRequestDto
+    )
     {
         var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
 

@@ -1,5 +1,5 @@
-using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services.Mappings;
 
@@ -38,17 +38,22 @@ public static class PostMappings
         };
     }
 
-    public static Post UpdateDtoToEntity(this PostUpdateRequestDto postUpdateRequestDto, Post existingPost)
+    public static Post UpdateDtoToEntity(
+        this PostUpdateRequestDto postUpdateRequestDto,
+        Post existingPost
+    )
     {
         existingPost.Title = postUpdateRequestDto.Title ?? existingPost.Title;
         existingPost.Description = postUpdateRequestDto.Description ?? existingPost.Description;
         existingPost.Location = postUpdateRequestDto.Location ?? existingPost.Location;
-        existingPost.Images = postUpdateRequestDto.Images.Count != 0
-            ? postUpdateRequestDto.Images.Select(imgDto => new Image { Url = imgDto.Url }).ToList()
-            : existingPost.Images;
+        existingPost.Images =
+            postUpdateRequestDto.Images.Count != 0
+                ? postUpdateRequestDto
+                    .Images.Select(imgDto => new Image { Url = imgDto.Url })
+                    .ToList()
+                : existingPost.Images;
         existingPost.Votes = postUpdateRequestDto.Votes ?? existingPost.Votes;
         existingPost.UpdatedAt = DateTime.UtcNow;
-
 
         return existingPost;
     }

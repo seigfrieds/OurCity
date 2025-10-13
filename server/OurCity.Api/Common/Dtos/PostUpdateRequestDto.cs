@@ -14,6 +14,6 @@ public class PostUpdateRequestDto
     public string? Location { get; set; }
 
     public int? Votes { get; set; }
-    
+
     public List<ImageDto> Images { get; set; } = new();
 }

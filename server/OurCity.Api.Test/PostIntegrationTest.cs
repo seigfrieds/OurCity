@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using OurCity.Api.Common.Dtos;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services;
-using OurCity.Api.Common.Dtos;
 using Testcontainers.PostgreSql;
 
 namespace OurCity.Api.Test;
@@ -73,7 +73,6 @@ public class PostIntegrationTest : IAsyncLifetime
                 retrievedPost.Data.Images.Select(i => i.Url)
             );
         });
-
     }
 
     [Fact]
@@ -133,7 +132,6 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Equal("New Location", updatedPost.Data.Location);
             Assert.Empty(updatedPost.Data.Images);
         });
-        
     }
 
     [Fact]
@@ -150,7 +148,7 @@ public class PostIntegrationTest : IAsyncLifetime
         Assert.NotNull(createdPost.Data);
 
         var deletedPost = await postService.DeletePost(createdPost.Data.Id);
-        
+
         Assert.True(deletedPost.IsSuccess);
         Assert.NotNull(deletedPost.Data);
 
