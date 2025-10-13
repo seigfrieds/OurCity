@@ -1,4 +1,4 @@
-namespace OurCity.Api.Services.Dtos;
+namespace OurCity.Api.Common.Dtos.User;
 
 public class UserResponseDto
 {

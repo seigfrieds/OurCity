@@ -1,5 +1,5 @@
 using OurCity.Api.Infrastructure.Database;
-using OurCity.Api.Services.Dtos;
+using OurCity.Api.Common.Dtos;
 
 namespace OurCity.Api.Services.Mappings;
 
