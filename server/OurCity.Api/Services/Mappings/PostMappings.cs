@@ -40,20 +40,16 @@ public static class PostMappings
 
     public static Post UpdateDtoToEntity(this PostUpdateRequestDto postUpdateRequestDto, Post existingPost)
     {
-        return new Post
-        {
-            Id = existingPost.Id,
-            Title = postUpdateRequestDto.Title ?? existingPost.Title,
-            Description = postUpdateRequestDto.Description ?? existingPost.Description,
-            Location = postUpdateRequestDto.Location ?? existingPost.Location,
-            Images = postUpdateRequestDto.Images.Count != 0
-                ? postUpdateRequestDto.Images.Select(imgDto => new Image { Url = imgDto.Url }).ToList()
-                : existingPost.Images,
-            // Have the number of votes available for update, we will add on role based access control later
-            // May have to make a separate method in the services layer for updating votes only
-            Votes = postUpdateRequestDto.Votes ?? existingPost.Votes,
-            CreatedAt = existingPost.CreatedAt,
-            UpdatedAt = DateTime.UtcNow,
-        };
+        existingPost.Title = postUpdateRequestDto.Title ?? existingPost.Title;
+        existingPost.Description = postUpdateRequestDto.Description ?? existingPost.Description;
+        existingPost.Location = postUpdateRequestDto.Location ?? existingPost.Location;
+        existingPost.Images = postUpdateRequestDto.Images.Count != 0
+            ? postUpdateRequestDto.Images.Select(imgDto => new Image { Url = imgDto.Url }).ToList()
+            : existingPost.Images;
+        existingPost.Votes = postUpdateRequestDto.Votes ?? existingPost.Votes;
+        existingPost.UpdatedAt = DateTime.UtcNow;
+
+
+        return existingPost;
     }
 }
