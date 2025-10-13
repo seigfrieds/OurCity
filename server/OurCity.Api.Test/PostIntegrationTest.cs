@@ -45,7 +45,7 @@ public class PostIntegrationTest : IAsyncLifetime
     {
         var postService = new PostService(new PostRepository(_dbContext));
         var post = await postService.CreatePost(
-            new Services.Dtos.PostRequestDto
+            new Common.Dtos.PostRequestDto
             {
                 Title = "Test Post",
                 Description = "This is a test post",
