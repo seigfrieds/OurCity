@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OurCity.Api.Common.Dtos;
 using OurCity.Api.Configurations;
 using OurCity.Api.Services;
-using OurCity.Api.Services.Dtos;
 
 namespace OurCity.Api.Controllers;
 
