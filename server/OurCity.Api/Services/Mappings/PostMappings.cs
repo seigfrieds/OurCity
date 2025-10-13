@@ -23,18 +23,38 @@ public static class PostMappings
         };
     }
 
-    public static Post ToEntity(this PostRequestDto postRequestDto)
+    public static Post CreateDtoToEntity(this PostCreateRequestDto postCreateRequestDto)
     {
         return new Post
         {
-            Title = postRequestDto.Title,
-            Description = postRequestDto.Description,
-            Location = postRequestDto.Location,
-            Images = postRequestDto
+            Title = postCreateRequestDto.Title,
+            Description = postCreateRequestDto.Description,
+            Location = postCreateRequestDto.Location,
+            Images = postCreateRequestDto
                 .Images.Select(imgDto => new Image { Url = imgDto.Url })
                 .ToList(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
         };
+    }
+
+    public static Post UpdateDtoToEntity(
+        this PostUpdateRequestDto postUpdateRequestDto,
+        Post existingPost
+    )
+    {
+        existingPost.Title = postUpdateRequestDto.Title ?? existingPost.Title;
+        existingPost.Description = postUpdateRequestDto.Description ?? existingPost.Description;
+        existingPost.Location = postUpdateRequestDto.Location ?? existingPost.Location;
+        existingPost.Images =
+            postUpdateRequestDto.Images.Count != 0
+                ? postUpdateRequestDto
+                    .Images.Select(imgDto => new Image { Url = imgDto.Url })
+                    .ToList()
+                : existingPost.Images;
+        existingPost.Votes = postUpdateRequestDto.Votes ?? existingPost.Votes;
+        existingPost.UpdatedAt = DateTime.UtcNow;
+
+        return existingPost;
     }
 }
