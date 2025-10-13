@@ -5,7 +5,7 @@ using OurCity.Api.Common.Dtos;
 namespace OurCity.Api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]s")]
 public class PostController : ControllerBase
 {
     private readonly ILogger<PostController> _logger;
@@ -18,7 +18,6 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Posts")]
     [EndpointSummary("Get all posts")]
     [EndpointDescription("Gets a list of all posts")]
     [ProducesResponseType(typeof(List<PostResponseDto>), StatusCodes.Status200OK)]
@@ -30,7 +29,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Posts/{postId}")]
+    [Route("{postId}")]
     [EndpointSummary("Get a post by ID")]
     [EndpointDescription("Gets a post by its ID")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
@@ -48,7 +47,6 @@ public class PostController : ControllerBase
     }
 
     [HttpPost]
-    [Route("Posts")]
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
@@ -60,7 +58,7 @@ public class PostController : ControllerBase
     }
 
     [HttpPut]
-    [Route("Posts/{postId}")]
+    [Route("{postId}")]
     [EndpointSummary("Update an existing post")]
     [EndpointDescription("Updates an existing post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
@@ -68,7 +66,7 @@ public class PostController : ControllerBase
     public async Task<IActionResult> UpdatePost(int postId, PostUpdateRequestDto postUpdateRequestDto)
     {
         var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
-        
+
         if (!post.IsSuccess)
         {
             return NotFound(post.Error);
