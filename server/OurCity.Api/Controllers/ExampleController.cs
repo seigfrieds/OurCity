@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using OurCity.Api.Configurations;
 using OurCity.Api.Services;
-using OurCity.Api.Services.Dtos;
+using OurCity.Api.Common.Dtos;
 
 namespace OurCity.Api.Controllers;
 
