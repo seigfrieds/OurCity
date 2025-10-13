@@ -50,5 +50,4 @@ public static class UserMappings
 
         return existingUser;
     }
-    
 }
