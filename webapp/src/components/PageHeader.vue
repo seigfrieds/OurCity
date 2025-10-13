@@ -1,5 +1,6 @@
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import Menubar from "primevue/menubar";
 import InputText from "primevue/inputtext";
 
@@ -9,43 +10,30 @@ type MenuItem = {
   command: () => void;
 };
 
-export default defineComponent({
-  name: "PageHeader",
-  components: {
-    Menubar,
-    InputText,
-  },
-  data() {
-    return {
-      searchQuery: "",
-    };
-  },
-  computed: {
-    items(): MenuItem[] {
-      return [
-        {
-          label: "Create",
-          icon: "pi pi-plus",
-          command: () => {
-            this.$router.push("/create");
-          },
-        },
-        {
-          label: "Log In",
-          icon: "pi pi-sign-in",
-          command: () => {
-            this.$router.push("/login");
-          },
-        },
-      ];
+const router = useRouter();
+
+const searchQuery = ref("");
+
+const items = computed<MenuItem[]>(() => [
+  {
+    label: "Create",
+    icon: "pi pi-plus",
+    command: () => {
+      router.push("/create");
     },
   },
-  methods: {
-    goToHome(): void {
-      this.$router.push("/");
+  {
+    label: "Log In",
+    icon: "pi pi-sign-in",
+    command: () => {
+      router.push("/login");
     },
   },
-});
+]);
+
+function goToHome(): void {
+  router.push("/");
+}
 </script>
 
 <template>

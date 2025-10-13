@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 import type { PropType } from "vue";
 import PostItem from "./PostItem.vue";
 
@@ -11,18 +11,7 @@ interface PostProps {
   votes?: number;
 }
 
-export default {
-  name: "PostList",
-  components: {
-    PostItem,
-  },
-  props: {
-    posts: {
-      type: Array as PropType<PostProps[]>,
-      required: true,
-    },
-  },
-};
+const props = defineProps<{ posts: PostProps[] }>();
 </script>
 
 <template>

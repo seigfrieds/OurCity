@@ -1,50 +1,32 @@
-<script lang="ts">
+<script setup lang="ts">
 import Card from "primevue/card";
-import Button from "primevue/button";
+import VoteButton from "primevue/button";
+import { withDefaults, defineProps, defineEmits } from "vue";
 
-export default {
-  name: "PostItem",
-  components: {
-    Card,
-    VoteButton: Button,
-  },
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    imageUrl: {
-      type: String,
-      required: true,
-    },
-    // total votes for the post
-    votes: {
-      type: Number,
-      default: 0,
-    },
-    // whether to show the voting UI
-    showVotes: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  methods: {
-    upvote() {
-      this.$emit("upvote");
-    },
-    downvote() {
-      this.$emit("downvote");
-    },
-  },
-};
+const props = withDefaults(defineProps<{
+  title: string;
+  location: string;
+  description: string;
+  imageUrl: string;
+  votes?: number;
+  showVotes?: boolean;
+}>(), {
+  votes: 0,
+  showVotes: true,
+});
+
+const emit = defineEmits<{
+  (e: "upvote"): void;
+  (e: "downvote"): void;
+}>();
+
+function upvote() {
+  emit("upvote");
+}
+
+function downvote() {
+  emit("downvote");
+}
 </script>
 
 <template>
