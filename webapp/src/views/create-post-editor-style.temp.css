@@ -1,0 +1,7 @@
+/* temporary file for toolbar styles insertion */
+.custom-toolbar {
+  margin-bottom: 0.5rem;
+}
+.custom-toolbar .ql-formats > * {
+  margin-right: 0.25rem;
+}

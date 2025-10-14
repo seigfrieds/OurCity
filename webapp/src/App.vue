@@ -1,41 +1,64 @@
 <!-- Where the JS/TS goes -->
 <script setup lang="ts">
-import { ref } from "vue";
-import config from "./config.ts";
-import { useRouter } from "vue-router";
-import Button from "primevue/button";
+// import { ref } from "vue";
+// import config from "./config.ts";
+// import { useRouter } from "vue-router";
 
-interface TypeScriptType {
-  prop: string;
-}
+// interface TypeScriptType {
+//   prop: string;
+// }
 
-const router = useRouter();
-
-const hello = ref<TypeScriptType>({ prop: "Hello world!" });
-
-const goToHome = () => {
-  router.push("/");
-};
-
-const goToAbout = () => {
-  router.push("/about");
-};
+// const router = useRouter();
 </script>
 
 <!-- Where the HTML goes -->
 <template>
-  <h1>{{ hello.prop }}</h1>
-  <h1>{{ config.example }}</h1>
-  <nav>
-    <Button label="Home" @click="goToHome" />
-    <Button label="About" @click="goToAbout" />
-  </nav>
   <main>
     <router-view />
   </main>
 </template>
 
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  margin: 0;
+  padding: 0;
+}
+</style>
+
 <!-- Where styling goes -->
+<style>
+/* Global styles - not scoped so they apply to the entire app */
+* {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Roboto",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/* Fallback for browsers that don't support variable fonts */
+@supports not (font-variation-settings: normal) {
+  * {
+    font-family:
+      -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  }
+}
+</style>
+
 <style scoped>
 /* note: scoped means the styles only affect THIS component */
 </style>
