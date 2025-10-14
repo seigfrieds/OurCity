@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
 import ImageModal from "@/components/ImageModal.vue";
 import VoteBox from "@/components/VoteBox.vue";
@@ -92,6 +92,7 @@ const posts = [
 ];
 
 const route = useRoute();
+const router = useRouter();
 const postId = route.params.id;
 const post = ref<PostProps | undefined>(undefined);
 const showImageModal = ref(false);
@@ -108,6 +109,21 @@ function openImageModal() {
 function closeImageModal() {
   showImageModal.value = false;
 }
+
+// added edit/delete handlers
+function editPost() {
+  // navigate to the edit page, passing the post id as a query parameter
+  const id = post?.value?.id;
+  if (id == null) return;
+  router.push({ name: "edit", query: { id: String(id) } });
+}
+
+function deletePost() {
+  if (confirm("Are you sure you want to delete this post?")) {
+    console.log("Delete post", post?.value?.id);
+    // placeholder: perform delete and navigate away
+  }
+}
 </script>
 
 <!-- Layout for post details page is based off of Reddit -->
@@ -115,7 +131,21 @@ function closeImageModal() {
   <PageHeader />
   <div class="post-detail-view">
     <h1 class="post-title">{{ post?.title }}</h1>
-    <div class="post-author">By @{{ post?.author }}</div>
+
+    <!-- replaced single author line with meta row that contains author on the left
+         and vertically stacked edit/delete buttons right-aligned -->
+    <div class="post-meta">
+      <div class="post-author">By @{{ post?.author }}</div>
+
+      <div class="post-actions" v-if="post">
+        <button class="post-action-btn edit-btn" @click="editPost" aria-label="Edit post">
+          Edit
+        </button>
+        <button class="post-action-btn delete-btn" @click="deletePost" aria-label="Delete post">
+          Delete
+        </button>
+      </div>
+    </div>
 
     <div v-if="post?.location" class="post-location">
       <div class="location-icon">
@@ -172,10 +202,62 @@ function closeImageModal() {
   text-align: left;
   color: var(--surface-color);
 }
+
+/* new: layout for author + actions row */
+.post-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
 .post-author {
   font-size: 1rem;
   color: var(--text-color);
 }
+
+/* vertical action buttons, right aligned */
+.post-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.post-action-btn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+}
+.post-action-btn.edit-btn {
+  background: var(--surface-variant);
+  color: var(--text-color);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.post-action-btn.edit-btn:hover,
+.post-action-btn.edit-btn:focus,
+.post-action-btn.edit-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  filter: brightness(0.98);
+  outline: none;
+}
+.post-action-btn.delete-btn {
+  background: var(--danger-color);
+  color: white;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.post-action-btn.delete-btn:hover,
+.post-action-btn.delete-btn:focus,
+.post-action-btn.delete-btn:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255, 77, 79, 0.18);
+  filter: brightness(0.95);
+  outline: none;
+}
+
+/* ...existing code... */
 .post-location {
   display: flex;
   align-items: center;
