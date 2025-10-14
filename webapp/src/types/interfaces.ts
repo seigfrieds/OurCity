@@ -2,7 +2,7 @@ export interface PostProps {
   id: string | number;
   author: string;
   title: string;
-  location: string;
+  location?: string;
   description: string;
   votes?: number;
   imageUrl: string;
