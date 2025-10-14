@@ -80,7 +80,7 @@ const posts = [
         text: "I have more fun watching young sheldon at home.",
         votes: 1,
         replies: [],
-      }
+      },
     ],
   },
 ];

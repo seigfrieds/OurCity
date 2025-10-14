@@ -1,7 +1,6 @@
 <script setup lang="ts">
-
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
 import ImageModal from "@/components/ImageModal.vue";
 import VoteBox from "@/components/VoteBox.vue";
@@ -87,7 +86,7 @@ const posts = [
         text: "I have more fun watching young sheldon at home.",
         votes: 1,
         replies: [],
-      }
+      },
     ],
   },
 ];
@@ -99,7 +98,7 @@ const showImageModal = ref(false);
 const commentText = ref("");
 
 onMounted(() => {
-  post.value = posts.find(p => p.id == Number(postId));
+  post.value = posts.find((p) => p.id == Number(postId));
 });
 
 function openImageModal() {
@@ -115,8 +114,8 @@ function closeImageModal() {
 <template>
   <PageHeader />
   <div class="post-detail-view">
-  <h1 class="post-title">{{ post?.title }}</h1>
-  <div class="post-author">By @{{ post?.author }}</div>
+    <h1 class="post-title">{{ post?.title }}</h1>
+    <div class="post-author">By @{{ post?.author }}</div>
 
     <div v-if="post?.location" class="post-location">
       <div class="location-icon">
@@ -124,15 +123,10 @@ function closeImageModal() {
       </div>
       <span>{{ post.location }}</span>
     </div>
-    
+
     <div v-if="post?.imageUrl" class="post-image-wrapper">
       <div class="image-hover-wrapper">
-        <img 
-          :src="post.imageUrl" 
-          :alt="post.title" 
-          class="post-image" 
-          @click=openImageModal()      
-        />
+        <img :src="post.imageUrl" :alt="post.title" class="post-image" @click="openImageModal()" />
         <div class="image-zoom-icon">
           <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></i>
         </div>
@@ -146,7 +140,7 @@ function closeImageModal() {
     <VoteBox class="post-votes" :votes="post?.votes ?? 0" />
 
     <div>
-      <CommentInput @submit="(text: string) => commentText = text" />
+      <CommentInput @submit="(text: string) => (commentText = text)" />
 
       <div v-if="post?.comments && post.comments.length > 0" class="content">
         <CommentList :comments="post.comments" />
@@ -188,7 +182,7 @@ function closeImageModal() {
   font-size: 1rem;
   color: var(--text-color);
 }
-.location-icon{
+.location-icon {
   margin-right: 0.25rem;
 }
 .post-description {
@@ -222,7 +216,7 @@ function closeImageModal() {
   bottom: 1rem;
   font-size: 1.5rem;
   color: var(--text-color);
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 50%;
   width: 2.5rem;
   height: 2.5rem;

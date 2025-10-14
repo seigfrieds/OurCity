@@ -1,9 +1,12 @@
-.smooth-transition-enter-active, .smooth-transition-leave-active {
+.smooth-transition-enter-active,
+.smooth-transition-leave-active {
   transition: opacity 0.2s;
 }
-.smooth-transition-enter-from, .smooth-transition-leave-to {
+.smooth-transition-enter-from,
+.smooth-transition-leave-to {
   opacity: 0;
 }
-.smooth-transition-enter-to, .smooth-transition-leave-from {
+.smooth-transition-enter-to,
+.smooth-transition-leave-from {
   opacity: 1;
 }

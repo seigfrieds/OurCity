@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { ref, defineEmits } from "vue";
 import "@/assets/styles/smooth-transition.css";
 
@@ -20,11 +19,8 @@ function handleSubmit() {
     ></textarea>
     <transition name="smooth-transition">
       <div v-if="commentText.trim().length > 0">
-        <button
-          class="comment-arrow-btn"
-          @click.prevent="handleSubmit"
-        >
-        <i class="pi pi-send"></i>
+        <button class="comment-arrow-btn" @click.prevent="handleSubmit">
+          <i class="pi pi-send"></i>
         </button>
       </div>
     </transition>

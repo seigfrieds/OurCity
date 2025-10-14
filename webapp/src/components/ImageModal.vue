@@ -1,10 +1,9 @@
 <script setup lang="ts">
-
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from "vue";
 import "@/assets/styles/smooth-transition.css";
 
 const props = defineProps<{ show: boolean; imageUrl?: string; title?: string }>();
-const emit = defineEmits(['close']);
+const emit = defineEmits(["close"]);
 </script>
 
 <template>
@@ -25,7 +24,7 @@ const emit = defineEmits(['close']);
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +40,7 @@ const emit = defineEmits(['close']);
   color: var(--surface-color);
 }
 .close-modal-btn:hover {
-  color: var(--danger-color, #d9534f)
+  color: var(--danger-color, #d9534f);
 }
 .modal-image {
   max-width: 100vw;

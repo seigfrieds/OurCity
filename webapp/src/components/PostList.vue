@@ -7,11 +7,12 @@ defineProps<{ posts: PostProps[] }>();
 
 <template>
   <div class="post-list">
-    <router-link 
-      v-for="post in posts" 
-      :key="post.id" 
+    <router-link
+      v-for="post in posts"
+      :key="post.id"
       :to="`/posts/${post.id}`"
-      style="text-decoration: none">
+      style="text-decoration: none"
+    >
       <PostItem
         :title="post.title"
         :location="post.location"
