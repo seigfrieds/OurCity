@@ -14,6 +14,15 @@ const router = useRouter();
 
 const searchQuery = ref("");
 
+// TODO: Replace with actual auth state management
+const isLoggedIn = ref(false);
+
+function handleLogout(): void {
+  // TODO: Add actual logout logic here
+  isLoggedIn.value = false;
+  router.push("/login");
+}
+
 const items = computed<MenuItem[]>(() => [
   {
     label: "Create",
@@ -22,20 +31,30 @@ const items = computed<MenuItem[]>(() => [
       router.push("/create");
     },
   },
-  {
-    label: "Log In",
-    icon: "pi pi-sign-in",
-    command: () => {
-      router.push("/login");
-    },
-  },
-  {
-    label: "Account",
-    icon: "pi pi-user",
-    command: () => {
-      router.push("/account");
-    },
-  },
+  ...(!isLoggedIn.value
+    ? [
+        {
+          label: "Log In",
+          icon: "pi pi-sign-in",
+          command: () => {
+            router.push("/login");
+          },
+        },
+      ]
+    : [
+        {
+          label: "Account",
+          icon: "pi pi-user",
+          command: () => {
+            router.push("/account");
+          },
+        },
+        {
+          label: "Log Out",
+          icon: "pi pi-sign-out",
+          command: handleLogout,
+        },
+      ]),
 ]);
 
 function goToHome(): void {
