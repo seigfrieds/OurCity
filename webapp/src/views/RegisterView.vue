@@ -12,12 +12,14 @@ import Message from "primevue/message";
 import "@/assets/styles/forms.css";
 
 type RegisterFormValues = {
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
 };
 
 const initialValues = {
+  username: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -26,6 +28,12 @@ const initialValues = {
 const resolver = toTypedSchema(
   z
     .object({
+      username: z
+        .string()
+        .min(1, { message: "Username is required" })
+        .min(3, { message: "Username must be at least 3 characters" })
+        .max(30, { message: "Username must be at most 30 characters" })
+        .regex(/^[a-zA-Z0-9_-]+$/, { message: "Username can only contain letters, numbers, underscores, and hyphens" }),
       email: z
         .string()
         .min(1, { message: "Email is required" })
@@ -33,7 +41,7 @@ const resolver = toTypedSchema(
       password: z.string().min(6, { message: "Password must be at least 6 characters" }),
       confirmPassword: z.string().min(1, { message: "Please confirm your password" }),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine((data: { password: string; confirmPassword: string }) => data.password === data.confirmPassword, {
       message: "Passwords do not match",
       path: ["confirmPassword"],
     }),
@@ -62,6 +70,16 @@ const onFormSubmit = (values: unknown) => {
             v-slot="{ errors }"
             @submit="onFormSubmit"
           >
+            <div class="field field-common">
+              <label for="username">Username</label>
+              <Field name="username" v-slot="{ field }">
+                <InputText v-bind="field" placeholder="Choose a username" />
+              </Field>
+              <Message v-if="errors.username" severity="error" size="small" variant="simple">{{
+                errors.username
+              }}</Message>
+            </div>
+
             <div class="field field-common">
               <label for="email">Email</label>
               <Field name="email" v-slot="{ field }">
