@@ -120,11 +120,11 @@ function downvote() {
 }
 
 .vote-btn.upvote.p-button:hover {
-  color: var(--primary-color, #0b74de) !important;
+  color: var(--danger-color, #d9534f) !important;
 }
 
 .vote-btn.downvote.p-button:hover {
-  color: var(--danger-color, #d9534f) !important;
+  color: var(--primary-color, #0b74de) !important;
 }
 
 .post-text-content {
@@ -136,7 +136,7 @@ function downvote() {
 
 .post-title {
   font-size: 1.5rem;
-  color: var(--text-color);
+  color: var(--surface-color);
 }
 
 .post-location {
