@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Enum;
 using OurCity.Api.Services;
 
 namespace OurCity.Api.Controllers;
@@ -69,6 +70,24 @@ public class PostController : ControllerBase
     )
     {
         var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
+
+        if (!post.IsSuccess)
+        {
+            return NotFound(post.Error);
+        }
+
+        return Ok(post.Data);
+    }
+
+    [HttpPut]
+    [Route("{postId}/upvote/vote")]
+    [EndpointSummary("Vote on a post")]
+    [EndpointDescription("A user votes on a post, either upvote or downvote")]
+    [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> VotePost(int postId, int userId, VoteType voteType)
+    {
+        var post = await _postService.VotePost(postId, userId, voteType);
 
         if (!post.IsSuccess)
         {

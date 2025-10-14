@@ -1,5 +1,6 @@
 using OurCity.Api.Common;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Enum;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Services.Mappings;
 
@@ -11,6 +12,7 @@ public interface IPostService
     Task<Result<PostResponseDto>> GetPostById(int postId);
     Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postRequestDto);
     Task<Result<PostResponseDto>> UpdatePost(int postId, PostUpdateRequestDto postRequestDto);
+    Task<Result<PostResponseDto>> VotePost(int postId, int userId, VoteType voteType);
     Task<Result<PostResponseDto>> DeletePost(int postId);
 }
 
@@ -64,6 +66,30 @@ public class PostService : IPostService
         var updatedPost = await _postRepository.UpdatePost(
             postUpdateRequestDto.UpdateDtoToEntity(post)
         );
+        return Result<PostResponseDto>.Success(updatedPost.ToDto());
+    }
+
+    public async Task<Result<PostResponseDto>> VotePost(int postId, int userId, VoteType voteType)
+    {
+        var post = await _postRepository.GetPostById(postId);
+
+        if (post == null)
+        {
+            return Result<PostResponseDto>.Failure("Post does not exist");
+        }
+
+        var targetList = (voteType == VoteType.Upvote) ? post.UpvotedUserIds : post.DownvotedUserIds;
+        var oppositeList = (voteType == VoteType.Upvote) ? post.DownvotedUserIds : post.UpvotedUserIds;
+
+        if (!targetList.Remove(userId))
+        {
+            targetList.Add(userId);
+            oppositeList.Remove(userId);
+        }
+
+        post.UpdatedAt = DateTime.UtcNow;
+        
+        var updatedPost = await _postRepository.UpdatePost(post);
         return Result<PostResponseDto>.Success(updatedPost.ToDto());
     }
 
