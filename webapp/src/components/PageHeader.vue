@@ -24,13 +24,6 @@ function handleLogout(): void {
 }
 
 const items = computed<MenuItem[]>(() => [
-  {
-    label: "Create",
-    icon: "pi pi-plus",
-    command: () => {
-      router.push("/create");
-    },
-  },
   ...(!isLoggedIn.value
     ? [
         {
@@ -43,16 +36,23 @@ const items = computed<MenuItem[]>(() => [
       ]
     : [
         {
-          label: "Account",
-          icon: "pi pi-user",
+          label: "Create",
+          icon: "pi pi-plus",
           command: () => {
-            router.push("/account");
+            router.push("/create");
           },
         },
         {
           label: "Log Out",
           icon: "pi pi-sign-out",
           command: handleLogout,
+        },
+        {
+          label: "Account",
+          icon: "pi pi-user",
+          command: () => {
+            router.push("/account");
+          },
         },
       ]),
 ]);

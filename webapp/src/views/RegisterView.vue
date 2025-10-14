@@ -33,7 +33,9 @@ const resolver = toTypedSchema(
         .min(1, { message: "Username is required" })
         .min(3, { message: "Username must be at least 3 characters" })
         .max(30, { message: "Username must be at most 30 characters" })
-        .regex(/^[a-zA-Z0-9_-]+$/, { message: "Username can only contain letters, numbers, underscores, and hyphens" }),
+        .regex(/^[a-zA-Z0-9_-]+$/, {
+          message: "Username can only contain letters, numbers, underscores, and hyphens",
+        }),
       email: z
         .string()
         .min(1, { message: "Email is required" })
@@ -41,10 +43,14 @@ const resolver = toTypedSchema(
       password: z.string().min(6, { message: "Password must be at least 6 characters" }),
       confirmPassword: z.string().min(1, { message: "Please confirm your password" }),
     })
-    .refine((data: { password: string; confirmPassword: string }) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    }),
+    .refine(
+      (data: { password: string; confirmPassword: string }) =>
+        data.password === data.confirmPassword,
+      {
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      },
+    ),
 );
 
 const onFormSubmit = (values: unknown) => {
