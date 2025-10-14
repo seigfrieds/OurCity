@@ -65,11 +65,13 @@ function downvote() {
   color: var(--text-color) !important;
   transform: translateY(-1px);
 }
+
 .vote-btn.upvote.p-button:hover {
-  color: var(--danger-color, #d9534f) !important;
+  color: var(--secondary-color) !important;
 }
+
 .vote-btn.downvote.p-button:hover {
-  color: var(--primary-color, #0b74de) !important;
+  color: var(--danger-color) !important;
 }
 .vote-count {
   font-weight: bold;
