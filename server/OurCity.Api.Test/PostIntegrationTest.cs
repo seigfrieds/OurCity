@@ -167,7 +167,11 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.DoesNotContain(userId, upvotedPost.Data.DownvotedUserIds);
         });
 
-        var removedUpvotePost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
+        var removedUpvotePost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Upvote
+        );
 
         Assert.True(removedUpvotePost.IsSuccess);
         Assert.NotNull(removedUpvotePost.Data);
@@ -197,7 +201,11 @@ public class PostIntegrationTest : IAsyncLifetime
         Assert.Empty(createdPost.Data.DownvotedUserIds);
 
         var userId = 1;
-        var downvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Downvote);
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
 
         Assert.True(downvotedPost.IsSuccess);
         Assert.NotNull(downvotedPost.Data);
@@ -210,7 +218,11 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Contains(userId, downvotedPost.Data.DownvotedUserIds);
         });
 
-        var removedDownvotePost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Downvote);
+        var removedDownvotePost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
 
         Assert.True(removedDownvotePost.IsSuccess);
         Assert.NotNull(removedDownvotePost.Data);
@@ -240,7 +252,11 @@ public class PostIntegrationTest : IAsyncLifetime
         Assert.Empty(createdPost.Data.DownvotedUserIds);
 
         var userId = 1;
-        var downvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Downvote);
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
 
         Assert.True(downvotedPost.IsSuccess);
         Assert.NotNull(downvotedPost.Data);
@@ -296,7 +312,11 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.DoesNotContain(userId, upvotedPost.Data.DownvotedUserIds);
         });
 
-        var downvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Downvote);
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
 
         Assert.True(downvotedPost.IsSuccess);
         Assert.NotNull(downvotedPost.Data);

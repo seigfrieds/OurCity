@@ -78,8 +78,10 @@ public class PostService : IPostService
             return Result<PostResponseDto>.Failure("Post does not exist");
         }
 
-        var targetList = (voteType == VoteType.Upvote) ? post.UpvotedUserIds : post.DownvotedUserIds;
-        var oppositeList = (voteType == VoteType.Upvote) ? post.DownvotedUserIds : post.UpvotedUserIds;
+        var targetList =
+            (voteType == VoteType.Upvote) ? post.UpvotedUserIds : post.DownvotedUserIds;
+        var oppositeList =
+            (voteType == VoteType.Upvote) ? post.DownvotedUserIds : post.UpvotedUserIds;
 
         if (!targetList.Remove(userId))
         {
@@ -88,7 +90,7 @@ public class PostService : IPostService
         }
 
         post.UpdatedAt = DateTime.UtcNow;
-        
+
         var updatedPost = await _postRepository.UpdatePost(post);
         return Result<PostResponseDto>.Success(updatedPost.ToDto());
     }
