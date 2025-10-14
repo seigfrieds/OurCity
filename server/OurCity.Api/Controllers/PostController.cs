@@ -80,7 +80,7 @@ public class PostController : ControllerBase
     }
 
     [HttpPut]
-    [Route("{postId}/upvote/vote")]
+    [Route("{postId}/vote")]
     [EndpointSummary("Vote on a post")]
     [EndpointDescription("A user votes on a post, either upvote or downvote")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
