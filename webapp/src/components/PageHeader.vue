@@ -47,7 +47,7 @@ function goToHome(): void {
         <div class="search-container">
           <span class="p-input-icon-left">
             <i class="pi pi-search" />
-            <InputText v-model="searchQuery" placeholder="Search..." class="search-input" />
+            <InputText v-model="searchQuery" placeholder="Search... (Coming Soon)" class="search-input" />
           </span>
         </div>
       </template>
