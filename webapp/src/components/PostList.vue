@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { PropType } from "vue";
 import PostItem from "./PostItem.vue";
 
 interface PostProps {
