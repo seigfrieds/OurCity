@@ -3,7 +3,7 @@ import Card from "primevue/card";
 import VoteButton from "primevue/button";
 import { withDefaults, defineProps, defineEmits } from "vue";
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     title: string;
     location?: string;
@@ -102,7 +102,6 @@ function downvote() {
     transform 120ms ease;
 }
 
-/* PrimeVue button override to make it look subtle */
 .vote-btn.p-button {
   background: transparent !important;
   border: none !important;

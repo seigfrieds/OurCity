@@ -11,7 +11,7 @@ interface PostProps {
   votes?: number;
 }
 
-const props = defineProps<{ posts: PostProps[] }>();
+defineProps<{ posts: PostProps[] }>();
 </script>
 
 <template>
