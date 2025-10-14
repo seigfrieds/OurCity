@@ -54,6 +54,14 @@ const onFileSelect = (
   const file = event?.files && event.files[0];
   if (file) setFieldValue("image", file);
 };
+
+// Editor modules: use custom toolbar and disable the default one
+const editorModules = {
+  toolbar: {
+    container: ".custom-toolbar", // Use our custom toolbar
+    toolbarVisible: false, // Hide PrimeVue's default toolbar
+  },
+};
 </script>
 
 <template>
@@ -111,9 +119,36 @@ const onFileSelect = (
             <div class="field-common">
               <label for="description">Description</label>
               <Field name="description" v-slot="{ field }">
+                <!-- custom toolbar for the editor: explicitly define controls -->
+                <div class="custom-toolbar ql-toolbar ql-snow">
+                  <span class="ql-formats">
+                    <select class="ql-header">
+                      <option value="1"></option>
+                      <option value="2"></option>
+                      <option selected></option>
+                    </select>
+                    <button class="ql-bold"></button>
+                    <button class="ql-italic"></button>
+                    <button class="ql-underline"></button>
+                    <button class="ql-strike"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-blockquote"></button>
+                    <button class="ql-code-block"></button>
+                  </span>
+                  <span class="ql-formats">
+                    <button class="ql-clean"></button>
+                  </span>
+                </div>
+
                 <Editor
                   :modelValue="field.value"
                   @update:modelValue="field.onInput"
+                  :modules="editorModules"
                   editorStyle="height: 320px"
                 />
               </Field>
@@ -128,3 +163,28 @@ const onFileSelect = (
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom toolbar styling */
+.custom-toolbar {
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: var(--surface-ground);
+}
+
+.custom-toolbar .ql-formats {
+  margin-right: 15px;
+}
+
+.custom-toolbar .ql-formats:last-child {
+  margin-right: 0;
+}
+
+/* Hide any default toolbar that might still appear */
+:deep(.p-editor-toolbar) {
+  display: none !important;
+}
+</style>
+
