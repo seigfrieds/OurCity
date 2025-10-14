@@ -5,13 +5,15 @@ import { withDefaults, defineProps, defineEmits } from "vue";
 
 const props = withDefaults(defineProps<{
   title: string;
-  location: string;
+  location?: string;
   description: string;
-  imageUrl: string;
-  votes?: number;
+  imageUrl?: string;
+  upvotes?: number;
+  downvotes?: number;
   showVotes?: boolean;
 }>(), {
-  votes: 0,
+  upvotes: 0,
+  downvotes: 0,
   showVotes: true,
 });
 
@@ -35,7 +37,7 @@ function downvote() {
       <div class="post-content">
         <div v-if="showVotes" class="post-votes">
           <VoteButton icon="pi pi-chevron-up" class="vote-btn upvote" @click.prevent="upvote" />
-          <div class="vote-count">{{ votes }}</div>
+          <div class="vote-count">{{ upvotes - downvotes }}</div>
           <VoteButton
             icon="pi pi-chevron-down"
             class="vote-btn downvote"
