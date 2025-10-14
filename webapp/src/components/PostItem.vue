@@ -3,19 +3,22 @@ import Card from "primevue/card";
 import VoteButton from "primevue/button";
 import { withDefaults, defineProps, defineEmits } from "vue";
 
-const props = withDefaults(defineProps<{
-  title: string;
-  location?: string;
-  description: string;
-  imageUrl?: string;
-  upvotes?: number;
-  downvotes?: number;
-  showVotes?: boolean;
-}>(), {
-  upvotes: 0,
-  downvotes: 0,
-  showVotes: true,
-});
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    location?: string;
+    description: string;
+    imageUrl?: string;
+    upvotes?: number;
+    downvotes?: number;
+    showVotes?: boolean;
+  }>(),
+  {
+    upvotes: 0,
+    downvotes: 0,
+    showVotes: true,
+  },
+);
 
 const emit = defineEmits<{
   (e: "upvote"): void;
