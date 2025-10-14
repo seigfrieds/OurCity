@@ -29,6 +29,13 @@ const items = computed<MenuItem[]>(() => [
       router.push("/login");
     },
   },
+  {
+    label: "Account",
+    icon: "pi pi-user",
+    command: () => {
+      router.push("/account");
+    },
+  },
 ]);
 
 function goToHome(): void {
