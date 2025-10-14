@@ -1,6 +1,5 @@
 using OurCity.Api.Common;
 using OurCity.Api.Infrastructure;
-using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services.Dtos;
 using OurCity.Api.Services.Mappings;
 

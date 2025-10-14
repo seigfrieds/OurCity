@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services;
+using OurCity.Api.Services.Dtos;
 using Testcontainers.PostgreSql;
 
 namespace OurCity.Api.Test;
@@ -45,11 +46,7 @@ public class PostIntegrationTest : IAsyncLifetime
     {
         var postService = new PostService(new PostRepository(_dbContext));
         var post = await postService.CreatePost(
-            new Services.Dtos.PostRequestDto
-            {
-                Title = "Test Post",
-                Description = "This is a test post",
-            }
+            new PostRequestDto { Title = "Test Post", Description = "This is a test post" }
         );
 
         Assert.Same(post.Data?.Title, "Test Post");

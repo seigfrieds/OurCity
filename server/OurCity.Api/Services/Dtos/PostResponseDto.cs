@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace OurCity.Api.Services.Dtos;
 
 public class PostResponseDto

@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using OurCity.Api.Common;
 using OurCity.Api.Configurations;
 using OurCity.Api.Services;
 using OurCity.Api.Services.Dtos;
@@ -11,31 +14,20 @@ namespace OurCity.Api.Controllers;
 [Route("[controller]")]
 public class ExampleController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing",
-        "Bracing",
-        "Chilly",
-        "Cool",
-        "Mild",
-        "Warm",
-        "Balmy",
-        "Hot",
-        "Sweltering",
-        "Scorching",
-    };
-
     private readonly ILogger<ExampleController> _logger;
     private readonly IOptions<ExampleSettings> _exampleSettings;
     private readonly IPostService _postService;
+    private readonly IExampleService _exampleService;
 
     public ExampleController(
         IPostService postService,
+        IExampleService exampleService,
         IOptions<ExampleSettings> exampleSettings,
         ILogger<ExampleController> logger
     )
     {
         _postService = postService;
+        _exampleService = exampleService;
         _exampleSettings = exampleSettings;
         _logger = logger;
     }
@@ -66,14 +58,17 @@ public class ExampleController : ControllerBase
         return Ok(_exampleSettings.Value);
     }
 
-    //EXAMPLE -> PROBLEM RESULTS, LINQ STUFF (LIST OPERATIONS), ANNOTATIONS FOR PARAMS
+    //EXAMPLE -> PROBLEM RESULTS, LINQ STUFF (LIST OPERATIONS), ANNOTATIONS FOR PARAMS, AUTH
     [HttpGet]
+    [Authorize]
     [Route("WeatherForecast")]
     [EndpointSummary("This is a summary for GetWeatherForecast")]
     [EndpointDescription("This is a description for GetWeatherForecast")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(List<WeatherForecastDto>), StatusCodes.Status200OK)]
-    public IActionResult GetWeatherForecast([Required] [FromQuery(Name = "fail")] bool fail)
+    public async Task<IActionResult> GetWeatherForecast(
+        [Required] [FromQuery(Name = "fail")] bool fail
+    )
     {
         _logger.LogInformation("I am processing a WeatherForecast request right now!");
 
@@ -87,24 +82,11 @@ public class ExampleController : ControllerBase
             );
         }
 
-        return Ok(
-            Enumerable
-                .Range(1, 5)
-                .Select(index => new WeatherForecastDto
-                {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    TemperatureC = Random.Shared.Next(-20, 55),
-                    Summary = Summaries[Random.Shared.Next(Summaries.Length)],
-                })
-                .ToList()
-        );
-    }
-}
+        var result = await _exampleService.GetWeatherForecasts(HttpContext.User);
 
-class WeatherForecastDto
-{
-    public DateOnly Date { get; set; }
-    public int TemperatureC { get; set; }
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    public string? Summary { get; set; }
+        if (!result.IsSuccess)
+            return Problem(statusCode: StatusCodes.Status401Unauthorized, detail: result.Error);
+
+        return Ok(result.Data);
+    }
 }

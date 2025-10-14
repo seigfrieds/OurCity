@@ -20,6 +20,10 @@ const goToHome = () => {
 const goToAbout = () => {
   router.push("/about");
 };
+
+const goToAccounts = () => {
+  router.push("/accounts");
+};
 </script>
 
 <!-- Where the HTML goes -->
@@ -29,6 +33,7 @@ const goToAbout = () => {
   <nav>
     <Button label="Home" @click="goToHome" />
     <Button label="About" @click="goToAbout" />
+    <Button label="Accounts" @click="goToAccounts" />
   </nav>
   <main>
     <router-view />
