@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using OurCity.Api.Authentication.Auth0;
+using OurCity.Api.Authentication.Development;
 using OurCity.Api.Configurations;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
@@ -23,10 +22,13 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-            policy.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [])
+        policy
+            .WithOrigins(
+                builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? []
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
-        .AllowCredentials();
+            .AllowCredentials();
     });
 });
 
@@ -59,80 +61,15 @@ builder.Services.AddProblemDetails(options =>
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 //Authentication
-//https://auth0.com/blog/backend-for-frontend-pattern-with-auth0-and-dotnet/#What-Is-the-Backend-For-Frontend-Authentication-Pattern-
-builder
-    .Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    })
-    .AddCookie(options =>
-    {
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.Strict;
-        options.Cookie.HttpOnly = true;
-    })
-    .AddOpenIdConnect(
-        "Auth0",
-        options =>
-        {
-            options.ClaimsIssuer = "Auth0";
-            options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}";
-            options.ClientId = builder.Configuration["Auth0:ClientId"];
-            options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+if (builder.Configuration["AuthOption"] == "Auth0")
+{
+    builder.Services.AddAuth0Authentication(builder.Configuration);
+}
+else
+{
+    builder.Services.AddDevelopmentAuthentication();
+}
 
-            options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-            options.ResponseMode = OpenIdConnectResponseMode.FormPost;
-
-            options.Scope.Clear();
-            options.Scope.Add("openid");
-
-            options.CallbackPath = new PathString("/callback");
-
-            options.SaveTokens = true;
-
-            options.Events = new OpenIdConnectEvents
-            {
-                OnRedirectToIdentityProvider = context =>
-                {
-                    context.ProtocolMessage.SetParameter(
-                        "audience",
-                        builder.Configuration["Auth0:ApiAudience"]
-                    );
-
-                    return Task.CompletedTask;
-                },
-                
-                OnRedirectToIdentityProviderForSignOut = context =>
-                {
-                    var logoutUri =
-                        $"https://{builder.Configuration["Auth0:Domain"]}/v2/logout?client_id={builder.Configuration["Auth0:ClientId"]}";
-                    /*var afterLogoutUri = context.Properties.RedirectUri;
-                    
-                    if (!string.IsNullOrEmpty(afterLogoutUri))
-                    {
-                        if (afterLogoutUri.StartsWith("/"))
-                        {
-                            var request = context.Request;
-                            afterLogoutUri =
-                                request.Scheme
-                                + "://"
-                                + request.Host
-                                + request.PathBase
-                                + afterLogoutUri;
-                        }
-
-                        logoutUri += $"&returnTo={Uri.EscapeDataString(afterLogoutUri)}";
-                    }*/
-
-                    context.Response.Redirect(logoutUri);
-
-                    return Task.CompletedTask;
-                }
-            };
-        }
-    );
 
 //Authorization
 builder.Services.AddSingleton<IAuthorizationHandler, CanReadWeatherForecastsHandler>();
