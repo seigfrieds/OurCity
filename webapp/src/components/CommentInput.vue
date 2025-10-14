@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits } from "vue";
+import Textarea from 'primevue/textarea';
 import "@/assets/styles/smooth-transition.css";
 
 const commentText = ref("");
@@ -12,11 +13,14 @@ function handleSubmit() {
 
 <template>
   <div class="comment-input-wrapper">
-    <textarea
+    <Textarea
       class="comment-input"
       placeholder="Add your thoughts..."
       v-model="commentText"
-    ></textarea>
+      rows="1"
+      fluid
+      autoResize
+    ></Textarea>
     <transition name="smooth-transition">
       <div v-if="commentText.trim().length > 0">
         <button class="comment-arrow-btn" @click.prevent="handleSubmit">
@@ -32,18 +36,18 @@ function handleSubmit() {
   position: relative;
 }
 .comment-input {
-  width: 100%;
+  /* width: 100%; */
   border-radius: 3rem;
   border: 1px solid var(--border-color);
-  padding: 0.75rem 3rem 0.5rem 1.5rem;
+  padding: 0.75rem 3rem 0.75rem 1.5rem;
   font-size: 1rem;
-  min-height: 4rem;
-  resize: vertical;
+  /* min-height: 1rem; */
+  /* resize: vertical; */
 }
 .comment-arrow-btn {
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 6px;
+  right: 1.5rem;
   width: 2rem;
   height: 2rem;
   background: var(--secondary-color);
