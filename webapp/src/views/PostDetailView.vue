@@ -6,7 +6,7 @@ import ImageModal from "@/components/ImageModal.vue";
 import VoteBox from "@/components/VoteBox.vue";
 import CommentInput from "@/components/CommentInput.vue";
 import CommentList from "@/components/CommentList.vue";
-import type { PostProps, CommentProps } from "@/types/interfaces";
+import type { PostProps } from "@/types/interfaces";
 
 const posts = [
   {

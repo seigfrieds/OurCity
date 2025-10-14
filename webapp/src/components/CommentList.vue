@@ -9,6 +9,7 @@ defineProps<{ comments: CommentProps[] }>();
   <div class="comments-list">
     <CommentItem
       v-for="comment in comments"
+      :key="comment.id"
       :id="comment.id"
       :author="comment.author"
       :text="comment.text"
