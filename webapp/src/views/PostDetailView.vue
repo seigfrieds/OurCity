@@ -233,7 +233,10 @@ function deletePost() {
 .post-action-btn.edit-btn {
   background: var(--surface-variant);
   color: var(--text-color);
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
 }
 .post-action-btn.edit-btn:hover,
 .post-action-btn.edit-btn:focus,
@@ -246,7 +249,10 @@ function deletePost() {
 .post-action-btn.delete-btn {
   background: var(--danger-color);
   color: white;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease;
 }
 .post-action-btn.delete-btn:hover,
 .post-action-btn.delete-btn:focus,

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, defineEmits } from "vue";
-import Textarea from 'primevue/textarea';
+import Textarea from "primevue/textarea";
 import "@/assets/styles/smooth-transition.css";
 
 const commentText = ref("");
