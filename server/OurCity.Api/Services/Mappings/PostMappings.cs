@@ -17,7 +17,8 @@ public static class PostMappings
             Id = post.Id,
             Title = post.Title,
             Description = post.Description,
-            Votes = post.Votes,
+            UpvotedUserIds = post.UpvotedUserIds,
+            DownvotedUserIds = post.DownvotedUserIds,
             Location = post.Location,
             Images = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
         };
@@ -52,7 +53,6 @@ public static class PostMappings
                     .Images.Select(imgDto => new Image { Url = imgDto.Url })
                     .ToList()
                 : existingPost.Images;
-        existingPost.Votes = postUpdateRequestDto.Votes ?? existingPost.Votes;
         existingPost.UpdatedAt = DateTime.UtcNow;
 
         return existingPost;

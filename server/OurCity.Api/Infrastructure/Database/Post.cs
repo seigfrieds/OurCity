@@ -5,8 +5,9 @@ public class Post
     public int Id { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public int Votes { get; set; } = 0;
     public string? Location { get; set; }
+    public List<int> UpvotedUserIds { get; set; } = new();
+    public List<int> DownvotedUserIds { get; set; } = new();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
