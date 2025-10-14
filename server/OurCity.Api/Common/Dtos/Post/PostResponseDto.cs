@@ -8,7 +8,8 @@ public class PostResponseDto
 
     public required string Description { get; set; }
 
-    public required int Votes { get; set; }
+    public List<int> UpvotedUserIds { get; set; } = new();
+    public List<int> DownvotedUserIds { get; set; } = new();
 
     public required string? Location { get; set; }
 
