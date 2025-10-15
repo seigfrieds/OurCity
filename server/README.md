@@ -105,3 +105,10 @@ Check analyzer errors (lint)
 ```sh
 dotnet build -p lint=true
 ```
+
+there's a chance integration tests can take forever -> should categorize into unit tests and integration tests.
+
+can just run with dotnet test --filter "TestType=Integration"
+
+dotnet test --collect:"XPlat Code Coverage" && dotnet reportgenerator -reports:"**/OurCity.Api.Test/TestResults/**/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html && open coveragereport/index.html
+Note: this creates a TestResults entry in OurCity.Api.Test -> will want to delete.. or you will be showing coverage for multiple reports
