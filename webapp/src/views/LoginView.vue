@@ -13,7 +13,7 @@ import "@/assets/styles/forms.css";
 import WipMessage from "@/components/WipMessage.vue";
 
 type LoginFormValues = {
-  username: "",
+  username: "";
 };
 
 const initialValues = {
@@ -22,7 +22,7 @@ const initialValues = {
 
 const resolver = toTypedSchema(
   z.object({
-    username: z.string().min(1, { message: "Username is required" }).nonempty()
+    username: z.string().min(1, { message: "Username is required" }).nonempty(),
   }),
 );
 
@@ -46,11 +46,7 @@ const onFormSubmit = (values: unknown) => {
           <h2 id="login-header">Login</h2>
         </template>
         <template #content>
-          <Form
-            :initialValues="initialValues"
-            :resolver="resolver"
-            @submit="onFormSubmit"
-          >
+          <Form :initialValues="initialValues" :resolver="resolver" @submit="onFormSubmit">
             <div class="field-common">
               <label id="username-label" for="username">username</label>
               <Field id="username-field" name="username" v-slot="{ field }">
