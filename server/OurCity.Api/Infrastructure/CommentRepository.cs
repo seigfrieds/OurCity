@@ -6,7 +6,7 @@ namespace OurCity.Api.Infrastructure;
 public interface ICommentRepository
 {
     Task<IEnumerable<Comment>> GetCommentsByPostId(int postId);
-    Task<Comment> GetCommentById(int postId, int commentId);
+    Task<Comment?> GetCommentById(int postId, int commentId);
     Task<Comment> CreateComment(Comment comment);
     Task<Comment> UpdateComment(Comment comment);
     Task<Comment> DeleteComment(Comment comment);
@@ -28,11 +28,11 @@ public class CommentRepository : ICommentRepository
             .ToListAsync();
     }
 
-    public async Task<Comment> GetCommentById(int postId, int commentId)
+    public async Task<Comment?> GetCommentById(int postId, int commentId)
     {
-        return await _appDbContext.Comments.FirstOrDefaultAsync(c =>
-            c.PostId == postId && c.Id == commentId && !c.IsDeleted
-        );
+        return await _appDbContext
+            .Comments.Where(c => c.PostId == postId && c.Id == commentId && !c.IsDeleted)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Comment> CreateComment(Comment comment)
