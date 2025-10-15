@@ -41,7 +41,7 @@ public class CommentIntegrationTests : IAsyncLifetime
             UpdatedAt = DateTime.UtcNow,
         };
         _dbContext.Users.Add(_testUser);
-        
+
         // Seed a generic post for tests
         _testPost = new Post
         {
@@ -53,7 +53,7 @@ public class CommentIntegrationTests : IAsyncLifetime
             UpdatedAt = DateTime.UtcNow,
         };
         _dbContext.Posts.Add(_testPost);
-        
+
         await _dbContext.SaveChangesAsync();
     }
 
@@ -68,12 +68,12 @@ public class CommentIntegrationTests : IAsyncLifetime
     {
         var expectedAuthorId = _testUser.Id;
         var expectedContent = "This is a test comment";
-        
+
         var commentService = new CommentService(new CommentRepository(_dbContext));
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = expectedAuthorId,
-            Content = expectedContent
+            Content = expectedContent,
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
@@ -87,24 +87,27 @@ public class CommentIntegrationTests : IAsyncLifetime
             Assert.False(createdComment.Data?.IsDeleted);
         });
     }
-    
+
     [Fact]
     public async Task GettingExistingCommentByIdShouldReturnComment()
     {
         var expectedAuthorId = _testUser.Id;
         var expectedContent = "This is a test comment";
-        
+
         var commentService = new CommentService(new CommentRepository(_dbContext));
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = expectedAuthorId,
-            Content = expectedContent
+            Content = expectedContent,
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
         Assert.NotNull(createdComment.Data);
 
-        var retrievedComment = await commentService.GetCommentById(_testPost.Id, createdComment.Data.Id);
+        var retrievedComment = await commentService.GetCommentById(
+            _testPost.Id,
+            createdComment.Data.Id
+        );
         Assert.True(retrievedComment.IsSuccess);
         Assert.NotNull(retrievedComment.Data);
 
@@ -117,18 +120,18 @@ public class CommentIntegrationTests : IAsyncLifetime
             Assert.False(createdComment.Data?.IsDeleted);
         });
     }
-    
+
     [Fact]
     public async Task GettingCommentsByPostIdShouldReturnComments()
     {
         var expectedAuthorId = _testUser.Id;
         var expectedContent = "This is a test comment";
-        
+
         var commentService = new CommentService(new CommentRepository(_dbContext));
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = expectedAuthorId,
-            Content = expectedContent
+            Content = expectedContent,
         };
 
         var createdComment1 = await commentService.CreateComment(_testPost.Id, createDto);
@@ -137,17 +140,21 @@ public class CommentIntegrationTests : IAsyncLifetime
         Assert.NotNull(createdComment2.Data);
 
         var postComments = await commentService.GetCommentsByPostId(_testPost.Id);
-        
+
         Assert.Equal(2, postComments.Count());
 
-        Assert.All(postComments, comment => Assert.Multiple(() =>
-        {
-            Assert.Equal(expectedAuthorId, comment.AuthorId);
-            Assert.Equal(expectedContent, comment.Content);
-            Assert.Equal(_testPost.Id, comment.PostId);
-            Assert.Equal(0, comment.Votes);
-            Assert.False(comment.IsDeleted);
-        }));
+        Assert.All(
+            postComments,
+            comment =>
+                Assert.Multiple(() =>
+                {
+                    Assert.Equal(expectedAuthorId, comment.AuthorId);
+                    Assert.Equal(expectedContent, comment.Content);
+                    Assert.Equal(_testPost.Id, comment.PostId);
+                    Assert.Equal(0, comment.Votes);
+                    Assert.False(comment.IsDeleted);
+                })
+        );
     }
 
     [Fact]
@@ -155,23 +162,24 @@ public class CommentIntegrationTests : IAsyncLifetime
     {
         var expectedAuthorId = _testUser.Id;
         var expectedContent = "This is new content";
-        
+
         var commentService = new CommentService(new CommentRepository(_dbContext));
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = expectedAuthorId,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
         Assert.NotNull(createdComment.Data);
 
-        var updateDto = new CommentUpdateRequestDto
-        {
-            Content = expectedContent
-        };
+        var updateDto = new CommentUpdateRequestDto { Content = expectedContent };
 
-        var updatedComment = await commentService.UpdateComment(_testPost.Id, createdComment.Data.Id, updateDto);
+        var updatedComment = await commentService.UpdateComment(
+            _testPost.Id,
+            createdComment.Data.Id,
+            updateDto
+        );
         Assert.True(updatedComment.IsSuccess);
         Assert.NotNull(updatedComment.Data);
 
@@ -192,7 +200,7 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
@@ -200,14 +208,23 @@ public class CommentIntegrationTests : IAsyncLifetime
         Assert.Equal(0, createdComment.Data.Votes);
 
         var userId = 2;
-        var upvotedComment = await commentService.VoteComment(_testPost.Id, createdComment.Data.Id, userId, VoteType.Upvote);
+        var upvotedComment = await commentService.VoteComment(
+            _testPost.Id,
+            createdComment.Data.Id,
+            userId,
+            VoteType.Upvote
+        );
 
         Assert.True(upvotedComment.IsSuccess);
         Assert.NotNull(upvotedComment.Data);
 
         Assert.Equal(1, upvotedComment.Data.Votes);
 
-        var userVoteStatus = await commentService.GetUserUpvoteStatus(_testPost.Id, createdComment.Data.Id, userId);
+        var userVoteStatus = await commentService.GetUserUpvoteStatus(
+            _testPost.Id,
+            createdComment.Data.Id,
+            userId
+        );
         Assert.True(userVoteStatus.IsSuccess);
         Assert.NotNull(userVoteStatus.Data);
         Assert.True(userVoteStatus.Data.Upvoted);
@@ -220,7 +237,7 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
@@ -228,14 +245,23 @@ public class CommentIntegrationTests : IAsyncLifetime
         Assert.Equal(0, createdComment.Data.Votes);
 
         var userId = 2;
-        var downvotedComment = await commentService.VoteComment(_testPost.Id, createdComment.Data.Id, userId, VoteType.Downvote);
+        var downvotedComment = await commentService.VoteComment(
+            _testPost.Id,
+            createdComment.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
 
         Assert.True(downvotedComment.IsSuccess);
         Assert.NotNull(downvotedComment.Data);
 
         Assert.Equal(-1, downvotedComment.Data.Votes);
-        
-        var userVoteStatus = await commentService.GetUserDownvoteStatus(_testPost.Id, createdComment.Data.Id, userId);
+
+        var userVoteStatus = await commentService.GetUserDownvoteStatus(
+            _testPost.Id,
+            createdComment.Data.Id,
+            userId
+        );
         Assert.True(userVoteStatus.IsSuccess);
         Assert.NotNull(userVoteStatus.Data);
         Assert.True(userVoteStatus.Data.Downvoted);
@@ -248,7 +274,7 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto()
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
@@ -289,7 +315,7 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto()
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
@@ -330,14 +356,19 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
         Assert.NotNull(createdComment.Data);
         Assert.Equal(0, createdComment.Data.Votes);
 
         var userId = 2;
-        var upvotedComment = await commentService.VoteComment(_testPost.Id, createdComment.Data.Id, userId, VoteType.Upvote);
+        var upvotedComment = await commentService.VoteComment(
+            _testPost.Id,
+            createdComment.Data.Id,
+            userId,
+            VoteType.Upvote
+        );
         Assert.True(upvotedComment.IsSuccess);
         Assert.NotNull(upvotedComment.Data);
         Assert.Equal(1, upvotedComment.Data.Votes);
@@ -360,7 +391,7 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = _testUser.Id,
-            Content = "This is a test comment"
+            Content = "This is a test comment",
         };
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
         Assert.NotNull(createdComment.Data);
@@ -395,18 +426,24 @@ public class CommentIntegrationTests : IAsyncLifetime
         var createDto = new CommentCreateRequestDto
         {
             AuthorId = _testUser.Id,
-            Content = "this is a test comment"
+            Content = "this is a test comment",
         };
 
         var createdComment = await commentService.CreateComment(_testPost.Id, createDto);
         Assert.NotNull(createdComment.Data);
 
-        var deletedComment = await commentService.DeleteComment(_testPost.Id, createdComment.Data.Id);
+        var deletedComment = await commentService.DeleteComment(
+            _testPost.Id,
+            createdComment.Data.Id
+        );
 
         Assert.True(deletedComment.IsSuccess);
         Assert.NotNull(deletedComment.Data);
 
-        var retrievedComment = await commentService.GetCommentById(_testPost.Id, deletedComment.Data.Id);
+        var retrievedComment = await commentService.GetCommentById(
+            _testPost.Id,
+            deletedComment.Data.Id
+        );
         Assert.False(retrievedComment.IsSuccess);
         Assert.Same(retrievedComment.Error, "Comment does not exist");
     }
