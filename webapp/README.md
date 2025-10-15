@@ -3,7 +3,7 @@
 ## Required Setup
 
 - Ensure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-- Ensure you have [Node.js and npm](https://nodejs.org/en/download).
+- Ensure you have [Node.js (>= v22) and npm](https://nodejs.org/en/download).
 - Ensure you have .env files setup
   - To run the dev environment, you will need .env.development (even if empty) or docker compose will error
   - To run the prod environment, you will need .env.production (even if empty) or docker compose will error

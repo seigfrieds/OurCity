@@ -1,9 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using OurCity.Api.Common.Dtos.Image;
 
-namespace OurCity.Api.Common.Dtos;
+namespace OurCity.Api.Common.Dtos.Post;
 
 public class PostCreateRequestDto
 {
+    [Required(ErrorMessage = "AuthorId is required")]
+    public required int AuthorId { get; set; }
+
     [Required(ErrorMessage = "Title is required")]
     [StringLength(50, ErrorMessage = "Title cannot exceed 50 characters")]
     public required string Title { get; set; }

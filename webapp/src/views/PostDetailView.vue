@@ -7,94 +7,13 @@ import VoteBox from "@/components/VoteBox.vue";
 import CommentInput from "@/components/CommentInput.vue";
 import CommentList from "@/components/CommentList.vue";
 import type { PostProps } from "@/types/interfaces";
-
-const posts = [
-  {
-    id: 1,
-    author: "a_real_prof",
-    title: "A beautiful day in the park",
-    location: "St. Vital South",
-    description:
-      "I spent the afternoon walking through the park, enjoying the beautiful weather. The leaves are just starting to change color, and the air is crisp and cool.",
-    votes: 7,
-    imageUrl:
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    comments: [],
-  },
-  {
-    id: 2,
-    author: "PoStoreGangEyeSayShun",
-    title: "Exploring the city streets",
-    location: "Tuxedo",
-    description:
-      "I love the energy of the city. There is always something new to see and do. I could spend hours just walking around and exploring.",
-    votes: 21,
-    imageUrl:
-      "https://images.unsplash.com/photo-1759167317838-4e77e12621cf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=744",
-    comments: [
-      {
-        id: 1,
-        author: "ViewCompOwnItLieBrrrAiry",
-        text: "I haven't seen much honestly, where could I go to find some good stuff to do?",
-        votes: 12,
-        replies: [
-          {
-            id: 7,
-            author: "UnemployedComputerScientist",
-            text: "Have you been to the Forks?",
-            replies: [],
-          },
-          {
-            id: 8,
-            author: "Shopoholic",
-            text: "theres always stuff to do at the outlet mall",
-            replies: [],
-          },
-        ],
-      },
-      {
-        id: 2,
-        author: "RealMichaelJordanProbably",
-        text: "If you're looking for some recommendations on things to do, I'd highly suggest going to a Sea Bears game.",
-        votes: 8,
-        replies: [],
-      },
-      {
-        id: 3,
-        author: "tacobellnachofries",
-        text: "check out Pineridge Hollow! It's a little outside the city but it's so much fun",
-        votes: 4,
-        replies: [],
-      },
-      {
-        id: 4,
-        author: "kingoftouchinggrass",
-        text: "bruh did anyone else go to nuit blanche? that was wild",
-        votes: 3,
-        replies: [],
-      },
-      {
-        id: 5,
-        author: "ILoveGambling21",
-        text: "the casino is pretty great too",
-        votes: 1,
-        replies: [],
-      },
-      {
-        id: 6,
-        author: "YoungSheldonBazinga",
-        text: "I have more fun watching young sheldon at home.",
-        votes: 1,
-        replies: [],
-      },
-    ],
-  },
-];
+import posts from "@/data/mockPosts";
 
 const route = useRoute();
 const router = useRouter();
 const postId = route.params.id;
 const post = ref<PostProps | undefined>(undefined);
+const currentImageIndex = ref(0);
 const showImageModal = ref(false);
 const commentText = ref("");
 
@@ -154,12 +73,33 @@ function deletePost() {
       <span>{{ post.location }}</span>
     </div>
 
-    <div v-if="post?.imageUrl" class="post-image-wrapper">
+    <div v-if="post?.imageUrls && post.imageUrls.length" class="post-image-wrapper">
       <div class="image-hover-wrapper">
-        <img :src="post.imageUrl" :alt="post.title" class="post-image" @click="openImageModal()" />
+        <img
+          :src="post.imageUrls[currentImageIndex]"
+          :alt="post.title"
+          class="post-image"
+          @click="openImageModal()"
+        />
         <div class="image-zoom-icon">
           <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></i>
         </div>
+        <button
+          v-if="currentImageIndex > 0"
+          class="image-btn image-prev"
+          @click="currentImageIndex--"
+          aria-label="Previous image"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+        <button
+          v-if="post.imageUrls && currentImageIndex < post.imageUrls.length - 1"
+          class="image-btn image-next"
+          @click="currentImageIndex++"
+          aria-label="Next image"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
       </div>
     </div>
 
@@ -171,7 +111,6 @@ function deletePost() {
 
     <div>
       <CommentInput @submit="(text: string) => (commentText = text)" />
-
       <div v-if="post?.comments && post.comments.length > 0" class="content">
         <CommentList :comments="post.comments" />
       </div>
@@ -180,7 +119,7 @@ function deletePost() {
 
     <ImageModal
       :show="showImageModal"
-      :imageUrl="post?.imageUrl"
+      :imageUrl="post?.imageUrls && post.imageUrls[currentImageIndex]"
       :title="post?.title"
       @close="closeImageModal"
     />
@@ -282,10 +221,18 @@ function deletePost() {
   display: flex;
   margin-bottom: 1rem;
   justify-content: center;
+  width: 100%;
+  height: 30rem;
+  max-width: 100%;
+  position: relative;
 }
 .image-hover-wrapper {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 .image-hover-wrapper:hover .image-zoom-icon {
@@ -293,7 +240,7 @@ function deletePost() {
 }
 .post-image {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
   border-radius: 2rem;
   display: block;
@@ -314,6 +261,36 @@ function deletePost() {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
+}
+
+.image-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.image-hover-wrapper:hover .image-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+.image-prev {
+  left: 1rem;
+}
+.image-next {
+  right: 1rem;
 }
 .no-comments {
   margin: 1.5rem 0;

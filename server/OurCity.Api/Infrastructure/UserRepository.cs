@@ -7,9 +7,10 @@ public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsers();
     Task<User?> GetUserById(int id);
+    Task<User?> GetUserByUsername(string username);
     Task<User> CreateUser(User user);
     Task<User> UpdateUser(User user);
-    Task DeleteUser(int id);
+    Task DeleteUser(User user);
 }
 
 public class UserRepository : IUserRepository
@@ -25,6 +26,7 @@ public class UserRepository : IUserRepository
     {
         return await _appDbContext
             .Users.Where(u => !u.IsDeleted) // exclude soft-deleted users
+            .Include(u => u.Posts)
             .OrderBy(u => u.Id)
             .ToListAsync();
     }
@@ -33,6 +35,14 @@ public class UserRepository : IUserRepository
     {
         return await _appDbContext
             .Users.Where(u => u.Id == id && !u.IsDeleted) // exclude soft-deleted users
+            .Include(u => u.Posts)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<User?> GetUserByUsername(string username)
+    {
+        return await _appDbContext
+            .Users.Where(u => u.Username == username && !u.IsDeleted) // exclude soft-deleted users
             .FirstOrDefaultAsync();
     }
 
@@ -50,15 +60,13 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task DeleteUser(int id)
+    public async Task DeleteUser(User user)
     {
-        var user = await _appDbContext.Users.FindAsync(id);
-        if (user != null)
-        {
-            // soft deletion in db (mark User as deleted)
-            user.IsDeleted = true;
-            user.UpdatedAt = DateTime.UtcNow;
-            await _appDbContext.SaveChangesAsync();
-        }
+        // soft deletion in db  (mark User as deleted)
+        user.IsDeleted = true;
+        user.UpdatedAt = DateTime.UtcNow;
+        _appDbContext.Users.Update(user);
+        await _appDbContext.SaveChangesAsync();
+        return;
     }
 }

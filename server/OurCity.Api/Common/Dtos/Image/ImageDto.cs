@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace OurCity.Api.Common.Dtos;
+namespace OurCity.Api.Common.Dtos.Image;
 
 public class ImageDto
 {

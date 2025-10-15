@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
 using OurCity.Api.Services;
 
@@ -35,7 +36,7 @@ public class PostController : ControllerBase
     [EndpointDescription("Gets a post by its ID")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPostById(int postId)
+    public async Task<IActionResult> GetPostById([FromRoute] int postId)
     {
         var post = await _postService.GetPostById(postId);
 
@@ -47,11 +48,53 @@ public class PostController : ControllerBase
         return Ok(post.Data);
     }
 
+    [HttpGet]
+    [Route("{postId}/upvote/{userId}")]
+    [EndpointSummary("Get a user's upvote status for a post")]
+    [ProducesResponseType(typeof(PostUpvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserUpvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _postService.GetUserUpvoteStatus(postId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
+    [HttpGet]
+    [Route("{postId}/downvote/{userId}")]
+    [EndpointSummary("Get a user's downvote status for a post")]
+    [ProducesResponseType(typeof(PostDownvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserDownvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _postService.GetUserDownvoteStatus(postId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
     [HttpPost]
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostCreateRequestDto postCreateRequestDto)
+    public async Task<IActionResult> CreatePost(
+        [FromBody] PostCreateRequestDto postCreateRequestDto
+    )
     {
         var post = await _postService.CreatePost(postCreateRequestDto);
 
@@ -65,8 +108,8 @@ public class PostController : ControllerBase
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePost(
-        int postId,
-        PostUpdateRequestDto postUpdateRequestDto
+        [FromRoute] int postId,
+        [FromBody] PostUpdateRequestDto postUpdateRequestDto
     )
     {
         var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
@@ -85,9 +128,16 @@ public class PostController : ControllerBase
     [EndpointDescription("A user votes on a post, either upvote or downvote")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> VotePost(int postId, int userId, VoteType voteType)
+    public async Task<IActionResult> VotePost(
+        [FromRoute] int postId,
+        [FromBody] PostVoteRequestDto postVoteRequestDto
+    )
     {
-        var post = await _postService.VotePost(postId, userId, voteType);
+        var post = await _postService.VotePost(
+            postId,
+            postVoteRequestDto.UserId,
+            postVoteRequestDto.VoteType
+        );
 
         if (!post.IsSuccess)
         {
@@ -103,7 +153,7 @@ public class PostController : ControllerBase
     [EndpointDescription("Deletes a post by its ID")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeletePost(int postId)
+    public async Task<IActionResult> DeletePost([FromRoute] int postId)
     {
         var post = await _postService.DeletePost(postId);
 

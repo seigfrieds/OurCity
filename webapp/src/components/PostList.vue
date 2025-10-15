@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import PostItem from "./PostItem.vue";
-import type { PostProps } from "@/types/interfaces";
-
-defineProps<{ posts: PostProps[] }>();
+import posts from "@/data/mockPosts";
 </script>
 
 <template>
@@ -13,12 +11,7 @@ defineProps<{ posts: PostProps[] }>();
       :to="`/posts/${post.id}`"
       style="text-decoration: none"
     >
-      <PostItem
-        :title="post.title"
-        :location="post.location"
-        :description="post.description"
-        :imageUrl="post.imageUrl"
-      />
+      <PostItem :post="post" />
     </router-link>
   </div>
 </template>

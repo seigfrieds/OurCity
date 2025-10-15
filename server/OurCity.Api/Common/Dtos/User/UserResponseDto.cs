@@ -1,3 +1,5 @@
+using OurCity.Api.Common.Dtos.Post;
+
 namespace OurCity.Api.Common.Dtos.User;
 
 public class UserResponseDto
@@ -6,11 +8,9 @@ public class UserResponseDto
 
     public required string Username { get; set; }
 
-    public required string Email { get; set; }
-
     public string? DisplayName { get; set; }
 
-    public required List<PostResponseDto> Posts { get; set; } = new();
+    public required List<int> PostIds { get; set; } = new();
 
     public required DateTime CreatedAt { get; set; }
 

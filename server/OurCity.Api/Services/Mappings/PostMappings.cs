@@ -1,4 +1,5 @@
-using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Image;
+using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services.Mappings;
@@ -15,12 +16,13 @@ public static class PostMappings
         return new PostResponseDto
         {
             Id = post.Id,
+            AuthorId = post.AuthorId,
             Title = post.Title,
             Description = post.Description,
-            UpvotedUserIds = post.UpvotedUserIds,
-            DownvotedUserIds = post.DownvotedUserIds,
+            Votes = post.UpvotedUserIds.Count - post.DownvotedUserIds.Count,
             Location = post.Location,
             Images = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
+            CommentIds = post.Comments?.Select(c => c.Id).ToList() ?? new List<int>(),
         };
     }
 
@@ -31,6 +33,7 @@ public static class PostMappings
             Title = postCreateRequestDto.Title,
             Description = postCreateRequestDto.Description,
             Location = postCreateRequestDto.Location,
+            AuthorId = postCreateRequestDto.AuthorId,
             Images = postCreateRequestDto
                 .Images.Select(imgDto => new Image { Url = imgDto.Url })
                 .ToList(),

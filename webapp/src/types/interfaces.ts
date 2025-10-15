@@ -5,7 +5,7 @@ export interface PostProps {
   location?: string;
   description: string;
   votes?: number;
-  imageUrl: string;
+  imageUrls: string[];
   comments: CommentProps[];
 }
 
