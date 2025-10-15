@@ -15,7 +15,7 @@ public class PostIntegrationTest : IAsyncLifetime
         .Build();
     private AppDbContext _dbContext = null!; //null! -> tell compiler to trust it will be initialized
     private User _testUser = null!;
-    
+
     public async Task InitializeAsync()
     {
         await _postgres.StartAsync();
@@ -35,7 +35,7 @@ public class PostIntegrationTest : IAsyncLifetime
             DisplayName = "Dummy",
             IsDeleted = false,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
         _dbContext.Users.Add(_testUser);
         await _dbContext.SaveChangesAsync();
