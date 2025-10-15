@@ -17,7 +17,7 @@ public class AuthenticationEndpointsTests : IClassFixture<OurCityWebApplicationF
     public async Task GetMeWithoutLogin()
     {
         using var client = _factory.CreateClient();
-        
+
         var response = await client.GetAsync("/Authentication/Me");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -27,7 +27,7 @@ public class AuthenticationEndpointsTests : IClassFixture<OurCityWebApplicationF
     public async Task GetMeWithLogin()
     {
         using var client = _factory.CreateClient();
-        
+
         await client.PostAsync("/Authentication/Login/username", null);
 
         var response = await client.GetAsync("/Authentication/Me");
@@ -39,7 +39,7 @@ public class AuthenticationEndpointsTests : IClassFixture<OurCityWebApplicationF
     public async Task GetMeWithLoginThenLogout()
     {
         using var client = _factory.CreateClient();
-        
+
         await client.PostAsync("/Authentication/Login/username", null);
         var loginMeResponse = await client.GetAsync("/Authentication/Me");
         Assert.Equal(HttpStatusCode.OK, loginMeResponse.StatusCode);
