@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using OurCity.Api.Configurations;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Middlewares;
@@ -13,9 +12,6 @@ using Scalar.AspNetCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
-//App configuration
-builder.Services.Configure<ExampleSettings>(builder.Configuration.GetSection("ExampleSettings"));
 
 //Logging
 builder.Host.UseSerilog((ctx, config) => config.ReadFrom.Configuration(builder.Configuration));
@@ -35,7 +31,6 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IPolicyService, PolicyService>();
-builder.Services.AddScoped<IExampleService, ExampleService>();
 
 //Controller
 builder.Services.AddControllers();
@@ -101,3 +96,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
+
+public partial class Program { }

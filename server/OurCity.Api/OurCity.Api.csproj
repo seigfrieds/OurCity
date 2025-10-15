@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <TreatWarningsAsErrors Condition="'$(lint)' == 'true'">true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>

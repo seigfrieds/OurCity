@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using OurCity.Api.Common.Dtos;
 using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
 using OurCity.Api.Infrastructure;
@@ -7,9 +6,11 @@ using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services;
 using Testcontainers.PostgreSql;
 
-namespace OurCity.Api.Test;
+namespace OurCity.Api.Test.IntegrationTests;
 
-public class PostIntegrationTest : IAsyncLifetime
+[Trait("Type", "Integration")]
+[Trait("Domain", "Post")]
+public class PostIntegrationTests : IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
         .WithImage("postgres:16.10")
