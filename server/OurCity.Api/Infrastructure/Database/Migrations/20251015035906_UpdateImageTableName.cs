@@ -5,7 +5,7 @@
 namespace OurCity.Api.Infrastructure.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class updateimagetablename : Migration
+    public partial class UpdateImageTableName : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

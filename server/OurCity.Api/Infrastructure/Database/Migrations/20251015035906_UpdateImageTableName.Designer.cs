@@ -14,7 +14,7 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20251015035906_update-image-table-name")]
-    partial class updateimagetablename
+    partial class UpdateImageTableName
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
