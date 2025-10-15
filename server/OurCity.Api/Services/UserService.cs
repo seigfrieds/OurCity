@@ -57,7 +57,7 @@ public class UserService : IUserService
         {
             return Result<UserResponseDto>.Failure("Username already exists.");
         }
-        
+
         var createdUser = await _userRepository.CreateUser(
             userCreateRequestDto.CreateDtoToEntity()
         );
