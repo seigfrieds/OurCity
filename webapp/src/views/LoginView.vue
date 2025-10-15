@@ -12,6 +12,7 @@ import Password from "primevue/password";
 import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
+import WipMessage from "@/components/WipMessage.vue";
 
 type LoginFormValues = {
   email: string;
@@ -19,8 +20,7 @@ type LoginFormValues = {
 };
 
 const initialValues = {
-  email: "",
-  password: "",
+  username: "",
 };
 
 const resolver = toTypedSchema(
@@ -40,9 +40,15 @@ const onFormSubmit = (values: unknown) => {
   <div class="login-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
+
+      <WipMessage 
+        message="The Login Page is currently a work in progress" 
+        description="The 'Log in' button is intended to NOT trigger a login API call yet"
+      />
+      
       <Card>
         <template #title>
-          <h2>Login</h2>
+          <h2 id="login-header">Login</h2>
         </template>
         <template #content>
           <Form
@@ -52,24 +58,12 @@ const onFormSubmit = (values: unknown) => {
             @submit="onFormSubmit"
           >
             <div class="field-common">
-              <label for="email">Email</label>
-              <Field name="email" v-slot="{ field }">
-                <InputText v-bind="field" placeholder="you@example.com" />
+              <label id="username-label" for="username">username</label>
+              <Field id="username-field" name="username" v-slot="{ field }">
+                <InputText id="uesrname-inputText" v-bind="field" placeholder="John Doe" />
               </Field>
-              <Message v-if="errors.email" severity="error" size="small" variant="simple">{{
-                errors.email
-              }}</Message>
             </div>
-            <div class="field-common">
-              <label for="password">Password</label>
-              <Field name="password" v-slot="{ field }">
-                <Password v-bind="field" :feedback="false" toggleMask />
-              </Field>
-              <Message v-if="errors.password" severity="error" size="small" variant="simple">{{
-                errors.password
-              }}</Message>
-            </div>
-            <Button type="submit" label="Log in" class="mt-2" />
+            <Button id="login-btn" type="submit" label="Log in" class="mt-2" />
           </Form>
           <div class="card-footer">
             <span>New here? </span><router-link to="/register">Create an account</router-link>
@@ -79,3 +73,15 @@ const onFormSubmit = (values: unknown) => {
     </div>
   </div>
 </template>
+
+<style>
+  #login-header {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  #login-btn {
+    margin-top:2rem;
+  }
+
+</style>
