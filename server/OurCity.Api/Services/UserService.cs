@@ -62,7 +62,6 @@ public class UserService : IUserService
         UserUpdateRequestDto userUpdateRequestDto
     )
     {
-        // check if the user id exists in db
         var existingUser = await _userRepository.GetUserById(id);
 
         if (existingUser == null)
