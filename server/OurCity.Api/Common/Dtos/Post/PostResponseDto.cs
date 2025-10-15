@@ -1,4 +1,6 @@
-namespace OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Image;
+
+namespace OurCity.Api.Common.Dtos.Post;
 
 public class PostResponseDto
 {

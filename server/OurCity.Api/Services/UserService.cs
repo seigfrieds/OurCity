@@ -1,6 +1,7 @@
 using OurCity.Api.Common;
 using OurCity.Api.Common.Dtos.User;
 using OurCity.Api.Infrastructure;
+using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services.Mappings;
 
 namespace OurCity.Api.Services;
@@ -9,6 +10,7 @@ public interface IUserService
 {
     Task<IEnumerable<UserResponseDto>> GetUsers();
     Task<Result<UserResponseDto>> GetUserById(int id);
+    Task<Result<UserResponseDto>> GetUserByUsername(string username);
     Task<Result<UserResponseDto>> CreateUser(UserCreateRequestDto userRequestDto);
     Task<Result<UserResponseDto>> UpdateUser(int id, UserUpdateRequestDto userRequestDto);
     Task<Result<UserResponseDto>> DeleteUser(int id);
@@ -31,6 +33,16 @@ public class UserService : IUserService
     public async Task<Result<UserResponseDto>> GetUserById(int id)
     {
         var user = await _userRepository.GetUserById(id);
+        if (user == null)
+        {
+            return Result<UserResponseDto>.Failure("User not found.");
+        }
+        return Result<UserResponseDto>.Success(user.ToDto());
+    }
+    
+    public async Task<Result<UserResponseDto>> GetUserByUsername(string username)
+    {
+        var user = await _userRepository.GetUserByUsername(username);
         if (user == null)
         {
             return Result<UserResponseDto>.Failure("User not found.");

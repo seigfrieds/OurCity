@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using OurCity.Api.Common.Dtos.Image;
 
-namespace OurCity.Api.Common.Dtos;
+namespace OurCity.Api.Common.Dtos.Post;
 
 public class PostUpdateRequestDto
 {

@@ -1,4 +1,5 @@
-using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Image;
+using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services.Mappings;

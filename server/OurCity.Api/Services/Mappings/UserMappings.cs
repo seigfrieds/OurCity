@@ -15,6 +15,7 @@ public static class UserMappings
         return new UserResponseDto
         {
             Id = user.Id,
+            Username = user.Username,
             DisplayName = user.DisplayName,
             PostIds = user.Posts.Select(p => p.Id).ToList(),
             CreatedAt = user.CreatedAt,
@@ -27,6 +28,7 @@ public static class UserMappings
     {
         return new User
         {
+            Username = userCreateRequestDto.Username,
             DisplayName = userCreateRequestDto.DisplayName,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
@@ -38,6 +40,7 @@ public static class UserMappings
         User existingUser
     )
     {
+        existingUser.Username = userUpdateRequestDto.Username;
         existingUser.DisplayName = userUpdateRequestDto.DisplayName ?? existingUser.DisplayName;
         existingUser.UpdatedAt = DateTime.UtcNow;
 
