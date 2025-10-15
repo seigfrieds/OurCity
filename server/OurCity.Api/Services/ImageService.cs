@@ -1,12 +1,11 @@
 /// Generative AI - ChatGPT was used to assist in the creation of this file.
 /// Prompt: Help me create a boiler plate for a C# logic that uploads images to AWS S3 and saves the image URLs to a database.
-
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Mvc;
 using OurCity.Api.Common;
 using OurCity.Api.Common.Dtos.Image;
 using OurCity.Api.Infrastructure;
-using Amazon.S3;
-using Amazon.S3.Transfer;
 using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services;
@@ -23,15 +22,25 @@ public class ImageService : IImageService
     private readonly IAmazonS3 _s3;
     private readonly string _bucketName;
 
-    public ImageService(IImageRepository imageRepository, IPostRepository postRepository, IAmazonS3 s3, IConfiguration configuration)
+    public ImageService(
+        IImageRepository imageRepository,
+        IPostRepository postRepository,
+        IAmazonS3 s3,
+        IConfiguration configuration
+    )
     {
         _imageRepository = imageRepository;
         _postRepository = postRepository;
         _s3 = s3;
-        _bucketName = configuration.GetValue<string>("S3Settings:BucketName") ?? throw new ArgumentNullException("S3 bucket name is not configured");
+        _bucketName =
+            configuration.GetValue<string>("S3Settings:BucketName")
+            ?? throw new ArgumentNullException("S3 bucket name is not configured");
     }
 
-    public async Task<Result<IEnumerable<ImageDto>>> UploadImages(int postId, [FromForm] List<IFormFile> files)
+    public async Task<Result<IEnumerable<ImageDto>>> UploadImages(
+        int postId,
+        [FromForm] List<IFormFile> files
+    )
     {
         var post = await _postRepository.GetPostById(postId);
 
@@ -52,10 +61,12 @@ public class ImageService : IImageService
         {
             if (file.Length == 0)
                 return Result<IEnumerable<ImageDto>>.Failure("Empty file detected");
-                
+
             if (file.Length > maxFileSize)
-                return Result<IEnumerable<ImageDto>>.Failure($"File {file.FileName} exceeds 5MB limit");
-            
+                return Result<IEnumerable<ImageDto>>.Failure(
+                    $"File {file.FileName} exceeds 5MB limit"
+                );
+
             var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtensions.Contains(extension))
                 return Result<IEnumerable<ImageDto>>.Failure($"Invalid file type: {extension}");
@@ -77,7 +88,7 @@ public class ImageService : IImageService
                     InputStream = stream,
                     Key = s3key,
                     BucketName = _bucketName,
-                    ContentType = file.ContentType
+                    ContentType = file.ContentType,
                 };
 
                 await transferUtility.UploadAsync(uploadRequest);
@@ -88,14 +99,11 @@ public class ImageService : IImageService
                     Url = url,
                     PostId = postId,
                     CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
                 };
 
                 images.Add(image);
-                uploadedImages.Add(new ImageDto
-                {
-                    Url = url
-                });
+                uploadedImages.Add(new ImageDto { Url = url });
             }
 
             await _imageRepository.UploadImages(images);

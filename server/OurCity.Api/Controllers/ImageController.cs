@@ -31,8 +31,7 @@ public class ImageController : ControllerBase
         {
             return NotFound(images.Error);
         }
-        
-        return Ok(images.Data);
 
+        return Ok(images.Data);
     }
 }

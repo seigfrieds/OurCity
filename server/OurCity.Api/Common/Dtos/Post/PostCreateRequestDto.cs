@@ -17,5 +17,4 @@ public class PostCreateRequestDto
 
     [StringLength(50, ErrorMessage = "Location cannot exceed 50 characters")]
     public string? Location { get; set; }
-
 }

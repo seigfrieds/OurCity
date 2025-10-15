@@ -26,24 +26,21 @@ builder.Services.Configure<AwsSettings>(builder.Configuration.GetSection("AwsSet
 builder.Services.AddSingleton<IAmazonS3>(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<AwsSettings>>().Value;
-    
+
     if (string.IsNullOrEmpty(settings.Region))
         throw new InvalidOperationException("AWS Region is not configured");
-    
+
     var config = new AmazonS3Config
     {
-        RegionEndpoint = RegionEndpoint.GetBySystemName(settings.Region)
+        RegionEndpoint = RegionEndpoint.GetBySystemName(settings.Region),
     };
 
-    if (!string.IsNullOrEmpty(settings.AccessKey) &&
-        !string.IsNullOrEmpty(settings.SecretKey))
+    if (!string.IsNullOrEmpty(settings.AccessKey) && !string.IsNullOrEmpty(settings.SecretKey))
     {
-        var credentials = new BasicAWSCredentials(
-            settings.AccessKey,
-            settings.SecretKey);
+        var credentials = new BasicAWSCredentials(settings.AccessKey, settings.SecretKey);
         return new AmazonS3Client(credentials, config);
     }
-    
+
     return new AmazonS3Client(config);
 });
 
