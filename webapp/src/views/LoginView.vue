@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page for users to log in with their email and password. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Button from "primevue/button";
@@ -29,12 +31,11 @@ const resolver = toTypedSchema(
 );
 
 const onFormSubmit = (values: unknown) => {
+  //API connection is not currently implemented.
   const inputtedValues = values as LoginFormValues;
   console.log("Login submit", inputtedValues);
-  // TODO: call API client to authenticate
 };
 </script>
-
 <template>
   <div class="login-view form-layout">
     <PageHeader />
@@ -59,7 +60,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.email
               }}</Message>
             </div>
-
             <div class="field-common">
               <label for="password">Password</label>
               <Field name="password" v-slot="{ field }">
@@ -69,7 +69,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.password
               }}</Message>
             </div>
-
             <Button type="submit" label="Log in" class="mt-2" />
           </Form>
           <div class="card-footer">

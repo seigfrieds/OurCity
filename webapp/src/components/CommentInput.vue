@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to provide help with CSS styling and for help with syntax -->
 <script setup lang="ts">
 import { ref } from "vue";
 import Textarea from "primevue/textarea";
@@ -36,13 +38,10 @@ function handleSubmit() {
   position: relative;
 }
 .comment-input {
-  /* width: 100%; */
   border-radius: 3rem;
   border: 1px solid var(--border-color);
   padding: 0.75rem 3rem 0.75rem 1.5rem;
   font-size: 1rem;
-  /* min-height: 1rem; */
-  /* resize: vertical; */
 }
 .comment-arrow-btn {
   position: absolute;

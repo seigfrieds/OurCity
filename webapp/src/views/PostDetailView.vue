@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to provide help with CSS styling and for help with syntax -->
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -29,9 +31,7 @@ function closeImageModal() {
   showImageModal.value = false;
 }
 
-// added edit/delete handlers
 function editPost() {
-  // navigate to the edit page, passing the post id as a query parameter
   const id = post?.value?.id;
   if (id == null) return;
   router.push({ name: "edit", query: { id: String(id) } });
@@ -40,22 +40,16 @@ function editPost() {
 function deletePost() {
   if (confirm("Are you sure you want to delete this post?")) {
     console.log("Delete post", post?.value?.id);
-    // placeholder: perform delete and navigate away
   }
 }
 </script>
 
-<!-- Layout for post details page is based off of Reddit -->
 <template>
   <PageHeader />
   <div class="post-detail-view">
     <h1 class="post-title">{{ post?.title }}</h1>
-
-    <!-- replaced single author line with meta row that contains author on the left
-         and vertically stacked edit/delete buttons right-aligned -->
     <div class="post-meta">
       <div class="post-author">By @{{ post?.author }}</div>
-
       <div class="post-actions" v-if="post">
         <button class="post-action-btn edit-btn" @click="editPost" aria-label="Edit post">
           Edit
@@ -65,14 +59,12 @@ function deletePost() {
         </button>
       </div>
     </div>
-
     <div v-if="post?.location" class="post-location">
       <div class="location-icon">
         <i class="pi pi-map-marker"></i>
       </div>
       <span>{{ post.location }}</span>
     </div>
-
     <div v-if="post?.imageUrls && post.imageUrls.length" class="post-image-wrapper">
       <div class="image-hover-wrapper">
         <img
@@ -102,13 +94,10 @@ function deletePost() {
         </button>
       </div>
     </div>
-
     <div class="post-description">
       <p>{{ post?.description }}</p>
     </div>
-
     <VoteBox class="post-votes" :votes="post?.votes ?? 0" />
-
     <div>
       <CommentInput @submit="(text: string) => (commentText = text)" />
       <div v-if="post?.comments && post.comments.length > 0" class="content">
@@ -116,7 +105,6 @@ function deletePost() {
       </div>
       <div v-else class="no-comments">Start a discussion!</div>
     </div>
-
     <ImageModal
       :show="showImageModal"
       :imageUrl="post?.imageUrls && post.imageUrls[currentImageIndex]"
@@ -141,8 +129,6 @@ function deletePost() {
   text-align: left;
   color: var(--surface-color);
 }
-
-/* new: layout for author + actions row */
 .post-meta {
   display: flex;
   align-items: center;
@@ -154,8 +140,6 @@ function deletePost() {
   font-size: 1rem;
   color: var(--text-color);
 }
-
-/* vertical action buttons, right aligned */
 .post-actions {
   display: flex;
   flex-direction: column;
@@ -201,8 +185,6 @@ function deletePost() {
   filter: brightness(0.95);
   outline: none;
 }
-
-/* ...existing code... */
 .post-location {
   display: flex;
   align-items: center;
@@ -262,7 +244,6 @@ function deletePost() {
   pointer-events: none;
   transition: opacity 0.2s;
 }
-
 .image-btn {
   position: absolute;
   top: 50%;

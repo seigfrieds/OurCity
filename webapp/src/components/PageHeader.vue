@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page header component with a title, search bar, create, login, logout, and account buttons. -->
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -11,14 +13,13 @@ type MenuItem = {
 };
 
 const router = useRouter();
-
 const searchQuery = ref("");
-
-// TODO: Replace with actual auth state management
+// Currently keeping this here as our login authentication is
+// not yet fully implemented.
 const isLoggedIn = ref(false);
 
 function handleLogout(): void {
-  // TODO: Add actual logout logic here
+  // Currently logout is not yet implemented.
   isLoggedIn.value = false;
   router.push("/login");
 }

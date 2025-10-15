@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a post list component that displays a list of post items. -->
 <script setup lang="ts">
 import PostItem from "./PostItem.vue";
 import posts from "@/data/mockPosts";

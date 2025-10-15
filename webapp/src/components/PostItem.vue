@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a post item component with a title, location, description, and image. -->
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
@@ -155,7 +157,6 @@ function downvote() {
   border-radius: 4px;
 }
 
-/* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .post-content {
     flex-direction: column;
