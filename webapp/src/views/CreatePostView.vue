@@ -1,3 +1,6 @@
+<!-- Generative AI - Claude was used to assist uploading files -->
+<!-- Prompt: Help me implement multiple files upload in my Vue.js page, I already have my api set up -->
+
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Button from "primevue/button";
@@ -9,42 +12,106 @@ import FileUpload from "primevue/fileupload";
 import InputText from "primevue/inputtext";
 import Editor from "primevue/editor";
 import Message from "primevue/message";
+import { ref } from "vue";
+import { useToast } from "primevue/usetoast";
+import { createPost } from "@/api/posts";
+import { uploadImage } from "@/api/images";
 
 import "@/assets/styles/forms.css";
+import { getMyInfo } from "@/api/authentication";
+import { getUserByUsername } from "@/api/users";
+import { useRouter } from "vue-router";
 
 type CreatePostFormValues = {
   title: string;
-  location: string;
+  location?: string;
   description: string;
-  image: File | undefined;
+  images?: File[];
 };
 
 type FileUploadEvent = {
   files: File[];
 };
 
+const toast = useToast(); 
+const isSubmitting = ref(false);
+const router = useRouter();
+
 const initialValues = {
   title: "",
   location: "",
   description: "",
-  image: undefined,
+  images: [],
 };
 
 const resolver = toTypedSchema(
   z.object({
     title: z.string().min(1, { message: "Title is required" }),
-    location: z.string().min(1, { message: "Location is required" }),
+    location: z.string().optional(),
     description: z.string().min(1, { message: "Description is required" }),
-    image: z
-      .instanceof(File, { message: "Image is required" })
-      .refine((file: File) => file.size < 1000000, { message: "Image must be less than 1MB" }),
+    images: z
+      .array(z.instanceof(File))
+      .optional()
+      .refine(
+        (files) => !files || files.length === 0 || files.length <= 10,
+        { message: "Maximum 10 images allowed" }
+      )
+      .refine(
+        (files) => !files || files.every((file) => file.size < 5000000),
+        { message: "Each image must be less than 5MB" }
+      ) 
+      .refine(
+        (files) => !files || files.every((file) => 
+          ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)
+        ),
+        { message: "Only image files (JPG, PNG, GIF, WebP) are allowed" }
+      ),
   }),
 );
 
-const onFormSubmit = (values: unknown) => {
+const onFormSubmit = async (values: unknown) => {
   const inputtedValues = values as CreatePostFormValues;
-  console.log("Submitting post:", inputtedValues);
-  // Here you would typically make an API call to create the post
+  const images = inputtedValues.images; 
+  isSubmitting.value = true;
+
+  try {
+    console.log("Creating post:", inputtedValues);
+    const username = await getMyInfo(); 
+    const user = await getUserByUsername(username);
+
+    const createPostDto = {
+      authorId: user.id, 
+      title: inputtedValues.title,
+      description: inputtedValues.description,
+      location: inputtedValues.location,
+    }
+    const post = await createPost(createPostDto);
+
+    if(images && images.length > 0) {
+      const uploadedImages = await uploadImage(post.id, images); 
+    }
+
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `Post created successfully`,
+      life: 3000,
+    });
+
+  } catch(error) {
+    console.error("Error creating a post", error);
+    
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Failed to create post',
+      life: 5000,
+    });
+    
+  } finally {
+    isSubmitting.value = false;
+    router.push('/');
+  }
 };
 
 const onFileSelect = (
