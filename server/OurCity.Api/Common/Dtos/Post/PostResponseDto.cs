@@ -1,5 +1,3 @@
-using OurCity.Api.Common.Dtos.Image;
-
 namespace OurCity.Api.Common.Dtos.Post;
 
 public class PostResponseDto
@@ -10,6 +8,5 @@ public class PostResponseDto
     public required string Description { get; set; }
     public required int Votes { get; set; }
     public required string? Location { get; set; }
-    public required List<ImageDto> Images { get; set; } = new();
     public List<int> CommentIds { get; set; } = new();
 }

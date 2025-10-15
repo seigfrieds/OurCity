@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using OurCity.Api.Common.Dtos;
 using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
 using OurCity.Api.Infrastructure;
@@ -86,10 +85,6 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Equal(createdPost.Data.Description, retrievedPost.Data.Description);
             Assert.Equal(createdPost.Data.Location, retrievedPost.Data.Location);
             Assert.Equal(createdPost.Data.Votes, retrievedPost.Data.Votes);
-            Assert.Equal(
-                createdPost.Data.Images.Select(i => i.Url),
-                retrievedPost.Data.Images.Select(i => i.Url)
-            );
         });
     }
 
@@ -115,7 +110,6 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Equal(_testUser.Id, createdPost.Data.AuthorId);
             Assert.Equal(0, createdPost.Data.Votes);
             Assert.Null(createdPost.Data.Location);
-            Assert.Empty(createdPost.Data.Images);
         });
     }
 
@@ -152,7 +146,6 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Equal("New Location", updatedPost.Data.Location);
             Assert.Equal(_testUser.Id, updatedPost.Data.AuthorId);
             Assert.Equal(0, updatedPost.Data.Votes);
-            Assert.Empty(updatedPost.Data.Images);
         });
     }
 
