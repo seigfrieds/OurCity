@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import Textarea from "primevue/textarea";
 import "@/assets/styles/smooth-transition.css";
 

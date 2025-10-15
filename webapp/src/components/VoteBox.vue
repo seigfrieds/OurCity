@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
 import VoteButton from "primevue/button";
 
 const props = defineProps<{ votes: number }>();

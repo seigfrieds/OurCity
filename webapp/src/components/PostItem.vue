@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
-import { withDefaults, defineProps, defineEmits } from "vue";
 
 withDefaults(
   defineProps<{

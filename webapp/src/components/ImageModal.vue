@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from "vue";
 import "@/assets/styles/smooth-transition.css";
 
 const props = defineProps<{ show: boolean; imageUrl?: string; title?: string }>();
