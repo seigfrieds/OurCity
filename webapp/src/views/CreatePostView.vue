@@ -88,7 +88,7 @@ const onFormSubmit = async (values: unknown) => {
     const post = await createPost(createPostDto);
 
     if(images && images.length > 0) {
-      const uploadedImages = await uploadImage(post.id, images); 
+      await uploadImage(post.id, images); 
     }
 
     toast.add({
