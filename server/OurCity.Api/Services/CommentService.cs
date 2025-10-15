@@ -9,7 +9,7 @@ namespace OurCity.Api.Services;
 public interface ICommentService
 {
     Task<IEnumerable<CommentResponseDto>> GetCommentsByPostId(int postId);
-    Task<CommentResponseDto> GetCommentById(int postId, int commentId);
+    Task<Result<CommentResponseDto>> GetCommentById(int postId, int commentId);
     Task<Result<CommentUpvoteResponseDto>> GetUserUpvoteStatus(
         int postId,
         int commentId,
@@ -52,10 +52,16 @@ public class CommentService : ICommentService
         return (await _commentRepository.GetCommentsByPostId(postId)).ToDtos();
     }
 
-    public async Task<CommentResponseDto> GetCommentById(int postId, int commentId)
+    public async Task<Result<CommentResponseDto>> GetCommentById(int postId, int commentId)
     {
         var comment = await _commentRepository.GetCommentById(postId, commentId);
-        return comment.ToDto();
+
+        if (comment == null)
+        {
+            return Result<CommentResponseDto>.Failure("Comment does not exist");
+        }
+
+        return Result<CommentResponseDto>.Success(comment.ToDto());
     }
 
     public async Task<Result<CommentUpvoteResponseDto>> GetUserUpvoteStatus(
@@ -125,10 +131,17 @@ public class CommentService : ICommentService
         CommentUpdateRequestDto commentUpdateRequestDto
     )
     {
-        var existingComment = await _commentRepository.GetCommentById(postId, commentId);
+        var comment = await _commentRepository.GetCommentById(postId, commentId);
+
+        if (comment == null)
+        {
+            return Result<CommentResponseDto>.Failure("Comment does not exist");
+        }
+
         var updatedComment = await _commentRepository.UpdateComment(
-            commentUpdateRequestDto.ToEntity(existingComment)
+            commentUpdateRequestDto.ToEntity(comment)
         );
+
         return Result<CommentResponseDto>.Success(updatedComment.ToDto());
     }
 
