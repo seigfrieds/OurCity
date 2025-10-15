@@ -256,24 +256,24 @@ public class PostUnitTest
     Assert.Equal(postId, result.Data.Id);
     Assert.Contains(userId, updatedPost.UpvotedUserIds);
   }
-  
+
   [Fact]
   public async Task DeletePost_ReturnsDeletedPost_WhenValid()
   {
-      // Arrange
-      var postId = 1;
-      var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test" };
+    // Arrange
+    var postId = 1;
+    var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test" };
 
-      _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
-      _mockRepo.Setup(r => r.DeletePost(existingPost)).ReturnsAsync(existingPost);
+    _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
+    _mockRepo.Setup(r => r.DeletePost(existingPost)).ReturnsAsync(existingPost);
 
-      // Act
-      var result = await _service.DeletePost(postId);
+    // Act
+    var result = await _service.DeletePost(postId);
 
-      // Assert
-      Assert.True(result.IsSuccess);
-      Assert.NotNull(result.Data);
-      Assert.Equal(postId, result.Data.Id);
-      Assert.Equal("Test Post", result.Data.Title);
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.NotNull(result.Data);
+    Assert.Equal(postId, result.Data.Id);
+    Assert.Equal("Test Post", result.Data.Title);
   }
 }
