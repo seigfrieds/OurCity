@@ -33,7 +33,9 @@ public class UserController : ControllerBase
     [EndpointSummary("Get user by ID")]
     [EndpointDescription("Gets a user with the specified ID")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetUserById(int id)
+    public async Task<IActionResult> GetUserById(
+        [FromRoute] int id
+    )
     {
         var user = await _userService.GetUserById(id);
         if (!user.IsSuccess)
@@ -47,7 +49,9 @@ public class UserController : ControllerBase
     [EndpointSummary("Create a new user")]
     [EndpointDescription("Creates a new user with the provided data")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateUser(UserCreateRequestDto userCreateRequestDto)
+    public async Task<IActionResult> CreateUser(
+        [FromBody] UserCreateRequestDto userCreateRequestDto
+    )
     {
         var user = await _userService.CreateUser(userCreateRequestDto);
 
@@ -59,7 +63,10 @@ public class UserController : ControllerBase
     [EndpointSummary("Update an existing user")]
     [EndpointDescription("Updates the user with the specified ID")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> UpdateUser(int id, UserUpdateRequestDto userUpdateRequestDto)
+    public async Task<IActionResult> UpdateUser(
+        [FromRoute] int id,
+        [FromBody] UserUpdateRequestDto userUpdateRequestDto
+    )
     {
         var user = await _userService.UpdateUser(id, userUpdateRequestDto);
         if (!user.IsSuccess)
@@ -74,7 +81,9 @@ public class UserController : ControllerBase
     [EndpointSummary("Delete a user")]
     [EndpointDescription("Deletes the user with the specified ID")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
-    public async Task<IActionResult> DeleteUser(int id)
+    public async Task<IActionResult> DeleteUser(
+        [FromRoute] int id
+    )
     {
         var user = await _userService.DeleteUser(id);
         if (!user.IsSuccess)
