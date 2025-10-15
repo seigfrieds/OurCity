@@ -4,22 +4,22 @@ export interface PostProps {
   title: string;
   location?: string;
   description: string;
-  votes?: number;
-  imageUrls: string[];
+  votes: number;
+  imageUrls?: string[];
   comments: CommentProps[];
 }
 
 export interface CommentProps {
   id: string | number;
   author: string;
-  text: string;
-  votes?: number;
+  content: string;
+  votes: number;
   replies: CommentProps[];
 }
 
 export interface ReplyProps {
   id: string | number;
   author: string;
-  text: string;
-  votes?: number;
+  content: string;
+  votes: number;
 }

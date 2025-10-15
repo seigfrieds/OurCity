@@ -1,16 +1,7 @@
-<script setup lang="ts">
-import PageHeader from "@/components/PageHeader.vue";
-import PostList from "@/components/PostList.vue";
-import posts from "@/data/mockPosts";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div class="home-view">
-    <PageHeader />
-    <div class="content">
-      <PostList :posts="posts" />
-    </div>
-  </div>
+  <div class="home-view">hello world</div>
 </template>
 
 <style scoped></style>
