@@ -12,7 +12,7 @@ defineProps<{ comments: CommentProps[] }>();
       :key="comment.id"
       :id="comment.id"
       :author="comment.author"
-      :text="comment.text"
+      :content="comment.content"
       :votes="comment.votes"
       :replies="comment.replies"
     />

@@ -12,7 +12,7 @@ export interface PostProps {
 export interface CommentProps {
   id: string | number;
   author: string;
-  text: string;
+  content: string;
   votes?: number;
   replies: CommentProps[];
 }

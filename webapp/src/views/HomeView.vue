@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import PageHeader from '@/components/PageHeader.vue'
 import { getPosts } from '@/api/posts'
-import type { PostResponseDto } from '@/types/api'
+import type { PostResponseDto } from '@/types/posts'
 import PostList from '@/components/PostList.vue'
 
 const posts = ref<PostResponseDto[]>([])
@@ -10,11 +10,13 @@ const posts = ref<PostResponseDto[]>([])
 onMounted(async () => {
   try {
     const response = await getPosts()
-    posts.value = response.data // Adjust if your API response shape is different
+    console.log('Fetched posts:', response)
+    posts.value = Array.isArray(response) ? response : response.data
   } catch (error) {
     console.error('Failed to fetch posts:', error)
   }
 })
+
 </script>
 
 <template>

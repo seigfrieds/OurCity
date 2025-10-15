@@ -1,4 +1,4 @@
-
+import type { ImageDto } from "./images";
 
 export type PostCreateRequestDto = {
   authorId: number;
@@ -25,8 +25,7 @@ export type PostResponseDto = {
   description: string;
   location: string;
   votes: number;
-  createdAt: string;
-  updatedAt: string; 
+  commentIds?: number[];
   images?: ImageDto[];
 }
 

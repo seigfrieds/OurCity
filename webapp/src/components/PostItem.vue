@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
-import { defineProps, defineEmits } from "vue";
-import type { PostProps } from "@/types/interfaces";
+import { defineEmits } from "vue";
+import type { PostResponseDto } from "@/types/posts";
 
-defineProps<{ post: PostProps }>();
+defineProps<{ post: PostResponseDto }>();
 
 const emit = defineEmits<{
   (e: "upvote"): void;
@@ -33,7 +33,6 @@ function downvote() {
             @click.prevent="downvote"
           />
         </div>
-
         <div class="post-text-content">
           <h2 class="post-title">{{ post.title }}</h2>
           <div class="post-location">
@@ -42,14 +41,15 @@ function downvote() {
           </div>
           <p class="post-description">{{ post.description }}</p>
         </div>
-        <div v-if="post.imageUrls && post.imageUrls.length" class="post-image-container">
-          <img :src="post.imageUrls[0]" :alt="post.title" class="post-image" />
+        <div v-if="post.images && post.images.length" class="post-image-container">
+          <img :src="post.images[0].url" :alt="post.title" class="post-image" />
         </div>
       </div>
     </template>
   </Card>
 </template>
 
+<!-- styles remain the same -->
 <style scoped>
 .post-card {
   display: flex;

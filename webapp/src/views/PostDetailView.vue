@@ -6,40 +6,88 @@ import ImageModal from "@/components/ImageModal.vue";
 import VoteBox from "@/components/VoteBox.vue";
 import CommentInput from "@/components/CommentInput.vue";
 import CommentList from "@/components/CommentList.vue";
-import type { PostProps } from "@/types/interfaces";
+import type { PostProps, CommentProps } from "@/types/interfaces";
+import type { PostResponseDto } from "@/types/posts";
+import type { UserResponseDto } from "@/types/users";
 import { getPostById } from "@/api/posts";
 import { getUserById } from "@/api/users";
-import { mapPostDtoToProps } from "../utils/mappers";
+import { getComments } from "@/api/comments";
 
 const route = useRoute();
 const router = useRouter();
-const postId = route.params.id;
+const postId = Number(route.params.id);
+
 const post = ref<PostProps | undefined>(undefined);
 const currentImageIndex = ref(0);
 const showImageModal = ref(false);
 const commentText = ref("");
 
+// Fetch post + author + comments
 onMounted(async () => {
   try {
-    const dto = await getPostById(Number(postId));
-    let authorName: string | undefined = undefined;
-    try {
-      if (dto.authorId != null) {
-        const author = await getUserById(dto.authorId);
-        authorName = author.displayName && author.displayName.trim().length > 0
-          ? author.displayName
-          : author.username;
+    const dto: PostResponseDto = await getPostById(postId);
+
+    // Map post author
+    let authorName = "Unknown";
+    if (dto.authorId != null) {
+      try {
+        const user: UserResponseDto = await getUserById(dto.authorId);
+        authorName =
+          user.displayName?.trim() && user.displayName.trim().length > 0
+            ? user.displayName.trim()
+            : user.username?.trim() || "Unknown";
+      } catch {
+        authorName = "Unknown";
       }
-    } catch (e) {
-      // Non-fatal: keep default author label if user lookup fails
-      console.warn("Failed to load author info", e);
     }
-    post.value = mapPostDtoToProps(dto, authorName);
+
+    // Fetch all comments for this post
+    let comments: CommentProps[] = [];
+    if (dto.commentIds && dto.commentIds.length > 0) {
+      const commentDtos = await getComments(dto.id);
+
+      comments = await Promise.all(
+        commentDtos.map(async (c) => {
+          let commentAuthor = "Unknown";
+          if (c.authorId != null) {
+            try {
+              const user = await getUserById(c.authorId);
+              commentAuthor =
+                user.displayName?.trim() && user.displayName.trim().length > 0
+                  ? user.displayName.trim()
+                  : user.username?.trim() || "Unknown";
+            } catch {
+              commentAuthor = "Unknown";
+            }
+          }
+          return {
+            id: c.id,
+            author: commentAuthor,
+            content: c.content, 
+            votes: c.votes ?? 0,
+            replies: [],
+          } as CommentProps;
+        })
+      );
+    }
+
+    // Build the post object
+    post.value = {
+      id: dto.id,
+      title: dto.title,
+      description: dto.description,
+      location: dto.location,
+      votes: dto.votes ?? 0,
+      author: authorName,
+      imageUrls: dto.images?.map((img) => img.url) ?? [],
+      comments,
+    };
   } catch (e) {
-    console.error("Failed to load post", e);
+    console.error("Failed to load post or comments", e);
   }
 });
 
+// Image modal handlers
 function openImageModal() {
   showImageModal.value = true;
 }
@@ -48,9 +96,8 @@ function closeImageModal() {
   showImageModal.value = false;
 }
 
-// added edit/delete handlers
+// Post actions
 function editPost() {
-  // navigate to the edit page, passing the post id as a query parameter
   const id = post?.value?.id;
   if (id == null) return;
   router.push({ name: "edit", query: { id: String(id) } });
@@ -59,22 +106,20 @@ function editPost() {
 function deletePost() {
   if (confirm("Are you sure you want to delete this post?")) {
     console.log("Delete post", post?.value?.id);
-    // placeholder: perform delete and navigate away
+    // TODO: call delete API and navigate
   }
 }
 </script>
 
-<!-- Layout for post details page is based off of Reddit -->
 <template>
   <PageHeader />
+
   <div class="post-detail-view">
     <h1 class="post-title">{{ post?.title }}</h1>
 
-    <!-- replaced single author line with meta row that contains author on the left
-         and vertically stacked edit/delete buttons right-aligned -->
+    <!-- Author and actions -->
     <div class="post-meta">
-      <div class="post-author">By @{{ post?.author }}</div>
-
+      <div class="post-author">{{ post?.author }}</div>
       <div class="post-actions" v-if="post">
         <button class="post-action-btn edit-btn" @click="editPost" aria-label="Edit post">
           Edit
@@ -85,14 +130,17 @@ function deletePost() {
       </div>
     </div>
 
+    <!-- Location -->
     <div v-if="post?.location" class="post-location">
-      <div class="location-icon">
-        <i class="pi pi-map-marker"></i>
-      </div>
+      <div class="location-icon"><i class="pi pi-map-marker"></i></div>
       <span>{{ post.location }}</span>
     </div>
 
-    <div v-if="post?.imageUrls && post.imageUrls.length && post.imageUrls[0] != 'string'" class="post-image-wrapper">
+    <!-- Images -->
+    <div
+      v-if="post?.imageUrls && post.imageUrls.length && post.imageUrls[0] != 'string'"
+      class="post-image-wrapper"
+    >
       <div class="image-hover-wrapper">
         <img
           :src="post.imageUrls[currentImageIndex]"
@@ -103,6 +151,8 @@ function deletePost() {
         <div class="image-zoom-icon">
           <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></i>
         </div>
+
+        <!-- Navigation buttons -->
         <button
           v-if="currentImageIndex > 0"
           class="image-btn image-prev"
@@ -112,7 +162,7 @@ function deletePost() {
           <i class="pi pi-chevron-left"></i>
         </button>
         <button
-          v-if="post.imageUrls && currentImageIndex < post.imageUrls.length - 1"
+          v-if="currentImageIndex < post.imageUrls.length - 1"
           class="image-btn image-next"
           @click="currentImageIndex++"
           aria-label="Next image"
@@ -122,12 +172,15 @@ function deletePost() {
       </div>
     </div>
 
+    <!-- Description -->
     <div class="post-description">
       <p>{{ post?.description }}</p>
     </div>
 
+    <!-- Votes -->
     <VoteBox class="post-votes" :votes="post?.votes ?? 0" />
 
+    <!-- Comments -->
     <div>
       <CommentInput @submit="(text: string) => (commentText = text)" />
       <div v-if="post?.comments && post.comments.length > 0" class="content">
@@ -136,6 +189,7 @@ function deletePost() {
       <div v-else class="no-comments">Start a discussion!</div>
     </div>
 
+    <!-- Image modal -->
     <ImageModal
       :show="showImageModal"
       :imageUrl="post?.imageUrls && post.imageUrls[currentImageIndex]"

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import PostItem from "./PostItem.vue";
-// Remove: import posts from "@/data/mockPosts";
-import { defineProps } from 'vue';
+import type { PostResponseDto } from '@/types/posts';
 
 const props = defineProps<{
-  posts: Array<any> // Replace 'any' with your Post type if available
+  posts: PostResponseDto[]
 }>();
 </script>
 

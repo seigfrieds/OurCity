@@ -9,7 +9,7 @@ const props = defineProps<CommentProps>();
 <template>
   <div class="comment-item">
     <div class="comment-author">{{ props.author }}</div>
-    <div class="comment-text">{{ props.text }}</div>
+    <div class="comment-text">{{ props.content }}</div>
     <VoteBox class="comment-votes" :votes="votes ?? 0" />
     <div v-if="props.replies && props.replies.length > 0" class="comment-replies">
       <CommentList :comments="props.replies" />
