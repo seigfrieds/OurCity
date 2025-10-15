@@ -1,0 +1,67 @@
+using Microsoft.EntityFrameworkCore;
+using OurCity.Api.Infrastructure.Database;
+
+namespace OurCity.Api.Infrastructure;
+
+public interface ICommentRepository
+{
+    Task<IEnumerable<Comment>> GetCommentsByPostId(int postId);
+    Task<Comment> GetCommentById(int postId, int commentId);
+    Task<Comment> CreateComment(Comment comment);
+    Task<Comment> UpdateComment(Comment comment);
+    Task<Comment> DeleteComment(Comment comment);
+}
+
+public class CommentRepository : ICommentRepository
+{
+    private readonly AppDbContext _appDbContext;
+
+    public CommentRepository(AppDbContext appDbContext)
+    {
+        _appDbContext = appDbContext;
+    }
+
+    public async Task<IEnumerable<Comment>> GetCommentsByPostId(int postId)
+    {
+        return await _appDbContext.Comments
+            .Where(c => c.PostId == postId && !c.IsDeleted)
+            .ToListAsync();
+    }
+
+    public async Task<Comment> GetCommentById(int postId, int commentId)
+    {
+        var comment = await _appDbContext.Comments
+            .FirstOrDefaultAsync(c => c.PostId == postId && c.Id == commentId && !c.IsDeleted);
+
+        if (comment == null)
+        {
+            throw new KeyNotFoundException($"Comment with ID {commentId} for Post ID {postId} not found.");
+        }
+
+        return comment;
+    }
+
+    public async Task<Comment> CreateComment(Comment comment)
+    {
+        _appDbContext.Comments.Add(comment);
+        await _appDbContext.SaveChangesAsync();
+        return comment;
+    }
+
+    public async Task<Comment> UpdateComment(Comment comment)
+    {
+        _appDbContext.Comments.Update(comment);
+        await _appDbContext.SaveChangesAsync();
+        return comment;
+    }
+    
+    public async Task<Comment> DeleteComment(Comment comment)
+    {
+        // soft deletion in db  (mark Comment as deleted)
+        comment.IsDeleted = true;
+        comment.UpdatedAt = DateTime.UtcNow;
+        _appDbContext.Comments.Update(comment);
+        await _appDbContext.SaveChangesAsync();
+        return comment;
+    }
+}

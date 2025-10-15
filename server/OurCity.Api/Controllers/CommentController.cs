@@ -1,0 +1,92 @@
+using Microsoft.AspNetCore.Mvc;
+using OurCity.Api.Services;
+using OurCity.Api.Common.Dtos.Comments;
+
+namespace OurCity.Api.Controllers;
+
+[ApiController]
+[Route("Posts/{postId}/[controller]s")] // comments are sub-resource of posts
+public class CommentController : ControllerBase
+{
+    private readonly ILogger<CommentController> _logger;
+    private readonly ICommentService _commentService;
+
+    public CommentController(ICommentService commentService, ILogger<CommentController> logger)
+    {
+        _commentService = commentService;
+        _logger = logger;
+    }
+
+    [HttpGet]
+    [EndpointSummary("Get all comments associated with a post")]
+    [EndpointDescription("Gets a list of all comments for a specific post")]
+    [ProducesResponseType(typeof(List<CommentResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetComments([FromRoute] int postId)
+    {
+        var comments = await _commentService.GetCommentsByPostId(postId);
+        return Ok(comments);
+    }
+
+    [HttpGet("{commentId}")]
+    [EndpointSummary("Get a specific comment associated with a post")]
+    [EndpointDescription("Gets a specific comment for a specific post")]
+    [ProducesResponseType(typeof(CommentResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetComment([FromRoute] int postId, [FromRoute] int commentId)
+    {
+        var comment = await _commentService.GetCommentById(postId, commentId);
+        if (comment == null)
+            return NotFound();
+        
+        return Ok(comment);
+    }
+
+    [HttpPost]
+    [EndpointSummary("Create a new comment under a post")]
+    [EndpointDescription("Creates a new comment to be associated with a specific post")]
+    [ProducesResponseType(typeof(CommentResponseDto), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateComment(
+        [FromRoute] int postId, 
+        [FromBody] CommentCreateRequestDto commentCreateRequestDto)
+    {
+        var comment = await _commentService.CreateComment(postId, commentCreateRequestDto);
+
+        return CreatedAtAction(
+            nameof(GetComment),
+            new { postId = comment.Data?.PostId, commentId = comment.Data?.Id },
+            comment.Data);
+    }
+
+    [HttpPut("{commentId}")]
+    [EndpointSummary("Update an existing comment")]
+    [EndpointDescription("Updates an existing comment associated with a specific post")]
+    [ProducesResponseType(typeof(CommentResponseDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateComment(
+        [FromRoute] int postId,
+        [FromRoute] int commentId,
+        [FromBody] CommentUpdateRequestDto commentUpdateRequestDto)
+    {
+        var comment = await _commentService.UpdateComment(postId, commentId, commentUpdateRequestDto);
+
+        if (comment.Data == null)
+            return NotFound();
+
+        return Ok(comment.Data);
+    }
+
+    [HttpDelete("{commentId}")]
+    [EndpointSummary("Delete a comment")]
+    [EndpointDescription("Deletes a comment associated with a specific post")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteComment(
+        [FromRoute] int postId,
+        [FromRoute] int commentId)
+    {
+        var comment = await _commentService.DeleteComment(postId, commentId);
+
+        if (comment.Data == null)
+            return NotFound();
+
+        return Ok(comment.Data);
+    }
+
+}
