@@ -1,3 +1,6 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  This file was adapted from the RegisterView.vue file which was created with CoPilot.
+  Comments in that file explain how is was created. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Card from "primevue/card";
@@ -7,7 +10,6 @@ import InputText from "primevue/inputtext";
 const accountDetails = {
   username: "johndoe",
   email: "john@example.com",
-  // Add more fields as needed
 };
 </script>
 
