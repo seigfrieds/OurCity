@@ -1,13 +1,13 @@
 import api from "./axios";
-import type { ApiResponse, PostResponseDto } from "@/types/api";
+import type { PostResponseDto } from "@/types/api";
 
-export async function getPosts(): Promise<ApiResponse<PostResponseDto[]>> {
-  const response = await api.get<ApiResponse<PostResponseDto[]>>("/posts");
+export async function getPosts(): Promise<PostResponseDto[]> {
+  const response = await api.get<PostResponseDto[]>("/posts");
   return response.data;
 }
 
-export async function getPostById(id: number): Promise<ApiResponse<PostResponseDto>> {
-  const response = await api.get<ApiResponse<PostResponseDto>>(`/posts/${id}`);
+export async function getPostById(id: number): Promise<PostResponseDto> {
+  const response = await api.get<PostResponseDto>(`/posts/${id}`);
   return response.data;
 }
 
@@ -16,8 +16,8 @@ export async function createPost(postData: {
   title: string;
   description: string;
   location: string;
-}): Promise<ApiResponse<PostResponseDto>> {
-  const response = await api.post<ApiResponse<PostResponseDto>>("/posts", postData);
+}): Promise<PostResponseDto> {
+  const response = await api.post<PostResponseDto>("/posts", postData);
   return response.data;
 }
 
@@ -25,22 +25,17 @@ export async function updatePost(id: number, postData: {
   title?: string;
   description?: string;
   location?: string;
-}): Promise<ApiResponse<PostResponseDto>> {
-  const response = await api.put<ApiResponse<PostResponseDto>>(`/posts/${id}`, postData);
+}): Promise<PostResponseDto> {
+  const response = await api.put<PostResponseDto>(`/posts/${id}`, postData);
   return response.data;
 }
 
-export async function deletePost(id: number): Promise<ApiResponse<null>> {
-  const response = await api.delete<ApiResponse<null>>(`/posts/${id}`);
+export async function deletePost(id: number): Promise<PostResponseDto> {
+  const response = await api.delete<PostResponseDto>(`/posts/${id}`);
   return response.data;
 }
 
-export async function upvotePost(id: number): Promise<ApiResponse<PostResponseDto>> {
-  const response = await api.post<ApiResponse<PostResponseDto>>(`/posts/${id}/upvote`);
-  return response.data;
-}
-
-export async function downvotePost(id: number): Promise<ApiResponse<PostResponseDto>> {
-  const response = await api.post<ApiResponse<PostResponseDto>>(`/posts/${id}/downvote`);
+export async function votePost(id: number, upvote: boolean): Promise<PostResponseDto> {
+  const response = await api.post<PostResponseDto>(`/posts/${id}/vote`, { upvote });
   return response.data;
 }

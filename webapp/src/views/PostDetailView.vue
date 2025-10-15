@@ -7,7 +7,9 @@ import VoteBox from "@/components/VoteBox.vue";
 import CommentInput from "@/components/CommentInput.vue";
 import CommentList from "@/components/CommentList.vue";
 import type { PostProps } from "@/types/interfaces";
-import posts from "@/data/mockPosts";
+import { getPostById } from "@/api/posts";
+import { getUserById } from "@/api/users";
+import { mapPostDtoToProps } from "../utils/mappers";
 
 const route = useRoute();
 const router = useRouter();
@@ -17,8 +19,25 @@ const currentImageIndex = ref(0);
 const showImageModal = ref(false);
 const commentText = ref("");
 
-onMounted(() => {
-  post.value = posts.find((p) => p.id == Number(postId));
+onMounted(async () => {
+  try {
+    const dto = await getPostById(Number(postId));
+    let authorName: string | undefined = undefined;
+    try {
+      if (dto.authorId != null) {
+        const author = await getUserById(dto.authorId);
+        authorName = author.displayName && author.displayName.trim().length > 0
+          ? author.displayName
+          : author.username;
+      }
+    } catch (e) {
+      // Non-fatal: keep default author label if user lookup fails
+      console.warn("Failed to load author info", e);
+    }
+    post.value = mapPostDtoToProps(dto, authorName);
+  } catch (e) {
+    console.error("Failed to load post", e);
+  }
 });
 
 function openImageModal() {
@@ -73,7 +92,7 @@ function deletePost() {
       <span>{{ post.location }}</span>
     </div>
 
-    <div v-if="post?.imageUrls && post.imageUrls.length" class="post-image-wrapper">
+    <div v-if="post?.imageUrls && post.imageUrls.length && post.imageUrls[0] != 'string'" class="post-image-wrapper">
       <div class="image-hover-wrapper">
         <img
           :src="post.imageUrls[currentImageIndex]"
