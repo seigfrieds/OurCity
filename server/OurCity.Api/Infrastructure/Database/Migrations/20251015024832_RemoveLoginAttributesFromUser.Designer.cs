@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OurCity.Api.Infrastructure.Database;
@@ -12,9 +13,11 @@ using OurCity.Api.Infrastructure.Database;
 namespace OurCity.Api.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015024832_RemoveLoginAttributesFromUser")]
+    partial class RemoveLoginAttributesFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("DownvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("DownvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
@@ -54,9 +57,12 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("UpvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("UpvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
+
+                    b.Property<int>("Votes")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

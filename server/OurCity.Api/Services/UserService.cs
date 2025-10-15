@@ -67,12 +67,13 @@ public class UserService : IUserService
     public async Task<Result<UserResponseDto>> DeleteUser(int id)
     {
         var existingUser = await _userRepository.GetUserById(id);
+
         if (existingUser == null)
         {
             return Result<UserResponseDto>.Failure("User not found.");
         }
 
-        await _userRepository.DeleteUser(id);
+        await _userRepository.DeleteUser(existingUser);
         return Result<UserResponseDto>.Success(existingUser.ToDto());
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OurCity.Api.Infrastructure.Database;
@@ -12,9 +13,11 @@ using OurCity.Api.Infrastructure.Database;
 namespace OurCity.Api.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015003557_CreateCommentsTable")]
+    partial class CreateCommentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("DownvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("DownvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
@@ -54,13 +57,14 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("UpvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("UpvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Votes")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("AuthorId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
@@ -103,9 +107,6 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -131,9 +132,12 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                         .IsRequired()
                         .HasColumnType("integer[]");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
                 });
@@ -146,10 +150,18 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Auth0Id")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
@@ -158,6 +170,10 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -165,21 +181,11 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("OurCity.Api.Infrastructure.Database.Comment", b =>
                 {
-                    b.HasOne("OurCity.Api.Infrastructure.Database.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OurCity.Api.Infrastructure.Database.Post", "Post")
+                    b.HasOne("OurCity.Api.Infrastructure.Database.Post", null)
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("OurCity.Api.Infrastructure.Database.Image", b =>
@@ -195,13 +201,9 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
             modelBuilder.Entity("OurCity.Api.Infrastructure.Database.Post", b =>
                 {
-                    b.HasOne("OurCity.Api.Infrastructure.Database.User", "Author")
+                    b.HasOne("OurCity.Api.Infrastructure.Database.User", null)
                         .WithMany("Posts")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OurCity.Api.Infrastructure.Database.Post", b =>

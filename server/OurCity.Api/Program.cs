@@ -23,10 +23,12 @@ builder.Services.AddDbContextPool<AppDbContext>(options =>
 //Repository
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 //Service
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 //Controller
 builder.Services.AddControllers();

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OurCity.Api.Infrastructure.Database;
@@ -12,9 +13,11 @@ using OurCity.Api.Infrastructure.Database;
 namespace OurCity.Api.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251015020457_UpdateCommentSchema")]
+    partial class UpdateCommentSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("DownvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("DownvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
 
@@ -54,9 +57,12 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.PrimitiveCollection<List<int>>("UpvotedUserIds")
+                    b.PrimitiveCollection<List<int>>("UpvotedBy")
                         .IsRequired()
                         .HasColumnType("integer[]");
+
+                    b.Property<int>("Votes")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -146,10 +152,18 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Auth0Id")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
@@ -157,6 +171,10 @@ namespace OurCity.Api.Infrastructure.Database.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

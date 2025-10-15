@@ -23,12 +23,18 @@ public class PostRepository : IPostRepository
 
     public async Task<IEnumerable<Post>> GetAllPosts()
     {
-        return await _appDbContext.Posts.ToListAsync();
+        return await _appDbContext
+            .Posts.Include(p => p.Images)
+            .Include(p => p.Comments)
+            .ToListAsync();
     }
 
     public async Task<Post?> GetPostById(int postId)
     {
-        return await _appDbContext.Posts.FindAsync(postId);
+        return await _appDbContext
+            .Posts.Include(p => p.Images)
+            .Include(p => p.Comments)
+            .FirstOrDefaultAsync(p => p.Id == postId);
     }
 
     public async Task<Post> CreatePost(Post post)
@@ -40,7 +46,7 @@ public class PostRepository : IPostRepository
 
     public async Task<Post> UpdatePost(Post post)
     {
-        _appDbContext.Update(post);
+        _appDbContext.Posts.Update(post);
         await _appDbContext.SaveChangesAsync();
         return post;
     }
