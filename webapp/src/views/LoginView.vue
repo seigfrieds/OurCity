@@ -31,12 +31,11 @@ const resolver = toTypedSchema(
 );
 
 const onFormSubmit = (values: unknown) => {
+  //API connection is not currently implemented.
   const inputtedValues = values as LoginFormValues;
   console.log("Login submit", inputtedValues);
-  // TODO: call API client to authenticate
 };
 </script>
-
 <template>
   <div class="login-view form-layout">
     <PageHeader />
@@ -61,7 +60,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.email
               }}</Message>
             </div>
-
             <div class="field-common">
               <label for="password">Password</label>
               <Field name="password" v-slot="{ field }">
@@ -71,7 +69,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.password
               }}</Message>
             </div>
-
             <Button type="submit" label="Log in" class="mt-2" />
           </Form>
           <div class="card-footer">

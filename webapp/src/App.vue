@@ -1,6 +1,5 @@
 <!-- Where the JS/TS goes -->
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <!-- Where the HTML goes -->
 <template>

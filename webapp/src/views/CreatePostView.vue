@@ -45,9 +45,9 @@ const resolver = toTypedSchema(
 );
 
 const onFormSubmit = (values: unknown) => {
+  //API connection is not currently implemented.
   const inputtedValues = values as CreatePostFormValues;
   console.log("Submitting post:", inputtedValues);
-  // Here you would typically make an API call to create the post
 };
 
 const onFileSelect = (
@@ -58,11 +58,10 @@ const onFileSelect = (
   if (file) setFieldValue("image", file);
 };
 
-// Editor modules: use custom toolbar and disable the default one
 const editorModules = {
   toolbar: {
-    container: ".custom-toolbar", // Use our custom toolbar
-    toolbarVisible: false, // Hide PrimeVue's default toolbar
+    container: ".custom-toolbar",
+    toolbarVisible: false,
   },
 };
 </script>
@@ -122,7 +121,6 @@ const editorModules = {
             <div class="field-common">
               <label for="description">Description</label>
               <Field name="description" v-slot="{ field }">
-                <!-- custom toolbar for the editor: explicitly define controls -->
                 <div class="custom-toolbar ql-toolbar ql-snow">
                   <span class="ql-formats">
                     <select class="ql-header">
@@ -147,7 +145,6 @@ const editorModules = {
                     <button class="ql-clean"></button>
                   </span>
                 </div>
-
                 <Editor
                   :modelValue="field.value"
                   @update:modelValue="field.onInput"
@@ -168,7 +165,6 @@ const editorModules = {
 </template>
 
 <style scoped>
-/* Custom toolbar styling */
 .custom-toolbar {
   margin-bottom: 0.5rem;
   border: 1px solid var(--surface-border);
@@ -185,7 +181,6 @@ const editorModules = {
   margin-right: 0;
 }
 
-/* Hide any default toolbar that might still appear */
 :deep(.p-editor-toolbar) {
   display: none !important;
 }

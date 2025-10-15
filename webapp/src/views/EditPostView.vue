@@ -44,9 +44,9 @@ const resolver = toTypedSchema(
 );
 
 const onFormSubmit = (values: unknown) => {
+  //API connection is not currently implemented.
   const inputtedValues = values as EditPostFormValues;
   console.log("Editing post:", inputtedValues);
-  // Here you would typically make an API call to edit the post
 };
 
 const onFileSelect = (
@@ -57,11 +57,10 @@ const onFileSelect = (
   if (file) setFieldValue("image", file);
 };
 
-// Editor modules: use custom toolbar and disable the default one
 const editorModules = {
   toolbar: {
-    container: ".custom-toolbar", // Use our custom toolbar
-    toolbarVisible: false, // Hide PrimeVue's default toolbar
+    container: ".custom-toolbar",
+    toolbarVisible: false,
   },
 };
 </script>
@@ -121,7 +120,6 @@ const editorModules = {
             <div class="field-common">
               <label for="description">Description</label>
               <Field name="description" v-slot="{ field }">
-                <!-- custom toolbar for the editor: explicitly define controls -->
                 <div class="custom-toolbar ql-toolbar ql-snow">
                   <span class="ql-formats">
                     <select class="ql-header">
@@ -167,7 +165,6 @@ const editorModules = {
 </template>
 
 <style scoped>
-/* Custom toolbar styling */
 .custom-toolbar {
   margin-bottom: 0.5rem;
   border: 1px solid var(--surface-border);
@@ -175,7 +172,6 @@ const editorModules = {
   padding: 0.5rem;
   background: var(--surface-ground);
 }
-
 .custom-toolbar .ql-formats {
   margin-right: 15px;
 }
@@ -183,8 +179,6 @@ const editorModules = {
 .custom-toolbar .ql-formats:last-child {
   margin-right: 0;
 }
-
-/* Hide any default toolbar that might still appear */
 :deep(.p-editor-toolbar) {
   display: none !important;
 }

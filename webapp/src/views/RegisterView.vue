@@ -56,10 +56,9 @@ const resolver = toTypedSchema(
 );
 
 const onFormSubmit = (values: unknown) => {
+  //API connection is not currently implemented.
   const inputtedValues = values as RegisterFormValues;
   console.log("Register submit", inputtedValues);
-  // TODO: call API to register user
-  // after success: router.push('/login') or auto-login
 };
 </script>
 
@@ -87,7 +86,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.username
               }}</Message>
             </div>
-
             <div class="field field-common">
               <label for="email">Email</label>
               <Field name="email" v-slot="{ field }">
@@ -97,7 +95,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.email
               }}</Message>
             </div>
-
             <div class="field field-common">
               <label for="password">Password</label>
               <Field name="password" v-slot="{ field }">
@@ -107,7 +104,6 @@ const onFormSubmit = (values: unknown) => {
                 errors.password
               }}</Message>
             </div>
-
             <div class="field field-common">
               <label for="confirmPassword">Confirm Password</label>
               <Field name="confirmPassword" v-slot="{ field }">
@@ -121,7 +117,6 @@ const onFormSubmit = (values: unknown) => {
                 >{{ errors.confirmPassword }}</Message
               >
             </div>
-
             <Button type="submit" label="Register" class="mt-2" />
           </Form>
         </template>

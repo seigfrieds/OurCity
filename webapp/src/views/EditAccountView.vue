@@ -10,7 +10,6 @@ import InputText from "primevue/inputtext";
 const accountDetails = {
   username: "johndoe",
   email: "john@example.com",
-  // Add more fields as needed
 };
 </script>
 

@@ -157,7 +157,6 @@ function downvote() {
   border-radius: 4px;
 }
 
-/* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .post-content {
     flex-direction: column;

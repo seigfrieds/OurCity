@@ -13,14 +13,13 @@ type MenuItem = {
 };
 
 const router = useRouter();
-
 const searchQuery = ref("");
-
-// TODO: Replace with actual auth state management
+// Currently keeping this here as our login authentication is
+// not yet fully implemented.
 const isLoggedIn = ref(false);
 
 function handleLogout(): void {
-  // TODO: Add actual logout logic here
+  // Currently logout is not yet implemented.
   isLoggedIn.value = false;
   router.push("/login");
 }
