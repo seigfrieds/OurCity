@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { 
+import type {
   PostResponseDto,
   PostCreateRequestDto,
   PostUpdateRequestDto,
@@ -23,7 +23,7 @@ export async function createPost(postData: PostCreateRequestDto): Promise<PostRe
 
 export async function updatePost(
   id: number,
-  postData: PostUpdateRequestDto
+  postData: PostUpdateRequestDto,
 ): Promise<PostResponseDto> {
   const response = await api.put<PostResponseDto>(`/posts/${id}`, postData);
   return response.data;
@@ -36,7 +36,7 @@ export async function deletePost(id: number): Promise<void> {
 export async function votePost(
   postId: number,
   userId: number,
-  voteType: 'Upvote' | 'Downvote'
+  voteType: "Upvote" | "Downvote",
 ): Promise<PostResponseDto> {
   const voteData: PostVoteRequestDto = { userId, voteType };
   const response = await api.post<PostResponseDto>(`/posts/${postId}/vote`, voteData);

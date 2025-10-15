@@ -5,18 +5,18 @@ export type PostCreateRequestDto = {
   title: string;
   description: string;
   location: string;
-}
+};
 
 export type PostUpdateRequestDto = {
   title?: string;
   description?: string;
   location?: string;
-}
+};
 
 export type PostVoteRequestDto = {
   userId: number;
-  voteType: 'Upvote' | 'Downvote';
-}
+  voteType: "Upvote" | "Downvote";
+};
 
 export type PostResponseDto = {
   id: number;
@@ -27,16 +27,16 @@ export type PostResponseDto = {
   votes: number;
   commentIds?: number[];
   images?: ImageDto[];
-}
+};
 
 export type PostUpvoteResponseDto = {
   id: number;
   authorId: number;
   upvoted: boolean;
-}
+};
 
 export type PostDownvoteResponseDto = {
   id: number;
   authorId: number;
   downvoted: boolean;
-}
+};

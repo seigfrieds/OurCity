@@ -1,9 +1,5 @@
 import api from "./axios";
-import type { 
-  UserResponseDto,
-  UserCreateRequestDto,
-  UserUpdateRequestDto,
-} from "@/types/users.ts";
+import type { UserResponseDto, UserCreateRequestDto, UserUpdateRequestDto } from "@/types/users.ts";
 
 export async function getUsers(): Promise<UserResponseDto[]> {
   const response = await api.get<UserResponseDto[]>("/users");
@@ -22,7 +18,7 @@ export async function createUser(userData: UserCreateRequestDto): Promise<UserRe
 
 export async function updateUser(
   id: number,
-  userData: UserUpdateRequestDto
+  userData: UserUpdateRequestDto,
 ): Promise<UserResponseDto> {
   const response = await api.put<UserResponseDto>(`/users/${id}`, userData);
   return response.data;

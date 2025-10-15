@@ -53,7 +53,8 @@ const posts: PostProps[] = [
       {
         id: 2,
         author: "RealMichaelJordanProbably",
-        content: "If you're looking for some recommendations on things to do, I'd highly suggest going to a Sea Bears game.",
+        content:
+          "If you're looking for some recommendations on things to do, I'd highly suggest going to a Sea Bears game.",
         votes: 8,
         replies: [],
       },

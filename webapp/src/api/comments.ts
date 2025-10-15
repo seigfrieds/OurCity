@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { 
+import type {
   CommentResponseDto,
   CommentCreateRequestDto,
   CommentUpdateRequestDto,
@@ -16,7 +16,10 @@ export async function getCommentById(postId: number, id: number): Promise<Commen
   return response.data;
 }
 
-export async function createComment(postId: number, commentData: CommentCreateRequestDto): Promise<CommentResponseDto> {
+export async function createComment(
+  postId: number,
+  commentData: CommentCreateRequestDto,
+): Promise<CommentResponseDto> {
   const response = await api.post<CommentResponseDto>(`Posts/${postId}/comments`, commentData);
   return response.data;
 }
@@ -24,7 +27,7 @@ export async function createComment(postId: number, commentData: CommentCreateRe
 export async function updateComment(
   postId: number,
   id: number,
-  commentData: CommentUpdateRequestDto
+  commentData: CommentUpdateRequestDto,
 ): Promise<CommentResponseDto> {
   const response = await api.put<CommentResponseDto>(`Posts/${postId}/comments/${id}`, commentData);
   return response.data;
@@ -38,9 +41,12 @@ export async function voteComment(
   commentId: number,
   postId: number,
   userId: number,
-  voteType: 'Upvote' | 'Downvote'
+  voteType: "Upvote" | "Downvote",
 ): Promise<CommentResponseDto> {
   const voteData: CommentVoteRequestDto = { userId, voteType };
-  const response = await api.post<CommentResponseDto>(`Posts/${postId}/comments/${commentId}/vote`, voteData);
+  const response = await api.post<CommentResponseDto>(
+    `Posts/${postId}/comments/${commentId}/vote`,
+    voteData,
+  );
   return response.data;
 }

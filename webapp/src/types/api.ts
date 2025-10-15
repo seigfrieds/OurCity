@@ -2,4 +2,4 @@ export type ApiResponse<T> = {
   data: T;
   message: string;
   isSuccess: boolean;
-}
+};
