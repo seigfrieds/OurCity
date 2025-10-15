@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to Create a page for editing posts. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Button from "primevue/button";

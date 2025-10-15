@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page for users to log in with their email and password. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Button from "primevue/button";

@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page header component with a title, search bar, create, login, logout, and account buttons. -->
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";

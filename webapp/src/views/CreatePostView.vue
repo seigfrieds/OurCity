@@ -1,3 +1,6 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page for creating posts with titles, locations,
+  descriptions, and images, using Primevue's form components. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Button from "primevue/button";

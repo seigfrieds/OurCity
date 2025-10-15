@@ -1,14 +1,5 @@
 <!-- Where the JS/TS goes -->
 <script setup lang="ts">
-// import { ref } from "vue";
-// import config from "./config.ts";
-// import { useRouter } from "vue-router";
-
-// interface TypeScriptType {
-//   prop: string;
-// }
-
-// const router = useRouter();
 </script>
 
 <!-- Where the HTML goes -->

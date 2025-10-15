@@ -1,3 +1,5 @@
+<!-- Generative AI - CoPilot was used to assist in the creation of this file.
+  CoPilot was asked to create a page for user registration with username, email, password, and confirm password fields. -->
 <script setup lang="ts">
 import PageHeader from "@/components/PageHeader.vue";
 import Card from "primevue/card";
