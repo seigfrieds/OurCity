@@ -56,6 +56,7 @@ builder.Services.AddDbContextPool<AppDbContext>(options =>
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 //Service
 builder.Services.AddScoped<IPostService, PostService>();
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IPolicyService, PolicyService>();
 builder.Services.AddScoped<IExampleService, ExampleService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 //Controller
 builder.Services.AddControllers();
