@@ -13,6 +13,7 @@ const route = useRoute();
 const router = useRouter();
 const postId = route.params.id;
 const post = ref<PostProps | undefined>(undefined);
+const currentImageIndex = ref(0);
 const showImageModal = ref(false);
 const commentText = ref("");
 
@@ -72,12 +73,33 @@ function deletePost() {
       <span>{{ post.location }}</span>
     </div>
 
-    <div v-if="post?.imageUrl" class="post-image-wrapper">
+    <div v-if="post?.imageUrls && post.imageUrls.length" class="post-image-wrapper">
       <div class="image-hover-wrapper">
-        <img :src="post.imageUrl" :alt="post.title" class="post-image" @click="openImageModal()" />
+        <img
+          :src="post.imageUrls[currentImageIndex]"
+          :alt="post.title"
+          class="post-image"
+          @click="openImageModal()"
+        />
         <div class="image-zoom-icon">
           <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center"></i>
         </div>
+        <button
+          v-if="currentImageIndex > 0"
+          class="image-btn image-prev"
+          @click="currentImageIndex--"
+          aria-label="Previous image"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+        <button
+          v-if="post.imageUrls && currentImageIndex < post.imageUrls.length - 1"
+          class="image-btn image-next"
+          @click="currentImageIndex++"
+          aria-label="Next image"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
       </div>
     </div>
 
@@ -89,7 +111,6 @@ function deletePost() {
 
     <div>
       <CommentInput @submit="(text: string) => (commentText = text)" />
-
       <div v-if="post?.comments && post.comments.length > 0" class="content">
         <CommentList :comments="post.comments" />
       </div>
@@ -98,7 +119,7 @@ function deletePost() {
 
     <ImageModal
       :show="showImageModal"
-      :imageUrl="post?.imageUrl"
+      :imageUrl="post?.imageUrls && post.imageUrls[currentImageIndex]"
       :title="post?.title"
       @close="closeImageModal"
     />
@@ -200,10 +221,18 @@ function deletePost() {
   display: flex;
   margin-bottom: 1rem;
   justify-content: center;
+  width: 100%;
+  height: 30rem;
+  max-width: 100%;
+  position: relative;
 }
 .image-hover-wrapper {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 .image-hover-wrapper:hover .image-zoom-icon {
@@ -211,7 +240,7 @@ function deletePost() {
 }
 .post-image {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
   border-radius: 2rem;
   display: block;
@@ -232,6 +261,36 @@ function deletePost() {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
+}
+
+.image-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  cursor: pointer;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.image-hover-wrapper:hover .image-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+.image-prev {
+  left: 1rem;
+}
+.image-next {
+  right: 1rem;
 }
 .no-comments {
   margin: 1.5rem 0;

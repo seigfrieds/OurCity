@@ -9,8 +9,9 @@ const posts: PostProps[] = [
     description:
       "I spent the afternoon walking through the park, enjoying the beautiful weather. The leaves are just starting to change color, and the air is crisp and cool.",
     votes: 7,
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    ],
     comments: [],
   },
   {
@@ -21,8 +22,11 @@ const posts: PostProps[] = [
     description:
       "I love the energy of the city. There is always something new to see and do. I could spend hours just walking around and exploring.",
     votes: 21,
-    imageUrl:
+    imageUrls: [
       "https://images.unsplash.com/photo-1759167317838-4e77e12621cf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=744",
+      "https://images.unsplash.com/photo-1760422711320-69c99a3fb6f1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1497",
+      "https://images.unsplash.com/photo-1759987651385-342ad67d210d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+    ],
     comments: [
       {
         id: 1,
@@ -80,6 +84,16 @@ const posts: PostProps[] = [
         replies: [],
       },
     ],
+  },
+  {
+    id: 3,
+    author: "kraftdinnermaster",
+    title: "Can we finish construction around the UofM already?",
+    location: "University of Manitoba",
+    description: "It takes me so much longer to leave campus with all the construction :(",
+    votes: 7,
+    imageUrls: [],
+    comments: [],
   },
 ];
 

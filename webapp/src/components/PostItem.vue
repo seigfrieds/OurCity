@@ -1,3 +1,5 @@
+postitem
+
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
@@ -44,8 +46,8 @@ function downvote() {
           </div>
           <p class="post-description">{{ post.description }}</p>
         </div>
-        <div class="post-image-container">
-          <img :src="post.imageUrl" :alt="post.title" class="post-image" />
+        <div v-if="post.imageUrls && post.imageUrls.length" class="post-image-container">
+          <img :src="post.imageUrls[0]" :alt="post.title" class="post-image" />
         </div>
       </div>
     </template>
@@ -115,8 +117,6 @@ function downvote() {
 .vote-btn.downvote.p-button:hover {
   color: var(--danger-color) !important;
 }
-
-
 
 .post-text-content {
   flex: 1;
