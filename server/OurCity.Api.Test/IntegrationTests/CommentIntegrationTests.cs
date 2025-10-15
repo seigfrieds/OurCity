@@ -9,6 +9,8 @@ using Testcontainers.PostgreSql;
 
 namespace OurCity.Api.Test.IntegrationTests;
 
+[Trait("Type", "Integration")]
+[Trait("Domain", "Comment")]
 public class CommentIntegrationTests : IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()

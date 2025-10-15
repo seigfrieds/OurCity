@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OurCity.Api.Common.Dtos.User;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Services;
@@ -6,13 +7,16 @@ using Testcontainers.PostgreSql;
 
 namespace OurCity.Api.Test.IntegrationTests;
 
+[Trait("Type", "Integration")]
+[Trait("Domain", "User")]
 public class UserIntegrationTests : IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
         .WithImage("postgres:16.10")
         .Build();
     private AppDbContext _dbContext = null!; //null! -> tell compiler to trust it will be initialized
-
+    private User _testUser = null!;
+    
     public async Task InitializeAsync()
     {
         await _postgres.StartAsync();
@@ -22,8 +26,18 @@ public class UserIntegrationTests : IAsyncLifetime
             .Options;
 
         _dbContext = new AppDbContext(options);
-
         await _dbContext.Database.EnsureCreatedAsync();
+
+        _testUser = new User
+        {
+            Username = "Test",
+            DisplayName = "Display Test",
+            IsDeleted = false,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        _dbContext.Users.Add(_testUser);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DisposeAsync()
@@ -33,12 +47,39 @@ public class UserIntegrationTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task FreshDbShouldReturnNothing()
+    public async Task GetCreatedUserShouldSucceed()
     {
         var userService = new UserService(new UserRepository(_dbContext));
-        var retrievedUsers = await userService.GetUsers();
 
-        Assert.NotNull(retrievedUsers);
-        Assert.Empty(retrievedUsers);
+        var retrievedUser = await userService.GetUserById(_testUser.Id);
+        Assert.True(retrievedUser.IsSuccess);
+        Assert.NotNull(retrievedUser.Data);
+
+        Assert.Multiple(() =>
+        {
+            Assert.Equal(_testUser.Username, retrievedUser.Data.Username);
+            Assert.Equal(_testUser.DisplayName, retrievedUser.Data.DisplayName);
+        });
+    }
+    
+    [Fact]
+    public async Task CreateUserShouldAddAndReturnUser()
+    {
+        var userService = new UserService(new UserRepository(_dbContext));
+        var createDto = new UserCreateRequestDto
+        {
+            Username = "Test Username"
+        };
+
+        var createdUser = await userService.CreateUser(createDto);
+        Assert.True(createdUser.IsSuccess);
+        Assert.NotNull(createdUser.Data);
+
+        Assert.Multiple(() =>
+        {
+            Assert.Equal("Test Username", createdUser.Data.Username);
+            Assert.Null(createdUser.Data.DisplayName);
+            Assert.False(createdUser.Data.IsDeleted);
+        });
     }
 }
