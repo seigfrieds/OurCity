@@ -94,7 +94,7 @@ public class PostUnitTest
     public async Task GetPostByIdWithNoExistingPost()
     {
         // Arrange
-        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post)null);
+        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post?)null);
 
         // Act
         var result = await _service.GetPostById(99);
@@ -159,7 +159,7 @@ public class PostUnitTest
     public async Task UserUpvoteNotExistingPost()
     {
         // Arrange
-        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post)null);
+        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post?)null);
 
         // Act
         var result = await _service.GetUserUpvoteStatus(99, 5);
@@ -224,7 +224,7 @@ public class PostUnitTest
     public async Task UserDownvoteNotExistingPost()
     {
         // Arrange
-        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post)null);
+        _mockRepo.Setup(r => r.GetPostById(99)).ReturnsAsync((Post?)null);
 
         // Act
         var result = await _service.GetUserDownvoteStatus(99, 5);
