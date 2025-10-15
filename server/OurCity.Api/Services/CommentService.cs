@@ -10,6 +10,8 @@ public interface ICommentService
 {
     Task<IEnumerable<CommentResponseDto>> GetCommentsByPostId(int postId);
     Task<CommentResponseDto> GetCommentById(int postId, int commentId);
+    Task<Result<CommentUpvoteResponseDto>> GetUserUpvoteStatus(int postId, int commentId, int userId);
+    Task<Result<CommentDownvoteResponseDto>> GetUserDownvoteStatus(int postId, int commentId, int userId);
     Task<Result<CommentResponseDto>> CreateComment(
         int postId,
         CommentCreateRequestDto commentCreateRequestDto
@@ -46,6 +48,44 @@ public class CommentService : ICommentService
     {
         var comment = await _commentRepository.GetCommentById(postId, commentId);
         return comment.ToDto();
+    }
+
+    public async Task<Result<CommentUpvoteResponseDto>> GetUserUpvoteStatus(int postId, int commentId, int userId)
+    {
+        var comment = await _commentRepository.GetCommentById(postId, commentId);
+
+        if (comment == null)
+        {
+            return Result<CommentUpvoteResponseDto>.Failure("Comment does not exist");
+        }
+
+        var isUpvoted = comment.UpvotedUserIds.Contains(userId);
+        return Result<CommentUpvoteResponseDto>.Success(new CommentUpvoteResponseDto
+        {
+            Id = comment.Id,
+            PostId = comment.PostId,
+            AuthorId = comment.AuthorId,
+            Upvoted = isUpvoted
+        });
+    }
+
+    public async Task<Result<CommentDownvoteResponseDto>> GetUserDownvoteStatus(int postId, int commentId, int userId)
+    {
+        var comment = await _commentRepository.GetCommentById(postId, commentId);
+
+        if (comment == null)
+        {
+            return Result<CommentDownvoteResponseDto>.Failure("Comment does not exist");
+        }
+
+        var isDownvoted = comment.DownvotedUserIds.Contains(userId);
+        return Result<CommentDownvoteResponseDto>.Success(new CommentDownvoteResponseDto
+        {
+            Id = comment.Id,
+            PostId = comment.PostId,
+            AuthorId = comment.AuthorId,
+            Downvoted = isDownvoted
+        });
     }
 
     public async Task<Result<CommentResponseDto>> CreateComment(

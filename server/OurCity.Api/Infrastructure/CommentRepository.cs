@@ -30,18 +30,9 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> GetCommentById(int postId, int commentId)
     {
-        var comment = await _appDbContext.Comments.FirstOrDefaultAsync(c =>
+        return await _appDbContext.Comments.FirstOrDefaultAsync(c =>
             c.PostId == postId && c.Id == commentId && !c.IsDeleted
         );
-
-        if (comment == null)
-        {
-            throw new KeyNotFoundException(
-                $"Comment with ID {commentId} for Post ID {postId} not found."
-            );
-        }
-
-        return comment;
     }
 
     public async Task<Comment> CreateComment(Comment comment)

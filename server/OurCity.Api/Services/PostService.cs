@@ -10,6 +10,8 @@ public interface IPostService
 {
     Task<Result<IEnumerable<PostResponseDto>>> GetPosts();
     Task<Result<PostResponseDto>> GetPostById(int postId);
+    Task<Result<PostUpvoteResponseDto>> GetUserUpvoteStatus(int postId, int userId);
+    Task<Result<PostDownvoteResponseDto>> GetUserDownvoteStatus(int postId, int userId);
     Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postRequestDto);
     Task<Result<PostResponseDto>> UpdatePost(int postId, PostUpdateRequestDto postRequestDto);
     Task<Result<PostResponseDto>> VotePost(int postId, int userId, VoteType voteType);
@@ -41,6 +43,42 @@ public class PostService : IPostService
         }
 
         return Result<PostResponseDto>.Success(post.ToDto());
+    }
+
+    public async Task<Result<PostUpvoteResponseDto>> GetUserUpvoteStatus(int postId, int userId)
+    {
+        var post = await _postRepository.GetPostById(postId);
+
+        if (post == null)
+        {
+            return Result<PostUpvoteResponseDto>.Failure("Post does not exist");
+        }
+
+        var isUpvoted = post.UpvotedUserIds.Contains(userId);
+        return Result<PostUpvoteResponseDto>.Success(new PostUpvoteResponseDto
+        {
+            Id = post.Id,
+            AuthorId = post.AuthorId,
+            Upvoted = isUpvoted
+        });
+    }
+
+    public async Task<Result<PostDownvoteResponseDto>> GetUserDownvoteStatus(int postId, int userId)
+    {
+        var post = await _postRepository.GetPostById(postId);
+
+        if (post == null)
+        {
+            return Result<PostDownvoteResponseDto>.Failure("Post does not exist");
+        }
+
+        var isDownvoted = post.DownvotedUserIds.Contains(userId);
+        return Result<PostDownvoteResponseDto>.Success(new PostDownvoteResponseDto
+        {
+            Id = post.Id,
+            AuthorId = post.AuthorId,
+            Downvoted = isDownvoted
+        });
     }
 
     public async Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postCreateRequestDto)

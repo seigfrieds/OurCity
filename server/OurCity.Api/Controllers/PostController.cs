@@ -47,6 +47,46 @@ public class PostController : ControllerBase
         return Ok(post.Data);
     }
 
+    [HttpGet]
+    [Route("{postId}/upvote/{userId}")]
+    [EndpointSummary("Get a user's upvote status for a post")]
+    [ProducesResponseType(typeof(PostUpvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserUpvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _postService.GetUserUpvoteStatus(postId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
+    [HttpGet]
+    [Route("{postId}/downvote/{userId}")]
+    [EndpointSummary("Get a user's downvote status for a post")]
+    [ProducesResponseType(typeof(PostDownvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserDownvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _postService.GetUserDownvoteStatus(postId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
     [HttpPost]
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]

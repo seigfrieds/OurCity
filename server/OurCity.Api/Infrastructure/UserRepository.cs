@@ -25,6 +25,7 @@ public class UserRepository : IUserRepository
     {
         return await _appDbContext
             .Users.Where(u => !u.IsDeleted) // exclude soft-deleted users
+            .Include(u => u.Posts)
             .OrderBy(u => u.Id)
             .ToListAsync();
     }
@@ -33,6 +34,7 @@ public class UserRepository : IUserRepository
     {
         return await _appDbContext
             .Users.Where(u => u.Id == id && !u.IsDeleted) // exclude soft-deleted users
+            .Include(u => u.Posts)
             .FirstOrDefaultAsync();
     }
 

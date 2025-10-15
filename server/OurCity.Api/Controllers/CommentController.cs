@@ -41,6 +41,48 @@ public class CommentController : ControllerBase
         return Ok(comment);
     }
 
+    [HttpGet]
+    [Route("{commentId}/upvote/{userId}")]
+    [EndpointSummary("Get a user's upvote status for a comment")]
+    [ProducesResponseType(typeof(CommentUpvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserUpvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int commentId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _commentService.GetUserUpvoteStatus(postId, commentId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
+    [HttpGet]
+    [Route("{commentId}/downvote/{userId}")]
+    [EndpointSummary("Get a user's downvote status for a comment")]
+    [ProducesResponseType(typeof(CommentDownvoteResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserDownvoteStatus(
+        [FromRoute] int postId,
+        [FromRoute] int commentId,
+        [FromRoute] int userId
+    )
+    {
+        var voteStatus = await _commentService.GetUserDownvoteStatus(postId, commentId, userId);
+
+        if (!voteStatus.IsSuccess)
+        {
+            return NotFound(voteStatus.Error);
+        }
+
+        return Ok(voteStatus.Data);
+    }
+
     [HttpPost]
     [EndpointSummary("Create a new comment under a post")]
     [EndpointDescription("Creates a new comment to be associated with a specific post")]
