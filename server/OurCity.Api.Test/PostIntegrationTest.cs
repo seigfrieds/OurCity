@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
@@ -32,6 +33,7 @@ public class PostIntegrationTest : IAsyncLifetime
         _testUser = new User
         {
             Id = 1,
+            Username = "Dummy",
             DisplayName = "Dummy",
             IsDeleted = false,
             CreatedAt = DateTime.UtcNow,

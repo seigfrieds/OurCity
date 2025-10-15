@@ -7,6 +7,7 @@ public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsers();
     Task<User?> GetUserById(int id);
+    Task<User?> GetUserByUsername(string username);
     Task<User> CreateUser(User user);
     Task<User> UpdateUser(User user);
     Task DeleteUser(User user);
@@ -35,6 +36,13 @@ public class UserRepository : IUserRepository
         return await _appDbContext
             .Users.Where(u => u.Id == id && !u.IsDeleted) // exclude soft-deleted users
             .Include(u => u.Posts)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<User?> GetUserByUsername(string username)
+    {
+        return await _appDbContext
+            .Users.Where(u => u.Username == username && !u.IsDeleted) // exclude soft-deleted users
             .FirstOrDefaultAsync();
     }
 

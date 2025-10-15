@@ -16,4 +16,7 @@ public class Result<T>
     public static Result<T> Success(T data) => new(true, data, null);
 
     public static Result<T> Failure(string errorMessage) => new(false, default, errorMessage);
+
+    public static Result<T> Unauthorized() =>
+        new(false, default, "You are not authorized to do this.");
 }
