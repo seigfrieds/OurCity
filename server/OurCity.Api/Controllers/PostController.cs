@@ -35,7 +35,9 @@ public class PostController : ControllerBase
     [EndpointDescription("Gets a post by its ID")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPostById(int postId)
+    public async Task<IActionResult> GetPostById(
+        [FromRoute] int postId
+    )
     {
         var post = await _postService.GetPostById(postId);
 
@@ -51,7 +53,9 @@ public class PostController : ControllerBase
     [EndpointSummary("Create a new post")]
     [EndpointDescription("Creates a new post with the provided data")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePost(PostCreateRequestDto postCreateRequestDto)
+    public async Task<IActionResult> CreatePost(
+        [FromBody] PostCreateRequestDto postCreateRequestDto
+    )
     {
         var post = await _postService.CreatePost(postCreateRequestDto);
 
@@ -65,8 +69,8 @@ public class PostController : ControllerBase
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePost(
-        int postId,
-        PostUpdateRequestDto postUpdateRequestDto
+        [FromRoute] int postId,
+        [FromBody] PostUpdateRequestDto postUpdateRequestDto
     )
     {
         var post = await _postService.UpdatePost(postId, postUpdateRequestDto);
@@ -85,7 +89,11 @@ public class PostController : ControllerBase
     [EndpointDescription("A user votes on a post, either upvote or downvote")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> VotePost(int postId, int userId, VoteType voteType)
+    public async Task<IActionResult> VotePost(
+        [FromRoute] int postId,
+        [FromRoute] int userId,
+        [FromRoute] VoteType voteType
+    )
     {
         var post = await _postService.VotePost(postId, userId, voteType);
 
@@ -103,7 +111,9 @@ public class PostController : ControllerBase
     [EndpointDescription("Deletes a post by its ID")]
     [ProducesResponseType(typeof(PostResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeletePost(int postId)
+    public async Task<IActionResult> DeletePost(
+        [FromRoute] int postId
+    )
     {
         var post = await _postService.DeletePost(postId);
 

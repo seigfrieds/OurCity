@@ -4,6 +4,8 @@ public class PostResponseDto
 {
     public int Id { get; set; }
 
+    public int AuthorId { get; set; }
+
     public required string Title { get; set; }
 
     public required string Description { get; set; }
@@ -14,4 +16,6 @@ public class PostResponseDto
     public required string? Location { get; set; }
 
     public required List<ImageDto> Images { get; set; } = new();
+
+    public List<int> CommentIds { get; set; } = new();
 }
