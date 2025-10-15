@@ -5,7 +5,7 @@ namespace OurCity.Api.Common.Dtos.User;
 public class UserResponseDto
 {
     public int Id { get; set; }
-    
+
     public required string Username { get; set; }
 
     public string? DisplayName { get; set; }

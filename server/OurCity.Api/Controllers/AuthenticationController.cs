@@ -22,7 +22,10 @@ public class AuthenticationController : ControllerBase
     private readonly ILogger<AuthenticationController> _logger;
     private readonly IUserService _userService;
 
-    public AuthenticationController(ILogger<AuthenticationController> logger, IUserService userService)
+    public AuthenticationController(
+        ILogger<AuthenticationController> logger,
+        IUserService userService
+    )
     {
         _logger = logger;
         _userService = userService;
@@ -36,26 +39,27 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> Login([FromRoute] [Required] [MinLength(1)] string username)
     {
         var claims = new List<Claim> { };
-        
+
         var getUserResult = await _userService.GetUserByUsername(username);
 
         if (getUserResult.IsSuccess)
         {
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, getUserResult.Data?.Id.ToString() ?? ""));
+            claims.Add(
+                new Claim(ClaimTypes.NameIdentifier, getUserResult.Data?.Id.ToString() ?? "")
+            );
             claims.Add(new Claim(ClaimTypes.Name, username));
         }
         else
         {
-            var createUserResult = await _userService.CreateUser(new UserCreateRequestDto
-            {
-                Username = username
-            });
+            var createUserResult = await _userService.CreateUser(
+                new UserCreateRequestDto { Username = username }
+            );
             var newUser = createUserResult.Data;
 
             claims.Add(new Claim(ClaimTypes.NameIdentifier, newUser?.Id.ToString() ?? ""));
             claims.Add(new Claim(ClaimTypes.Name, username));
         }
-        
+
         var identity = new ClaimsIdentity(
             claims,
             CookieAuthenticationDefaults.AuthenticationScheme

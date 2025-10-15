@@ -38,7 +38,7 @@ public class UserRepository : IUserRepository
             .Include(u => u.Posts)
             .FirstOrDefaultAsync();
     }
-    
+
     public async Task<User?> GetUserByUsername(string username)
     {
         return await _appDbContext

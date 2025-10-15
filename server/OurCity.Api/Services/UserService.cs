@@ -39,7 +39,7 @@ public class UserService : IUserService
         }
         return Result<UserResponseDto>.Success(user.ToDto());
     }
-    
+
     public async Task<Result<UserResponseDto>> GetUserByUsername(string username)
     {
         var user = await _userRepository.GetUserByUsername(username);

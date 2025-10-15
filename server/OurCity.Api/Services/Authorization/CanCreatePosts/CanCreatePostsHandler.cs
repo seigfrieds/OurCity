@@ -10,10 +10,10 @@ public class CanCreatePostsHandler : AuthorizationHandler<CanCreatePostsRequirem
     )
     {
         var isUserAuthenticated = context.User.Identity?.IsAuthenticated ?? false;
-        
+
         if (isUserAuthenticated)
             context.Succeed(requirement);
-        
+
         return Task.CompletedTask;
     }
 }

@@ -32,10 +32,10 @@ public class AuthorizationController : ControllerBase
     public async Task<IActionResult> CanCreatePosts()
     {
         var isAllowed = await _policyService.CheckPolicy(HttpContext.User, Policy.CanCreatePosts);
-        
+
         return Ok(isAllowed);
     }
-    
+
     [HttpGet]
     [Route("CanMutateThisPost/{postId}")]
     [EndpointSummary("CanMutateThisPost")]
@@ -44,8 +44,12 @@ public class AuthorizationController : ControllerBase
     [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
     public async Task<IActionResult> CanMutateThisPost([FromRoute] int postId)
     {
-        var isAllowed =  await _policyService.CheckResourcePolicy(HttpContext.User, Policy.CanMutateThisPost, postId);
-        
+        var isAllowed = await _policyService.CheckResourcePolicy(
+            HttpContext.User,
+            Policy.CanMutateThisPost,
+            postId
+        );
+
         return Ok(isAllowed);
     }
 }

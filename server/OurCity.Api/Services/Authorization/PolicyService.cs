@@ -21,7 +21,7 @@ public class PolicyService : IPolicyService
         _authorizationService = authorizationService;
         _postRepository = postRepository;
     }
-    
+
     public async Task<bool> CheckPolicy(ClaimsPrincipal user, Policy policy)
     {
         var authResult = await _authorizationService.AuthorizeAsync(user, Policy.CanCreatePosts);
@@ -31,10 +31,14 @@ public class PolicyService : IPolicyService
         return isAllowed;
     }
 
-    public async Task<bool> CheckResourcePolicy(ClaimsPrincipal user, Policy policy, object resource)
+    public async Task<bool> CheckResourcePolicy(
+        ClaimsPrincipal user,
+        Policy policy,
+        object resource
+    )
     {
         bool isAllowed = false;
-        
+
         if (policy == Policy.CanMutateThisPost)
             isAllowed = await CheckCanMutateThisPost(user, policy, (int)resource);
 
@@ -47,10 +51,14 @@ public class PolicyService : IPolicyService
 
         if (post == null)
             return false;
-        
-        var authResult = await _authorizationService.AuthorizeAsync(user, post, Policy.CanMutateThisPost);
+
+        var authResult = await _authorizationService.AuthorizeAsync(
+            user,
+            post,
+            Policy.CanMutateThisPost
+        );
         var isAllowed = authResult.Succeeded;
-        
+
         return isAllowed;
     }
 }
