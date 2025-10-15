@@ -16,6 +16,8 @@
     - The .env files you add should correspond to the environment
       - e.g. .env.development, .env.production
 
+## IMPORTANT NOTE: ALL COMMANDS ARE WRITTEN WITH PRESUMPTION YOU ARE IN THE /SERVER FOLDER
+
 ## Running app with Docker
 
 ### Development Environment (HMR)
@@ -62,10 +64,6 @@ To run migrations
 docker compose -f docker-compose.prod.yml --profile migrate up ourcity.migrate.prod --build
 ```
 
-## Running app locally on machine
-
-TODO...
-
 ## Tooling
 
 ### Get mandatory dotnet tools
@@ -77,14 +75,32 @@ dotnet tool restore
 ### Create migrations
 
 ```sh
-dotnet ef migrations add <migration-name>
+dotnet ef migrations add <migration-name> -p OurCity.Api
 ```
 
 ### Run the tests
 
+NOTE: There's a chance tests might take a long time on first start due to setting up Testcontainers.
+
 ```sh
 dotnet test
 ```
+
+For running tests, you can also run by type of test / what it tests
+
+```sh
+dotnet test --filter "Type=Unit"
+dotnet test --filter "Type=Integration"
+dotnet test --filter "Domain=Comment"
+etc
+```
+
+Getting coverage
+```sh
+dotnet test --collect:"XPlat Code Coverage" && dotnet reportgenerator -reports:"**/OurCity.Api.Test/TestResults/**/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html && open coveragereport/index.html
+```
+
+Note: The coverage generation creates a TestResults entry in OurCity.Api.Test. If you don't delete, future runs for checking coverage might include them.
 
 ### Linting and formatting
 
@@ -105,10 +121,3 @@ Check analyzer errors (lint)
 ```sh
 dotnet build -p lint=true
 ```
-
-there's a chance integration tests can take forever -> should categorize into unit tests and integration tests.
-
-can just run with dotnet test --filter "TestType=Integration"
-
-dotnet test --collect:"XPlat Code Coverage" && dotnet reportgenerator -reports:"**/OurCity.Api.Test/TestResults/**/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html && open coveragereport/index.html
-Note: this creates a TestResults entry in OurCity.Api.Test -> will want to delete.. or you will be showing coverage for multiple reports
