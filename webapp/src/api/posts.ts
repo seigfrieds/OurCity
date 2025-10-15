@@ -21,11 +21,14 @@ export async function createPost(postData: {
   return response.data;
 }
 
-export async function updatePost(id: number, postData: {
-  title?: string;
-  description?: string;
-  location?: string;
-}): Promise<PostResponseDto> {
+export async function updatePost(
+  id: number,
+  postData: {
+    title?: string;
+    description?: string;
+    location?: string;
+  },
+): Promise<PostResponseDto> {
   const response = await api.put<PostResponseDto>(`/posts/${id}`, postData);
   return response.data;
 }

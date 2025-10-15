@@ -33,7 +33,7 @@ type FileUploadEvent = {
   files: File[];
 };
 
-const toast = useToast(); 
+const toast = useToast();
 const isSubmitting = ref(false);
 const router = useRouter();
 
@@ -52,65 +52,63 @@ const resolver = toTypedSchema(
     images: z
       .array(z.instanceof(File))
       .optional()
+      .refine((files) => !files || files.length === 0 || files.length <= 10, {
+        message: "Maximum 10 images allowed",
+      })
+      .refine((files) => !files || files.every((file) => file.size < 5000000), {
+        message: "Each image must be less than 5MB",
+      })
       .refine(
-        (files) => !files || files.length === 0 || files.length <= 10,
-        { message: "Maximum 10 images allowed" }
-      )
-      .refine(
-        (files) => !files || files.every((file) => file.size < 5000000),
-        { message: "Each image must be less than 5MB" }
-      ) 
-      .refine(
-        (files) => !files || files.every((file) => 
-          ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)
-        ),
-        { message: "Only image files (JPG, PNG, GIF, WebP) are allowed" }
+        (files) =>
+          !files ||
+          files.every((file) =>
+            ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"].includes(file.type),
+          ),
+        { message: "Only image files (JPG, PNG, GIF, WebP) are allowed" },
       ),
   }),
 );
 
 const onFormSubmit = async (values: unknown) => {
   const inputtedValues = values as CreatePostFormValues;
-  const images = inputtedValues.images; 
+  const images = inputtedValues.images;
   isSubmitting.value = true;
 
   try {
     console.log("Creating post:", inputtedValues);
-    const username = await getMyInfo(); 
+    const username = await getMyInfo();
     const user = await getUserByUsername(username);
 
     const createPostDto = {
-      authorId: user.id, 
+      authorId: user.id,
       title: inputtedValues.title,
       description: inputtedValues.description,
       location: inputtedValues.location,
-    }
+    };
     const post = await createPost(createPostDto);
 
-    if(images && images.length > 0) {
-      await uploadImage(post.id, images); 
+    if (images && images.length > 0) {
+      await uploadImage(post.id, images);
     }
 
     toast.add({
-      severity: 'success',
-      summary: 'Success',
+      severity: "success",
+      summary: "Success",
       detail: `Post created successfully`,
       life: 3000,
     });
-
-  } catch(error) {
+  } catch (error) {
     console.error("Error creating a post", error);
-    
+
     toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to create post',
+      severity: "error",
+      summary: "Error",
+      detail: "Failed to create post",
       life: 5000,
     });
-    
   } finally {
     isSubmitting.value = false;
-    router.push('/');
+    router.push("/");
   }
 };
 
