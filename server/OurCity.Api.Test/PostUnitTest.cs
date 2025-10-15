@@ -3,11 +3,11 @@
 ///   a description of what exactly should be tested for this component and giving
 ///   back the needed syntax to do the test. Mock data was created by CoPilot.
 using Moq;
+using OurCity.Api.Common.Dtos.Post;
+using OurCity.Api.Common.Enum;
 using OurCity.Api.Services;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
-using OurCity.Api.Common.Dtos.Post;
-using OurCity.Api.Common.Enum;
 
 public class PostUnitTest
 {
