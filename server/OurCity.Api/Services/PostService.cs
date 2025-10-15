@@ -55,12 +55,14 @@ public class PostService : IPostService
         }
 
         var isUpvoted = post.UpvotedUserIds.Contains(userId);
-        return Result<PostUpvoteResponseDto>.Success(new PostUpvoteResponseDto
-        {
-            Id = post.Id,
-            AuthorId = post.AuthorId,
-            Upvoted = isUpvoted
-        });
+        return Result<PostUpvoteResponseDto>.Success(
+            new PostUpvoteResponseDto
+            {
+                Id = post.Id,
+                AuthorId = post.AuthorId,
+                Upvoted = isUpvoted,
+            }
+        );
     }
 
     public async Task<Result<PostDownvoteResponseDto>> GetUserDownvoteStatus(int postId, int userId)
@@ -73,12 +75,14 @@ public class PostService : IPostService
         }
 
         var isDownvoted = post.DownvotedUserIds.Contains(userId);
-        return Result<PostDownvoteResponseDto>.Success(new PostDownvoteResponseDto
-        {
-            Id = post.Id,
-            AuthorId = post.AuthorId,
-            Downvoted = isDownvoted
-        });
+        return Result<PostDownvoteResponseDto>.Success(
+            new PostDownvoteResponseDto
+            {
+                Id = post.Id,
+                AuthorId = post.AuthorId,
+                Downvoted = isDownvoted,
+            }
+        );
     }
 
     public async Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postCreateRequestDto)
