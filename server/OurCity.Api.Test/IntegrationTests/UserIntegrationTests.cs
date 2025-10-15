@@ -37,7 +37,7 @@ public class UserIntegrationTests : IAsyncLifetime
     {
         var userService = new UserService(new UserRepository(_dbContext));
         var retrievedUsers = await userService.GetUsers();
-        
+
         Assert.NotNull(retrievedUsers);
         Assert.Empty(retrievedUsers);
     }
