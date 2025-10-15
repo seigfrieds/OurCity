@@ -23,53 +23,48 @@ Configuration is done through .env
 
 ### Development Environment (HMR)
 
-Webapp should be accessible at http://localhost:5173
+1. (Re)Build image, and spin up Docker container in the background
+    ```sh
+    docker compose up -d --build
+    ```
 
-To (re)build image, and spin up Docker container in the background
+2. Webapp should be accessible at http://localhost:5173
 
-```sh
-docker compose up -d --build
-```
-
-To clean up the Docker container (-v is required to clean up the containers node_modules)
-
-```sh
-docker compose down -v
-```
+3. To clean up the Docker container (-v is required to clean up the containers node_modules)
+    ```sh
+    docker compose down -v
+    ```
 
 ### Production Environment
 
-Webapp should be accessible at http://localhost (maps to port 80)
+1. (Re)Build image, and spin up Docker container in the background
+    ```sh
+    docker compose -f docker-compose.prod.yml up -d --build
+    ```
 
-To (re)build image, and spin up Docker container in the background
 
-```sh
-docker compose -f docker-compose.prod.yml up -d --build
-```
+2. Webapp should be accessible at http://localhost (maps to port 80)
 
-To clean up the Docker container
 
-```sh
-docker compose -f docker-compose.prod.yml down
-```
+3. To clean up the Docker container
+    ```sh
+    docker compose -f docker-compose.prod.yml down
+    ```
 
 ## Running app locally on machine
 
-Webapp should be accessible at http://localhost:5173
-
-### Install dependencies
-
+### 1. Install dependencies
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 2a. Compile and Hot-Reload for Development
 
 ```sh
 npm run dev
 ```
 
-### Build for production
+### 2b. Build for production
 
 To build files
 
@@ -82,6 +77,9 @@ To run the built files
 ```sh
 npm run build:preview
 ```
+
+### 3. Webapp should be accessible at http://localhost:5173
+
 
 ## Tooling
 

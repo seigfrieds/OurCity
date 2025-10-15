@@ -28,47 +28,45 @@
 
 ### Development Environment (HMR)
 
-API documentation should be available at http://localhost:8000/scalar or http://localhost:8000/swagger
+1. (Re)Build iamge, and spin up .NET API and Postgres Docker containers in the background
+    ```sh
+    docker compose up -d --build
+    ```
 
-To (re)build image, and spin up .NET API and Postgres Docker containers in the background
+2. Run Migrations
+    ```sh
+    docker compose --profile migrate up ourcity.migrate.dev --build
+    ```
 
-```sh
-docker compose up -d --build
-```
+3. If you successfully access our API documentation should at http://localhost:8000/scalar or http://localhost:8000/swagger, the server set up is complete. 
 
-To clean up the Docker containers
 
-```sh
-docker compose down
-```
-
-To run database migrations
-
-```sh
-docker compose --profile migrate up ourcity.migrate.dev --build
-```
+4. To clean up the Docker containers
+    ```sh
+    docker compose down
+    ```
 
 ### Production Environment
 
-API documentation is not available for production.
+API documentation is not available for production. 
 
-To (re)build image, and spin up .NET API and Postgres Docker containers in the background
+1. (Re)Build image, and spin up .NET API and Postgres Docker containers in the background
+    ```sh
+    docker compose -f docker-compose.prod.yml up -d --build
+    ```
 
-```sh
-docker compose -f docker-compose.prod.yml up -d --build
-```
+2. Run migrations
+    ```sh
+    docker compose -f docker-compose.prod.yml --profile migrate up ourcity.migrate.prod --build
+    ```
+    the server setup is completed here. 
 
-To clean up the Docker containers
+3. To clean up the Docker containers
+    ```sh
+    docker compose -f docker-compose.prod.yml down
+    ```
 
-```sh
-docker compose -f docker-compose.prod.yml down
-```
 
-To run migrations
-
-```sh
-docker compose -f docker-compose.prod.yml --profile migrate up ourcity.migrate.prod --build
-```
 
 ## Tooling
 
