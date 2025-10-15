@@ -33,6 +33,7 @@ public class PostIntegrationTest : IAsyncLifetime
         _testUser = new User
         {
             Id = 1,
+            Username = "Dummy",
             DisplayName = "Dummy",
             IsDeleted = false,
             CreatedAt = DateTime.UtcNow,
