@@ -13,8 +13,8 @@ describe("ImageModal", () => {
       props: {
         show: true,
         imageUrl: "https://test.com/testimage.jpg",
-        title: "Test Image"
-      }
+        title: "Test Image",
+      },
     });
     const modal = wrapper.find(".image-modal");
     expect(modal.exists()).toBe(true);
@@ -23,25 +23,25 @@ describe("ImageModal", () => {
     expect(img.attributes("src")).toBe("https://test.com/testimage.jpg");
     expect(img.attributes("alt")).toBe("Test Image");
   });
-  
+
   it("does not render when show is false", () => {
     const wrapper = mount(ImageModal, {
-      props: { 
+      props: {
         show: false,
         imageUrl: "https://test.com/testimage.jpg",
         title: "Test Image",
-      }
+      },
     });
     expect(wrapper.find(".image-modal").exists()).toBe(false);
   });
 
   it("emits 'close' event when button is clicked", async () => {
     const wrapper = mount(ImageModal, {
-      props: { 
+      props: {
         show: true,
         imageUrl: "https://test.com/testimage.jpg",
         title: "Test Image",
-      }
+      },
     });
     await wrapper.vm.$nextTick();
     const closeButton = wrapper.find(".close-modal-btn");

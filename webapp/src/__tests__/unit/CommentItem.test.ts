@@ -16,7 +16,7 @@ describe("CommentItem", () => {
         text: "Test Text",
         votes: 0,
         replies: [],
-      }
+      },
     });
     expect(wrapper.find(".comment-author").text()).toBe("Test Author");
     expect(wrapper.find(".comment-text").text()).toBe("Test Text");

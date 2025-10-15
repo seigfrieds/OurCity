@@ -10,33 +10,34 @@ import PostList from "@/components/PostList.vue";
 describe("PostList", () => {
   it("renders a list of posts", () => {
     const posts = [
-      { 
-        id: 1, 
-        title: "Test Post 1", 
-        location: "Test Location 1", 
-        description: "Test Description 1", 
-        imageUrl: "TestImage.jpg" 
+      {
+        id: 1,
+        title: "Test Post 1",
+        location: "Test Location 1",
+        description: "Test Description 1",
+        imageUrl: "TestImage.jpg",
       },
-      { 
-        id: 2, 
-        title: "Test Post 2", 
-        location: "Test Location 2", 
-        description: "Description 2", 
-        imageUrl: "TestImage.jpg" }
+      {
+        id: 2,
+        title: "Test Post 2",
+        location: "Test Location 2",
+        description: "Description 2",
+        imageUrl: "TestImage.jpg",
+      },
     ];
     const wrapper = mount(PostList, {
       props: { posts },
       global: {
         stubs: {
           PostItem: {
-            props: ['title'],
-            template: "<div class='stub-post-item'>{{ title }}</div>"
+            props: ["title"],
+            template: "<div class='stub-post-item'>{{ title }}</div>",
           },
           RouterLink: {
-            template: "<a><slot /></a>"
-          }
-        }
-      }
+            template: "<a><slot /></a>",
+          },
+        },
+      },
     });
     const postItems = wrapper.findAll(".stub-post-item");
     expect(postItems.length).toBe(2);

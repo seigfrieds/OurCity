@@ -15,12 +15,11 @@ global.ResizeObserver = class {
 };
 
 describe("CommentInput", () => {
-  
   it("renders the textarea with placeholder", () => {
     const wrapper = mount(CommentInput, {
       global: {
-        plugins: [PrimeVue]
-      }
+        plugins: [PrimeVue],
+      },
     });
     const textarea = wrapper.find(".comment-input");
     expect(textarea.exists()).toBe(true);
@@ -30,8 +29,8 @@ describe("CommentInput", () => {
   it("emits 'submit comment' event with text when button is clicked", async () => {
     const wrapper = mount(CommentInput, {
       global: {
-        plugins: [PrimeVue]
-      }
+        plugins: [PrimeVue],
+      },
     });
     const textarea = wrapper.find(".comment-input");
     await textarea.setValue("i am testing the comment input");

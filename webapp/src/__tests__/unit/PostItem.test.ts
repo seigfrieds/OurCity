@@ -15,7 +15,7 @@ describe("PostItem", () => {
         location: "Test Location",
         description: "Test Description",
         imageUrl: "https://test.com/testimage.jpg",
-      }
+      },
     });
     expect(wrapper.text()).toContain("Test Title");
     expect(wrapper.text()).toContain("Test Location");
@@ -27,12 +27,13 @@ describe("PostItem", () => {
 
   it("emits upvote event when upvote button is clicked", async () => {
     const wrapper = mount(PostItem, {
-      props: { 
+      props: {
         title: "Test Title",
         location: "Test Location",
         description: "Test Description",
         imageUrl: "https://test.com/testimage.jpg",
-        votes: 0 },
+        votes: 0,
+      },
     });
     const upvoteBtn = wrapper.find(".upvote");
     await upvoteBtn.trigger("click");
@@ -41,12 +42,13 @@ describe("PostItem", () => {
 
   it("emits downvote event when downvote button is clicked", async () => {
     const wrapper = mount(PostItem, {
-      props: { 
+      props: {
         title: "Test Title",
         location: "Test Location",
         description: "Test Description",
         imageUrl: "https://test.com/testimage.jpg",
-        votes: 0 },
+        votes: 0,
+      },
     });
     const downvoteBtn = wrapper.find(".downvote");
     await downvoteBtn.trigger("click");

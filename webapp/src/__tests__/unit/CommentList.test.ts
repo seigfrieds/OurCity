@@ -10,31 +10,31 @@ import CommentList from "@/components/CommentList.vue";
 describe("CommentList", () => {
   it("renders a list of comments", () => {
     const comments = [
-      { 
-        id: 1, 
-        author: "Test Author 1", 
-        text: "Test Text 1", 
-        votes: 2, 
-        replies: [] 
+      {
+        id: 1,
+        author: "Test Author 1",
+        text: "Test Text 1",
+        votes: 2,
+        replies: [],
       },
-      { 
-        id: 2, 
-        author: "Test Author 2", 
-        text: "Test Text 2", 
-        votes: 3, 
-        replies: [] 
-      }
+      {
+        id: 2,
+        author: "Test Author 2",
+        text: "Test Text 2",
+        votes: 3,
+        replies: [],
+      },
     ];
     const wrapper = mount(CommentList, {
       props: { comments },
       global: {
         stubs: {
           CommentItem: {
-            props: ['author', 'text'],
-            template: "<div class='stub-comment-item'>{{ author }}: {{ text }}</div>"
-          }
-        }
-      }
+            props: ["author", "text"],
+            template: "<div class='stub-comment-item'>{{ author }}: {{ text }}</div>",
+          },
+        },
+      },
     });
     const commentItems = wrapper.findAll(".stub-comment-item");
     expect(commentItems.length).toBe(2);
