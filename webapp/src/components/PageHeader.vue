@@ -1,13 +1,9 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
 </script>
 
 <template>
   
-  <div class="home-view">
-    <PageHeader />
-    
-    hello world
-  </div>
 </template>
 
 <style scoped>
