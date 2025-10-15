@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { UserResponseDto } from "@/types/api";
+import type { UserResponseDto } from "@/types/users";
 
 export async function getUsers(): Promise<UserResponseDto[]> {
   const response = await api.get<UserResponseDto[]>("/users");

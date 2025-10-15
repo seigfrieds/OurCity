@@ -1,4 +1,4 @@
-import type { PostResponseDto } from "@/types/api";
+import type { PostResponseDto } from "@/types/posts";
 import type { PostProps } from "@/types/interfaces";
 
 export function mapPostDtoToProps(dto: PostResponseDto, authorName?: string): PostProps {
