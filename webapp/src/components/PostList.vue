@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import PostItem from "./PostItem.vue";
-import posts from "@/data/mockPosts";
+// Remove: import posts from "@/data/mockPosts";
+import { defineProps } from 'vue';
+
+const props = defineProps<{
+  posts: Array<any> // Replace 'any' with your Post type if available
+}>();
 </script>
 
 <template>
   <div class="post-list">
     <router-link
-      v-for="post in posts"
+      v-for="post in props.posts"
       :key="post.id"
       :to="`/posts/${post.id}`"
       style="text-decoration: none"
