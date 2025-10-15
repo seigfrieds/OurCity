@@ -23,7 +23,10 @@ public class ImageController : ControllerBase
     [EndpointDescription("Uploads one or more images to an existing post")]
     [ProducesResponseType(typeof(List<ImageDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UploadImages([FromRoute] int postId, [FromForm] IFormFileCollection files)
+    public async Task<IActionResult> UploadImages(
+        [FromRoute] int postId,
+        [FromForm] IFormFileCollection files
+    )
     {
         var images = await _imageService.UploadImages(postId, files);
 
@@ -73,7 +76,7 @@ public class ImageController : ControllerBase
     public async Task<IActionResult> GetImageByPostId(int postId)
     {
         var image = await _imageService.GetImageByPostId(postId);
-        
+
         if (!image.IsSuccess)
         {
             return NotFound(image.Error);

@@ -141,7 +141,7 @@ public class ImageService : IImageService
         var imageDto = new ImageDto { Url = image.Url };
         return Result<ImageDto>.Success(imageDto);
     }
-    
+
     public async Task<Result<ImageDto>> GetImageByPostId(int postId)
     {
         var image = await _imageRepository.GetImageByPostId(postId);

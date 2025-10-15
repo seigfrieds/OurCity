@@ -7,7 +7,7 @@ public interface IImageRepository
 {
     Task<IEnumerable<Image>> UploadImages(List<Image> images);
     Task<IEnumerable<Image>> GetAllImages();
-    Task<Image?> GetImageByImageId(int imageId); 
+    Task<Image?> GetImageByImageId(int imageId);
     Task<Image?> GetImageByPostId(int postId);
 }
 
