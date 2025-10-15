@@ -1,24 +1,10 @@
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
-import { withDefaults, defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from "vue";
+import type { PostProps } from "@/types/interfaces";
 
-withDefaults(
-  defineProps<{
-    title: string;
-    location?: string;
-    description: string;
-    imageUrl?: string;
-    upvotes?: number;
-    downvotes?: number;
-    showVotes?: boolean;
-  }>(),
-  {
-    upvotes: 0,
-    downvotes: 0,
-    showVotes: true,
-  },
-);
+defineProps<{ post: PostProps }>();
 
 const emit = defineEmits<{
   (e: "upvote"): void;
@@ -38,25 +24,26 @@ function downvote() {
   <Card class="post-card">
     <template #content>
       <div class="post-content">
-        <div v-if="showVotes" class="post-votes">
+        <div class="post-votes">
           <VoteButton icon="pi pi-chevron-up" class="vote-btn upvote" @click.prevent="upvote" />
-          <div class="vote-count">{{ upvotes - downvotes }}</div>
+          <div class="vote-count">{{ post.votes ?? 0 }}</div>
           <VoteButton
             icon="pi pi-chevron-down"
             class="vote-btn downvote"
             @click.prevent="downvote"
           />
         </div>
+
         <div class="post-text-content">
-          <h2 class="post-title">{{ title }}</h2>
+          <h2 class="post-title">{{ post.title }}</h2>
           <div class="post-location">
             <i class="pi pi-map-marker location-icon"></i>
-            <span>{{ location }}</span>
+            <span>{{ post.location }}</span>
           </div>
-          <p class="post-description">{{ description }}</p>
+          <p class="post-description">{{ post.description }}</p>
         </div>
-        <div class="post-image-container">
-          <img :src="imageUrl" :alt="title" class="post-image" />
+        <div v-if="post.imageUrls && post.imageUrls.length" class="post-image-container">
+          <img :src="post.imageUrls[0]" :alt="post.title" class="post-image" />
         </div>
       </div>
     </template>
