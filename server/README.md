@@ -9,6 +9,10 @@
   - To run the dev environment, you will need .env.development (even if empty) or docker compose will error
   - To run the prod environment, you will need .env.production (even if empty) or docker compose will error
 
+## Common Errors
+- SQL Errors like "Relation does not exist"
+  - You may need to run migrations when initially running the app to populate your database. It is NOT automatically done.
+
 ## Configuration
 
 - For secrets, do not commit to appsettings.json.
@@ -39,8 +43,6 @@ docker compose down
 ```
 
 To run database migrations
-
-**NOTE: You may need to run migrations when initially running the app to populate your database. It is NOT automatically done. This would explain errors like "Relation does not exist"**
 
 ```sh
 docker compose --profile migrate up ourcity.migrate.dev --build
@@ -102,6 +104,9 @@ etc
 ```
 
 Getting coverage
+
+This works for MacOS (verified). Other shells may need different separators between commands (e.g. ;)
+
 ```sh
 dotnet test --collect:"XPlat Code Coverage" && dotnet reportgenerator -reports:"**/OurCity.Api.Test/TestResults/**/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html && open coveragereport/index.html
 ```
