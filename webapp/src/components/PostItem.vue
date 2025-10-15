@@ -1,14 +1,10 @@
-postitem
-
 <script setup lang="ts">
 import Card from "primevue/card";
 import VoteButton from "primevue/button";
 import { defineProps, defineEmits } from "vue";
 import type { PostProps } from "@/types/interfaces";
 
-const props = defineProps<{
-  post: PostProps;
-}>();
+defineProps<{ post: PostProps }>();
 
 const emit = defineEmits<{
   (e: "upvote"): void;
