@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OurCity.Api.Common.Dtos;
 using OurCity.Api.Common.Dtos.Comments;
 using OurCity.Api.Services;
 
@@ -76,6 +77,33 @@ public class CommentController : ControllerBase
 
         if (comment.Data == null)
             return NotFound();
+
+        return Ok(comment.Data);
+    }
+
+    [HttpPut]
+    [Route("{commentId}/vote")]
+    [EndpointSummary("Vote on a comment")]
+    [EndpointDescription("A user votes on a comment, either upvote or downvote")]
+    [ProducesResponseType(typeof(CommentResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> VoteComment(
+        [FromRoute] int postId,
+        [FromRoute] int commentId,
+        [FromBody] CommentVoteRequestDto commentVoteRequestDto
+    )
+    {
+        var comment = await _commentService.VoteComment(
+            postId,
+            commentId,
+            commentVoteRequestDto.UserId,
+            commentVoteRequestDto.VoteType
+        );
+
+        if (!comment.IsSuccess)
+        {
+            return NotFound(comment.Error);
+        }
 
         return Ok(comment.Data);
     }

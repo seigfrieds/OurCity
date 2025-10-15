@@ -1,5 +1,6 @@
 using OurCity.Api.Common;
 using OurCity.Api.Common.Dtos.Comments;
+using OurCity.Api.Common.Enum;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Services.Mappings;
 
@@ -17,6 +18,12 @@ public interface ICommentService
         int postId,
         int commentId,
         CommentUpdateRequestDto commentUpdateRequestDto
+    );
+    Task<Result<CommentResponseDto>> VoteComment(
+        int postId,
+        int commentId,
+        int userId,
+        VoteType voteType
     );
     Task<Result<CommentResponseDto>> DeleteComment(int postId, int commentId);
 }
@@ -62,6 +69,37 @@ public class CommentService : ICommentService
         var updatedComment = await _commentRepository.UpdateComment(
             commentUpdateRequestDto.ToEntity(existingComment)
         );
+        return Result<CommentResponseDto>.Success(updatedComment.ToDto());
+    }
+
+    public async Task<Result<CommentResponseDto>> VoteComment(
+        int postId,
+        int commentId,
+        int userId,
+        VoteType voteType
+    )
+    {
+        var comment = await _commentRepository.GetCommentById(postId, commentId);
+
+        if (comment == null)
+        {
+            return Result<CommentResponseDto>.Failure("Comment does not exist");
+        }
+
+        var targetList =
+            (voteType == VoteType.Upvote) ? comment.UpvotedUserIds : comment.DownvotedUserIds;
+        var oppositeList =
+            (voteType == VoteType.Upvote) ? comment.DownvotedUserIds : comment.UpvotedUserIds;
+
+        if (!targetList.Remove(userId))
+        {
+            targetList.Add(userId);
+            oppositeList.Remove(userId);
+        }
+
+        comment.UpdatedAt = DateTime.UtcNow;
+
+        var updatedComment = await _commentRepository.UpdateComment(comment);
         return Result<CommentResponseDto>.Success(updatedComment.ToDto());
     }
 
