@@ -16,7 +16,7 @@ public class UserIntegrationTests : IAsyncLifetime
         .Build();
     private AppDbContext _dbContext = null!; //null! -> tell compiler to trust it will be initialized
     private User _testUser = null!;
-    
+
     public async Task InitializeAsync()
     {
         await _postgres.StartAsync();
@@ -34,7 +34,7 @@ public class UserIntegrationTests : IAsyncLifetime
             DisplayName = "Display Test",
             IsDeleted = false,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
         _dbContext.Users.Add(_testUser);
         await _dbContext.SaveChangesAsync();
@@ -61,15 +61,12 @@ public class UserIntegrationTests : IAsyncLifetime
             Assert.Equal(_testUser.DisplayName, retrievedUser.Data.DisplayName);
         });
     }
-    
+
     [Fact]
     public async Task CreateUserShouldAddAndReturnUser()
     {
         var userService = new UserService(new UserRepository(_dbContext));
-        var createDto = new UserCreateRequestDto
-        {
-            Username = "Test Username"
-        };
+        var createDto = new UserCreateRequestDto { Username = "Test Username" };
 
         var createdUser = await userService.CreateUser(createDto);
         Assert.True(createdUser.IsSuccess);

@@ -13,14 +13,13 @@ public class OurCityWebApplicationFactory : WebApplicationFactory<Program>, IAsy
 
     public OurCityWebApplicationFactory()
     {
-        _postgres = new PostgreSqlBuilder()
-            .WithImage("postgres:16.10")
-            .Build();
+        _postgres = new PostgreSqlBuilder().WithImage("postgres:16.10").Build();
     }
 
     public async Task InitializeAsync()
     {
-        await _postgres.StartAsync(); ;
+        await _postgres.StartAsync();
+        ;
     }
 
     public async Task DisposeAsync()
@@ -32,13 +31,15 @@ public class OurCityWebApplicationFactory : WebApplicationFactory<Program>, IAsy
     {
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+            var descriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(DbContextOptions<AppDbContext>)
+            );
             if (descriptor != null)
                 services.Remove(descriptor);
 
             services.AddDbContextPool<AppDbContext>(options =>
-                options.UseNpgsql(_postgres.GetConnectionString()));
+                options.UseNpgsql(_postgres.GetConnectionString())
+            );
 
             var sp = services.BuildServiceProvider();
             using var scope = sp.CreateScope();
