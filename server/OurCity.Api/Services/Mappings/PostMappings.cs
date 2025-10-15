@@ -1,3 +1,4 @@
+using OurCity.Api.Common.Dtos.Image;
 using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Infrastructure.Database;
 
