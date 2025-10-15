@@ -23,7 +23,7 @@ public class ImageController : ControllerBase
     [EndpointDescription("Uploads one or more images to an existing post")]
     [ProducesResponseType(typeof(List<ImageDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UploadImages(int postId, [FromForm] List<IFormFile> files)
+    public async Task<IActionResult> UploadImages([FromRoute] int postId, [FromForm] IFormFileCollection files)
     {
         var images = await _imageService.UploadImages(postId, files);
 
@@ -33,5 +33,52 @@ public class ImageController : ControllerBase
         }
 
         return Ok(images.Data);
+    }
+
+    [HttpGet]
+    [EndpointSummary("Get all images")]
+    [EndpointDescription("Retrieves all images")]
+    [ProducesResponseType(typeof(List<ImageDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllImages()
+    {
+        var images = await _imageService.GetAllImages();
+
+        return Ok(images.Data);
+    }
+
+    [HttpGet]
+    [Route("{imageId}")]
+    [EndpointSummary("Get an image by ID")]
+    [EndpointDescription("Retrieves an image by its ID")]
+    [ProducesResponseType(typeof(ImageDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetImageByImageId(int imageId)
+    {
+        var image = await _imageService.GetImageByImageId(imageId);
+
+        if (!image.IsSuccess)
+        {
+            return NotFound(image.Error);
+        }
+
+        return Ok(image.Data);
+    }
+
+    [HttpGet]
+    [Route("post/{postId}")]
+    [EndpointSummary("Get an image by Post ID")]
+    [EndpointDescription("Retrieves an image by its associated Post ID")]
+    [ProducesResponseType(typeof(ImageDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetImageByPostId(int postId)
+    {
+        var image = await _imageService.GetImageByPostId(postId);
+        
+        if (!image.IsSuccess)
+        {
+            return NotFound(image.Error);
+        }
+
+        return Ok(image.Data);
     }
 }

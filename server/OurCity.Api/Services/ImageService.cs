@@ -12,7 +12,10 @@ namespace OurCity.Api.Services;
 
 public interface IImageService
 {
-    Task<Result<IEnumerable<ImageDto>>> UploadImages(int postId, [FromForm] List<IFormFile> files);
+    Task<Result<IEnumerable<ImageDto>>> UploadImages(int postId, IFormFileCollection files);
+    Task<Result<IEnumerable<ImageDto>>> GetAllImages();
+    Task<Result<ImageDto>> GetImageByImageId(int imageId);
+    Task<Result<ImageDto>> GetImageByPostId(int postId);
 }
 
 public class ImageService : IImageService
@@ -33,13 +36,13 @@ public class ImageService : IImageService
         _postRepository = postRepository;
         _s3 = s3;
         _bucketName =
-            configuration.GetValue<string>("S3Settings:BucketName")
+            configuration.GetValue<string>("AwsSettings:BucketName")
             ?? throw new ArgumentNullException("S3 bucket name is not configured");
     }
 
     public async Task<Result<IEnumerable<ImageDto>>> UploadImages(
         int postId,
-        [FromForm] List<IFormFile> files
+        IFormFileCollection files
     )
     {
         var post = await _postRepository.GetPostById(postId);
@@ -54,7 +57,7 @@ public class ImageService : IImageService
             return Result<IEnumerable<ImageDto>>.Success(new List<ImageDto>());
         }
 
-        const long maxFileSize = 5 * 1024 * 1024; // 5MB
+        const long maxFileSize = 5 * 1024 * 1024;
         var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
 
         foreach (var file in files)
@@ -117,5 +120,38 @@ public class ImageService : IImageService
         {
             return Result<IEnumerable<ImageDto>>.Failure($"Unknown error: {ex.Message}");
         }
+    }
+
+    public async Task<Result<IEnumerable<ImageDto>>> GetAllImages()
+    {
+        var images = await _imageRepository.GetAllImages();
+        var imageDtos = images.Select(image => new ImageDto { Url = image.Url });
+        return Result<IEnumerable<ImageDto>>.Success(imageDtos);
+    }
+
+    public async Task<Result<ImageDto>> GetImageByImageId(int imageId)
+    {
+        var image = await _imageRepository.GetImageByImageId(imageId);
+
+        if (image == null)
+        {
+            return Result<ImageDto>.Failure("Image not found");
+        }
+
+        var imageDto = new ImageDto { Url = image.Url };
+        return Result<ImageDto>.Success(imageDto);
+    }
+    
+    public async Task<Result<ImageDto>> GetImageByPostId(int postId)
+    {
+        var image = await _imageRepository.GetImageByPostId(postId);
+
+        if (image == null)
+        {
+            return Result<ImageDto>.Failure("Image not found");
+        }
+
+        var imageDto = new ImageDto { Url = image.Url };
+        return Result<ImageDto>.Success(imageDto);
     }
 }
