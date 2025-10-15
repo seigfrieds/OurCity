@@ -33,9 +33,26 @@ public class UserController : ControllerBase
     [EndpointSummary("Get user by ID")]
     [EndpointDescription("Gets a user with the specified ID")]
     [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserById([FromRoute] int id)
     {
         var user = await _userService.GetUserById(id);
+        if (!user.IsSuccess)
+        {
+            return NotFound(user.Error);
+        }
+        return Ok(user.Data);
+    }
+
+    [HttpGet]
+    [Route("/name/{username}")]
+    [EndpointSummary("Get user by username")]
+    [EndpointDescription("Gets a user with the specified username")]
+    [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
+    {
+        var user = await _userService.GetUserByUsername(username);
         if (!user.IsSuccess)
         {
             return NotFound(user.Error);
