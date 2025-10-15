@@ -20,6 +20,7 @@
 ## IMPORTANT NOTE: ALL COMMANDS ARE WRITTEN WITH PRESUMPTION YOU ARE IN THE /SERVER FOLDER
 
 ## Running app with Docker
+### 🚨🚨🚨 Docker Desktop should be running, or these will not work. 🚨🚨🚨
 
 ### Development Environment (HMR)
 
@@ -37,9 +38,9 @@ To clean up the Docker containers
 docker compose down
 ```
 
-To run migrations
+To run database migrations
 
-**NOTE: You may need to run migrations when initially running the app to populate your database. It is NOT automatically done.**
+**NOTE: You may need to run migrations when initially running the app to populate your database. It is NOT automatically done. This would explain errors like "Relation does not exist"**
 
 ```sh
 docker compose --profile migrate up ourcity.migrate.dev --build
@@ -70,6 +71,8 @@ docker compose -f docker-compose.prod.yml --profile migrate up ourcity.migrate.p
 ## Tooling
 
 ### Get mandatory dotnet tools
+
+**If you do not do this step, you may not be able to run some of the commands in this README.**
 
 ```sh
 dotnet tool restore
