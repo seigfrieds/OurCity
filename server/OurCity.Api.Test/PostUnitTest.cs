@@ -1,15 +1,17 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+/// Generative AI - CoPilot was used to assist in the creation of this file.
+///   CoPilot was asked to help write unit tests for the Post API methods by being given
+///   a description of what exactly should be tested for this component and giving
+///   back the needed syntax to do the test. Mock data was created by CoPilot.
+
 using Moq;
-using Xunit;
 using OurCity.Api.Services;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
-using OurCity.Api.Common;
-using OurCity.Api.Common.Dtos;
+using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
 
 public class PostUnitTest
+
 {
   private readonly Mock<IPostRepository> _mockRepo;
   private readonly PostService _service;
@@ -189,8 +191,89 @@ public class PostUnitTest
     Assert.Equal("Post does not exist", result.Error);
   }
 
-  // CreatePost
-  // UpdatePost
-  // VotePost
-  // DeletePost
+  [Fact]
+  public async Task CreatePostWhenValid()
+  {
+    // Arrange
+    var dto = new PostCreateRequestDto { AuthorId = 10, Title = "Test Post", Description = "Test Description" };
+    var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test Description" };
+    _mockRepo.Setup(r => r.CreatePost(It.IsAny<Post>())).ReturnsAsync(post);
+
+    // Act
+    var result = await _service.CreatePost(dto);
+
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.NotNull(result.Data);
+    Assert.Equal(1, result.Data.Id);
+    Assert.Equal("Test Post", result.Data.Title);
+    Assert.Equal("Test Description", result.Data.Description);
+    Assert.Equal(10, result.Data.AuthorId);
+  }
+
+  [Fact]
+  public async Task UpdatePost_ReturnsUpdatedPost_WhenValid()
+  {
+    // Arrange
+    var postId = 1;
+    var updateDto = new PostUpdateRequestDto { Title = "Updated Title", Description = "Updated Description" };
+    var existingPost = new Post { Id = postId, Title = "Old Title", Description = "Old Description" };
+    var updatedPost = new Post { Id = postId, Title = "Updated Title", Description = "Updated Description" };
+
+    _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
+    _mockRepo.Setup(r => r.UpdatePost(It.IsAny<Post>())).ReturnsAsync(updatedPost);
+
+    // Act
+    var result = await _service.UpdatePost(postId, updateDto);
+
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.NotNull(result.Data);
+    Assert.Equal(postId, result.Data.Id);
+    Assert.Equal("Updated Title", result.Data.Title);
+    Assert.Equal("Updated Description", result.Data.Description);
+  }
+
+  [Fact]
+  public async Task VotePost_ReturnsUpdatedPost_WhenValid()
+  {
+    // Arrange
+    var postId = 1;
+    var userId = 42;
+    var voteType = VoteType.Upvote;
+    var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int>() };
+    var updatedPost = new Post { Id = postId, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int> { userId } };
+
+    _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
+    _mockRepo.Setup(r => r.UpdatePost(It.IsAny<Post>())).ReturnsAsync(updatedPost);
+
+    // Act
+    var result = await _service.VotePost(postId, userId, voteType);
+
+    // Assert
+    Assert.True(result.IsSuccess);
+    Assert.NotNull(result.Data);
+    Assert.Equal(postId, result.Data.Id);
+    Assert.Contains(userId, updatedPost.UpvotedUserIds);
+  }
+  
+  [Fact]
+  public async Task DeletePost_ReturnsDeletedPost_WhenValid()
+  {
+      // Arrange
+      var postId = 1;
+      var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test" };
+
+      _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
+      _mockRepo.Setup(r => r.DeletePost(existingPost)).ReturnsAsync(existingPost);
+
+      // Act
+      var result = await _service.DeletePost(postId);
+
+      // Assert
+      Assert.True(result.IsSuccess);
+      Assert.NotNull(result.Data);
+      Assert.Equal(postId, result.Data.Id);
+      Assert.Equal("Test Post", result.Data.Title);
+  }
 }
