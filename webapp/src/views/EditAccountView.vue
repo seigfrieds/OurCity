@@ -6,6 +6,7 @@ import PageHeader from "@/components/PageHeader.vue";
 import Card from "primevue/card";
 import Button from "primevue/button";
 import InputText from "primevue/inputtext";
+import WipMessage from "@/components/WipMessage.vue";
 
 const accountDetails = {
   username: "johndoe",
@@ -17,6 +18,10 @@ const accountDetails = {
   <div class="edit-account-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
+      <WipMessage
+        message="The Edit Account page is currently a work in progress"
+        description="The 'Save Changes' button is NOT indended to trigger an API call yet"
+      />
       <Card>
         <template #title>
           <h2>Edit Account</h2>

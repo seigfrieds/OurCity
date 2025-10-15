@@ -10,6 +10,7 @@ import CommentInput from "@/components/CommentInput.vue";
 import CommentList from "@/components/CommentList.vue";
 import type { PostProps } from "@/types/interfaces";
 import posts from "@/data/mockPosts";
+import WipMessage from "@/components/WipMessage.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -47,6 +48,11 @@ function deletePost() {
 <template>
   <PageHeader />
   <div class="post-detail-view">
+    <WipMessage
+      message="The Post Details page is currently a work in progress"
+      description="The 'Delete', 'Upvote', 'Downvote', and 'Submit Comment' buttons  will NOT trigger an API call yet"
+    />
+
     <h1 class="post-title">{{ post?.title }}</h1>
     <div class="post-meta">
       <div class="post-author">By @{{ post?.author }}</div>

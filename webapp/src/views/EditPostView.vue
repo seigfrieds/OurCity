@@ -13,6 +13,7 @@ import Editor from "primevue/editor";
 import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
+import WipMessage from "@/components/WipMessage.vue";
 
 type EditPostFormValues = {
   title: string;
@@ -69,6 +70,11 @@ const editorModules = {
   <div class="edit-post-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
+      <WipMessage
+        message="The Edit Post Page is currently a work in progress"
+        description="The 'Edit Post' and 'Upload' buttons are intended to NOT trigger a login API call yet"
+      />
+
       <Card>
         <template #title>
           <h2>Edit a Post</h2>

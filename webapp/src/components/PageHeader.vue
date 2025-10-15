@@ -75,8 +75,9 @@ function goToHome(): void {
           <span class="p-input-icon-left">
             <i class="pi pi-search" />
             <InputText
+              disabled="true"
               v-model="searchQuery"
-              placeholder="Search... (Coming Soon)"
+              placeholder="Work In Progress... Coming Soon"
               class="search-input"
             />
           </span>

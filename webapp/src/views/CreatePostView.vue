@@ -14,6 +14,7 @@ import Editor from "primevue/editor";
 import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
+import WipMessage from "@/components/WipMessage.vue";
 
 type CreatePostFormValues = {
   title: string;
@@ -70,6 +71,11 @@ const editorModules = {
   <div class="create-post-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
+      <WipMessage
+        message="The Create Post page is currently a work in progress"
+        description="The 'Create Post' and 'Upload' buttons are intended to NOT trigger API calls yet"
+      />
+
       <Card>
         <template #title>
           <h2>Create a Post</h2>
