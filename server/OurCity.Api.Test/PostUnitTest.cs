@@ -2,7 +2,6 @@
 ///   CoPilot was asked to help write unit tests for the Post API methods by being given
 ///   a description of what exactly should be tested for this component and giving
 ///   back the needed syntax to do the test. Mock data was created by CoPilot.
-
 using Moq;
 using OurCity.Api.Services;
 using OurCity.Api.Infrastructure;
