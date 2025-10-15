@@ -51,9 +51,17 @@ public class UserService : IUserService
 
     public async Task<Result<UserResponseDto>> CreateUser(UserCreateRequestDto userCreateRequestDto)
     {
+        // check if the username already exists in db
+        var existingUser = await _userRepository.GetUserByUsername(userCreateRequestDto.Username);
+        if (existingUser != null)
+        {
+            return Result<UserResponseDto>.Failure("Username already exists.");
+        }
+        
         var createdUser = await _userRepository.CreateUser(
             userCreateRequestDto.CreateDtoToEntity()
         );
+
         return Result<UserResponseDto>.Success(createdUser.ToDto());
     }
 
