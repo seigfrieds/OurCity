@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import PostItem from "./PostItem.vue";
 import posts from "@/data/mockPosts";
-
 </script>
 
 <template>
