@@ -89,11 +89,14 @@ public class PostController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VotePost(
         [FromRoute] int postId,
-        [FromRoute] int userId,
-        [FromRoute] VoteType voteType
+        [FromBody] PostVoteRequestDto postVoteRequestDto
     )
     {
-        var post = await _postService.VotePost(postId, userId, voteType);
+        var post = await _postService.VotePost(
+            postId,
+            postVoteRequestDto.UserId,
+            postVoteRequestDto.VoteType
+        );
 
         if (!post.IsSuccess)
         {
