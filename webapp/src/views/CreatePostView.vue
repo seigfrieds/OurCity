@@ -75,7 +75,7 @@ const editorModules = {
         message="The Create Post page is currently a work in progress"
         description="The 'Create Post' and 'Upload' buttons are intended to NOT trigger API calls yet"
       />
-      
+
       <Card>
         <template #title>
           <h2>Create a Post</h2>

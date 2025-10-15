@@ -48,12 +48,10 @@ function deletePost() {
 <template>
   <PageHeader />
   <div class="post-detail-view">
-
-    <WipMessage 
+    <WipMessage
       message="The Post Details page is currently a work in progress"
       description="The 'Delete', 'Upvote', 'Downvote', and 'Submit Comment' buttons  will NOT trigger an API call yet"
     />
-  
 
     <h1 class="post-title">{{ post?.title }}</h1>
     <div class="post-meta">

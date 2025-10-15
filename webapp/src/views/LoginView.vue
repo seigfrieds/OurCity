@@ -8,15 +8,12 @@ import { toTypedSchema } from "@vee-validate/zod";
 import * as z from "zod";
 import { Form, Field } from "vee-validate";
 import InputText from "primevue/inputtext";
-import Password from "primevue/password";
-import Message from "primevue/message";
 
 import "@/assets/styles/forms.css";
 import WipMessage from "@/components/WipMessage.vue";
 
 type LoginFormValues = {
-  email: string;
-  password: string;
+  username: "",
 };
 
 const initialValues = {
@@ -25,8 +22,7 @@ const initialValues = {
 
 const resolver = toTypedSchema(
   z.object({
-    email: z.string().min(1, { message: "Email is required" }).email({ message: "Invalid email" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+    username: z.string().min(1, { message: "Username is required" }).nonempty()
   }),
 );
 
@@ -40,12 +36,11 @@ const onFormSubmit = (values: unknown) => {
   <div class="login-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
-
-      <WipMessage 
-        message="The Login Page is currently a work in progress" 
+      <WipMessage
+        message="The Login Page is currently a work in progress"
         description="The 'Log in' button is intended to NOT trigger a login API call yet"
       />
-      
+
       <Card>
         <template #title>
           <h2 id="login-header">Login</h2>
@@ -54,7 +49,6 @@ const onFormSubmit = (values: unknown) => {
           <Form
             :initialValues="initialValues"
             :resolver="resolver"
-            v-slot="{ errors }"
             @submit="onFormSubmit"
           >
             <div class="field-common">
@@ -75,13 +69,12 @@ const onFormSubmit = (values: unknown) => {
 </template>
 
 <style>
-  #login-header {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-  }
+#login-header {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
 
-  #login-btn {
-    margin-top:2rem;
-  }
-
+#login-btn {
+  margin-top: 2rem;
+}
 </style>

@@ -70,9 +70,8 @@ const editorModules = {
   <div class="edit-post-view form-layout">
     <PageHeader />
     <div class="form-container form-container-common">
-
-      <WipMessage 
-        message="The Edit Post Page is currently a work in progress" 
+      <WipMessage
+        message="The Edit Post Page is currently a work in progress"
         description="The 'Edit Post' and 'Upload' buttons are intended to NOT trigger a login API call yet"
       />
 
