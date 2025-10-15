@@ -23,16 +23,16 @@ public class PostRepository : IPostRepository
 
     public async Task<IEnumerable<Post>> GetAllPosts()
     {
-        return await _appDbContext.Posts
-            .Include(p => p.Images)
+        return await _appDbContext
+            .Posts.Include(p => p.Images)
             .Include(p => p.Comments)
             .ToListAsync();
     }
 
     public async Task<Post?> GetPostById(int postId)
     {
-        return await _appDbContext.Posts
-            .Include(p => p.Images)
+        return await _appDbContext
+            .Posts.Include(p => p.Images)
             .Include(p => p.Comments)
             .FirstOrDefaultAsync(p => p.Id == postId);
     }

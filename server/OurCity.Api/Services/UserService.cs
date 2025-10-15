@@ -73,7 +73,7 @@ public class UserService : IUserService
             return Result<UserResponseDto>.Failure("User not found.");
         }
 
-        await _userRepository.DeleteUser(existingUser); 
+        await _userRepository.DeleteUser(existingUser);
         return Result<UserResponseDto>.Success(existingUser.ToDto());
     }
 }

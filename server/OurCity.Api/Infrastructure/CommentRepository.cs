@@ -23,19 +23,22 @@ public class CommentRepository : ICommentRepository
 
     public async Task<IEnumerable<Comment>> GetCommentsByPostId(int postId)
     {
-        return await _appDbContext.Comments
-            .Where(c => c.PostId == postId && !c.IsDeleted)
+        return await _appDbContext
+            .Comments.Where(c => c.PostId == postId && !c.IsDeleted)
             .ToListAsync();
     }
 
     public async Task<Comment> GetCommentById(int postId, int commentId)
     {
-        var comment = await _appDbContext.Comments
-            .FirstOrDefaultAsync(c => c.PostId == postId && c.Id == commentId && !c.IsDeleted);
+        var comment = await _appDbContext.Comments.FirstOrDefaultAsync(c =>
+            c.PostId == postId && c.Id == commentId && !c.IsDeleted
+        );
 
         if (comment == null)
         {
-            throw new KeyNotFoundException($"Comment with ID {commentId} for Post ID {postId} not found.");
+            throw new KeyNotFoundException(
+                $"Comment with ID {commentId} for Post ID {postId} not found."
+            );
         }
 
         return comment;
@@ -54,7 +57,7 @@ public class CommentRepository : ICommentRepository
         await _appDbContext.SaveChangesAsync();
         return comment;
     }
-    
+
     public async Task<Comment> DeleteComment(Comment comment)
     {
         // soft deletion in db  (mark Comment as deleted)

@@ -1,6 +1,6 @@
 using OurCity.Api.Common;
-using OurCity.Api.Infrastructure;
 using OurCity.Api.Common.Dtos.Comments;
+using OurCity.Api.Infrastructure;
 using OurCity.Api.Services.Mappings;
 
 namespace OurCity.Api.Services;
@@ -9,8 +9,15 @@ public interface ICommentService
 {
     Task<IEnumerable<CommentResponseDto>> GetCommentsByPostId(int postId);
     Task<CommentResponseDto> GetCommentById(int postId, int commentId);
-    Task<Result<CommentResponseDto>> CreateComment(int postId, CommentCreateRequestDto commentCreateRequestDto);
-    Task<Result<CommentResponseDto>> UpdateComment(int postId, int commentId, CommentUpdateRequestDto commentUpdateRequestDto);
+    Task<Result<CommentResponseDto>> CreateComment(
+        int postId,
+        CommentCreateRequestDto commentCreateRequestDto
+    );
+    Task<Result<CommentResponseDto>> UpdateComment(
+        int postId,
+        int commentId,
+        CommentUpdateRequestDto commentUpdateRequestDto
+    );
     Task<Result<CommentResponseDto>> DeleteComment(int postId, int commentId);
 }
 
@@ -33,16 +40,28 @@ public class CommentService : ICommentService
         var comment = await _commentRepository.GetCommentById(postId, commentId);
         return comment.ToDto();
     }
-    public async Task<Result<CommentResponseDto>> CreateComment(int postId, CommentCreateRequestDto commentCreateRequestDto)
+
+    public async Task<Result<CommentResponseDto>> CreateComment(
+        int postId,
+        CommentCreateRequestDto commentCreateRequestDto
+    )
     {
-        var createdComment = await _commentRepository.CreateComment(commentCreateRequestDto.ToEntity(postId));
+        var createdComment = await _commentRepository.CreateComment(
+            commentCreateRequestDto.ToEntity(postId)
+        );
         return Result<CommentResponseDto>.Success(createdComment.ToDto());
     }
 
-    public async Task<Result<CommentResponseDto>> UpdateComment(int postId, int commentId, CommentUpdateRequestDto commentUpdateRequestDto)
+    public async Task<Result<CommentResponseDto>> UpdateComment(
+        int postId,
+        int commentId,
+        CommentUpdateRequestDto commentUpdateRequestDto
+    )
     {
         var existingComment = await _commentRepository.GetCommentById(postId, commentId);
-        var updatedComment = await _commentRepository.UpdateComment(commentUpdateRequestDto.ToEntity(existingComment));
+        var updatedComment = await _commentRepository.UpdateComment(
+            commentUpdateRequestDto.ToEntity(existingComment)
+        );
         return Result<CommentResponseDto>.Success(updatedComment.ToDto());
     }
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OurCity.Api.Services;
 using OurCity.Api.Common.Dtos.Comments;
+using OurCity.Api.Services;
 
 namespace OurCity.Api.Controllers;
 
@@ -36,7 +36,7 @@ public class CommentController : ControllerBase
         var comment = await _commentService.GetCommentById(postId, commentId);
         if (comment == null)
             return NotFound();
-        
+
         return Ok(comment);
     }
 
@@ -45,15 +45,17 @@ public class CommentController : ControllerBase
     [EndpointDescription("Creates a new comment to be associated with a specific post")]
     [ProducesResponseType(typeof(CommentResponseDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateComment(
-        [FromRoute] int postId, 
-        [FromBody] CommentCreateRequestDto commentCreateRequestDto)
+        [FromRoute] int postId,
+        [FromBody] CommentCreateRequestDto commentCreateRequestDto
+    )
     {
         var comment = await _commentService.CreateComment(postId, commentCreateRequestDto);
 
         return CreatedAtAction(
             nameof(GetComment),
             new { postId = comment.Data?.PostId, commentId = comment.Data?.Id },
-            comment.Data);
+            comment.Data
+        );
     }
 
     [HttpPut("{commentId}")]
@@ -63,9 +65,14 @@ public class CommentController : ControllerBase
     public async Task<IActionResult> UpdateComment(
         [FromRoute] int postId,
         [FromRoute] int commentId,
-        [FromBody] CommentUpdateRequestDto commentUpdateRequestDto)
+        [FromBody] CommentUpdateRequestDto commentUpdateRequestDto
+    )
     {
-        var comment = await _commentService.UpdateComment(postId, commentId, commentUpdateRequestDto);
+        var comment = await _commentService.UpdateComment(
+            postId,
+            commentId,
+            commentUpdateRequestDto
+        );
 
         if (comment.Data == null)
             return NotFound();
@@ -79,7 +86,8 @@ public class CommentController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteComment(
         [FromRoute] int postId,
-        [FromRoute] int commentId)
+        [FromRoute] int commentId
+    )
     {
         var comment = await _commentService.DeleteComment(postId, commentId);
 
@@ -88,5 +96,4 @@ public class CommentController : ControllerBase
 
         return Ok(comment.Data);
     }
-
 }

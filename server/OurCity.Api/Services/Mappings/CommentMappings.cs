@@ -1,5 +1,5 @@
-using OurCity.Api.Infrastructure.Database;
 using OurCity.Api.Common.Dtos.Comments;
+using OurCity.Api.Infrastructure.Database;
 
 namespace OurCity.Api.Services.Mappings;
 
@@ -22,14 +22,11 @@ public static class CommentMappings
             DownvotedUserIds = comment.DownvotedUserIds,
             IsDeleted = comment.IsDeleted,
             CreatedAt = comment.CreatedAt,
-            UpdatedAt = comment.UpdatedAt
+            UpdatedAt = comment.UpdatedAt,
         };
     }
 
-    public static Comment ToEntity(
-        this CommentCreateRequestDto commentCreateRequestDto,
-        int postId
-    )
+    public static Comment ToEntity(this CommentCreateRequestDto commentCreateRequestDto, int postId)
     {
         return new Comment
         {
@@ -37,7 +34,7 @@ public static class CommentMappings
             AuthorId = commentCreateRequestDto.AuthorId,
             Content = commentCreateRequestDto.Content,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
         };
     }
 

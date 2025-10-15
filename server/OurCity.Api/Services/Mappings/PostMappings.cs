@@ -22,7 +22,7 @@ public static class PostMappings
             DownvotedUserIds = post.DownvotedUserIds,
             Location = post.Location,
             Images = post.Images.Select(image => new ImageDto { Url = image.Url }).ToList(),
-            CommentIds = post.Comments?.Select(c => c.Id).ToList() ?? new List<int>()
+            CommentIds = post.Comments?.Select(c => c.Id).ToList() ?? new List<int>(),
         };
     }
 
