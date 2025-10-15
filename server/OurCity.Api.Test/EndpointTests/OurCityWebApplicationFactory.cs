@@ -22,7 +22,7 @@ public class OurCityWebApplicationFactory : WebApplicationFactory<Program>, IAsy
         ;
     }
 
-    public async Task DisposeAsync()
+    public new async Task DisposeAsync()
     {
         await _postgres.StopAsync();
     }
