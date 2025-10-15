@@ -15,7 +15,6 @@ namespace OurCity.Api.Controllers;
 /// <credits>
 /// Code taken largely from ChatGPT prompt asking for cookie authentication where it just takes the user submitted name for the identity
 /// </credits>
-
 [ApiController]
 [Route("[controller]")]
 public class AuthenticationController : ControllerBase

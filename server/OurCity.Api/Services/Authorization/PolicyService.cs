@@ -11,7 +11,6 @@ namespace OurCity.Api.Services.Authorization;
 /// <credits>
 /// Code was refined by ChatGPT
 /// </credits>
-
 public interface IPolicyService
 {
     Task<bool> CheckPolicy(ClaimsPrincipal user, Policy policy);

@@ -10,7 +10,6 @@ namespace OurCity.Api.Services.Authorization;
 /// <credits>
 /// Code inspired from my (Andre) WT3
 /// </credits>
-
 public class Policy
 {
     public static readonly Policy CanCreatePosts = new("CanCreatePosts");

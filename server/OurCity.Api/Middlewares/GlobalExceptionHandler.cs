@@ -9,7 +9,6 @@ namespace OurCity.Api.Middlewares;
 /// <credits>
 /// Code taken from combination of Microsoft docs + ChatGPT asking for global exception handler middleware
 /// </credits>
-
 public class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger;

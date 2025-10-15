@@ -6,7 +6,6 @@ namespace OurCity.Api.Controllers;
 /// <summary>
 /// AuthorizationController has endpoints that lets end users check what policies they have for OurCity
 /// </summary>
-
 [ApiController]
 [Route("[controller]")]
 public class AuthorizationController : ControllerBase

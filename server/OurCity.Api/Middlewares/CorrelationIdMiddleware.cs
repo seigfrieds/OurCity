@@ -8,7 +8,6 @@ namespace OurCity.Api.Middlewares;
 /// <credits>
 /// Code taken largely from ChatGPT, asking for middleware that adds correlation id to http requests + adds it to serilog logger
 /// </credits>
-
 public class CorrelationIdMiddleware
 {
     private readonly RequestDelegate _next;

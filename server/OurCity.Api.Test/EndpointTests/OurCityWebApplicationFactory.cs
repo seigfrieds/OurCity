@@ -13,7 +13,6 @@ namespace OurCity.Api.Test.EndpointTests;
 /// <credits>
 /// Code modified from ChatGPT response just asking how to call API endpoints for testing
 /// </credits>
-
 public class OurCityWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private readonly PostgreSqlContainer _postgres;
