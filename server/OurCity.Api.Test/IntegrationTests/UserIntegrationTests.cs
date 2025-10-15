@@ -12,7 +12,6 @@ public class UserIntegrationTests : IAsyncLifetime
         .WithImage("postgres:16.10")
         .Build();
     private AppDbContext _dbContext = null!; //null! -> tell compiler to trust it will be initialized
-    private User _testUser = null!;
 
     public async Task InitializeAsync()
     {
@@ -25,19 +24,6 @@ public class UserIntegrationTests : IAsyncLifetime
         _dbContext = new AppDbContext(options);
 
         await _dbContext.Database.EnsureCreatedAsync();
-
-        // Seed a generic user for tests
-        _testUser = new User
-        {
-            Id = 1,
-            Username = "Dummy",
-            DisplayName = "Dummy",
-            IsDeleted = false,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow,
-        };
-        _dbContext.Users.Add(_testUser);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DisposeAsync()
@@ -49,11 +35,10 @@ public class UserIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task FreshDbShouldReturnNothing()
     {
-        var postService = new PostService(new PostRepository(_dbContext));
-        var retrievedPost = await postService.GetPosts();
-
-        Assert.True(retrievedPost.IsSuccess);
-        Assert.NotNull(retrievedPost.Data);
-        Assert.Empty(retrievedPost.Data);
+        var userService = new UserService(new UserRepository(_dbContext));
+        var retrievedUsers = await userService.GetUsers();
+        
+        Assert.NotNull(retrievedUsers);
+        Assert.Empty(retrievedUsers);
     }
 }
