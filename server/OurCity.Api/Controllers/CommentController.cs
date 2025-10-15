@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using OurCity.Api.Common.Dtos;
 using OurCity.Api.Common.Dtos.Comments;
 using OurCity.Api.Services;
 
