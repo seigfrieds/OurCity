@@ -1,5 +1,3 @@
-using OurCity.Api.Common.Dtos.Post;
-
 namespace OurCity.Api.Common.Dtos.User;
 
 public class UserResponseDto

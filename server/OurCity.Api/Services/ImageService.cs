@@ -2,7 +2,6 @@
 /// Prompt: Help me create a boiler plate for a C# logic that uploads images to AWS S3 and saves the image URLs to a database.
 using Amazon.S3;
 using Amazon.S3.Transfer;
-using Microsoft.AspNetCore.Mvc;
 using OurCity.Api.Common;
 using OurCity.Api.Common.Dtos.Image;
 using OurCity.Api.Infrastructure;
