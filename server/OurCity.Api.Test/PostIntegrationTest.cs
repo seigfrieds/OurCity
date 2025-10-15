@@ -80,10 +80,10 @@ public class PostIntegrationTest : IAsyncLifetime
         {
             Assert.Equal(createdPost.Data.Id, retrievedPost.Data.Id);
             Assert.Equal(createdPost.Data.Title, retrievedPost.Data.Title);
+            Assert.Equal(_testUser.Id, retrievedPost.Data.AuthorId);
             Assert.Equal(createdPost.Data.Description, retrievedPost.Data.Description);
             Assert.Equal(createdPost.Data.Location, retrievedPost.Data.Location);
-            Assert.Equal(createdPost.Data.UpvotedUserIds, retrievedPost.Data.UpvotedUserIds);
-            Assert.Equal(createdPost.Data.DownvotedUserIds, retrievedPost.Data.DownvotedUserIds);
+            Assert.Equal(createdPost.Data.Votes, retrievedPost.Data.Votes);
             Assert.Equal(
                 createdPost.Data.Images.Select(i => i.Url),
                 retrievedPost.Data.Images.Select(i => i.Url)
@@ -110,9 +110,9 @@ public class PostIntegrationTest : IAsyncLifetime
         {
             Assert.Equal("Test Post", createdPost.Data.Title);
             Assert.Equal("This is a test post", createdPost.Data.Description);
+            Assert.Equal(_testUser.Id, createdPost.Data.AuthorId);
+            Assert.Equal(0, createdPost.Data.Votes);
             Assert.Null(createdPost.Data.Location);
-            Assert.Empty(createdPost.Data.UpvotedUserIds);
-            Assert.Empty(createdPost.Data.DownvotedUserIds);
             Assert.Empty(createdPost.Data.Images);
         });
     }
@@ -148,14 +148,14 @@ public class PostIntegrationTest : IAsyncLifetime
             Assert.Equal("Updated Test Post", updatedPost.Data.Title);
             Assert.Equal("This is an updatedPost test post", updatedPost.Data.Description);
             Assert.Equal("New Location", updatedPost.Data.Location);
-            Assert.Empty(createdPost.Data.UpvotedUserIds);
-            Assert.Empty(createdPost.Data.DownvotedUserIds);
+            Assert.Equal(_testUser.Id, updatedPost.Data.AuthorId);
+            Assert.Equal(0, updatedPost.Data.Votes);
             Assert.Empty(updatedPost.Data.Images);
         });
     }
 
     [Fact]
-    public async Task UpvoteShouldAddUserIdToUpvotedList()
+    public async Task UpvoteShouldAdd1Vote()
     {
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
@@ -167,8 +167,7 @@ public class PostIntegrationTest : IAsyncLifetime
 
         var createdPost = await postService.CreatePost(createDto);
         Assert.NotNull(createdPost.Data);
-        Assert.Empty(createdPost.Data.UpvotedUserIds);
-        Assert.Empty(createdPost.Data.DownvotedUserIds);
+        Assert.Equal(0, createdPost.Data.Votes);
 
         var userId = 1;
         var upvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
@@ -176,34 +175,145 @@ public class PostIntegrationTest : IAsyncLifetime
         Assert.True(upvotedPost.IsSuccess);
         Assert.NotNull(upvotedPost.Data);
 
-        Assert.Multiple(() =>
-        {
-            Assert.Single(upvotedPost.Data.UpvotedUserIds);
-            Assert.Contains(userId, upvotedPost.Data.UpvotedUserIds);
-            Assert.Empty(upvotedPost.Data.DownvotedUserIds);
-            Assert.DoesNotContain(userId, upvotedPost.Data.DownvotedUserIds);
-        });
+        Assert.Equal(1, upvotedPost.Data.Votes);
+    }
 
-        var removedUpvotePost = await postService.VotePost(
+    [Fact]
+    public async Task DownvoteShouldRemove1Vote()
+    {
+        var postService = new PostService(new PostRepository(_dbContext));
+        var createDto = new PostCreateRequestDto
+        {
+            AuthorId = _testUser.Id,
+            Title = "Test Post",
+            Description = "This is a test post",
+        };
+
+        var createdPost = await postService.CreatePost(createDto);
+        Assert.NotNull(createdPost.Data);
+        Assert.Equal(0, createdPost.Data.Votes);
+
+        var userId = 2;
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
+
+        Assert.True(downvotedPost.IsSuccess);
+        Assert.NotNull(downvotedPost.Data);
+
+        Assert.Equal(-1, downvotedPost.Data.Votes);
+    }
+
+    [Fact]
+    public async Task UpvoteShouldNegateDownvote()
+    {
+        var postService = new PostService(new PostRepository(_dbContext));
+        var createDto = new PostCreateRequestDto
+        {
+            AuthorId = _testUser.Id,
+            Title = "Test Post",
+            Description = "This is a test post",
+        };
+
+        var createdPost = await postService.CreatePost(createDto);
+        Assert.NotNull(createdPost.Data);
+        Assert.Equal(0, createdPost.Data.Votes);
+
+        var userId = 2;
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userId,
+            VoteType.Downvote
+        );
+
+        Assert.True(downvotedPost.IsSuccess);
+        Assert.NotNull(downvotedPost.Data);
+
+        Assert.Equal(-1, downvotedPost.Data.Votes);
+
+        var userIdTwo = 3;
+        var upvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userIdTwo,
+            VoteType.Upvote
+        );
+
+        Assert.True(upvotedPost.IsSuccess);
+        Assert.NotNull(upvotedPost.Data);
+
+        Assert.Equal(0, upvotedPost.Data.Votes);
+    }
+
+    [Fact]
+    public async Task DownvoteShouldNegateUpvote()
+    {
+        var postService = new PostService(new PostRepository(_dbContext));
+        var createDto = new PostCreateRequestDto
+        {
+            AuthorId = _testUser.Id,
+            Title = "Test Post",
+            Description = "This is a test post",
+        };
+
+        var createdPost = await postService.CreatePost(createDto);
+        Assert.NotNull(createdPost.Data);
+        Assert.Equal(0, createdPost.Data.Votes);
+
+        var userId = 2;
+        var upvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
+
+        Assert.True(upvotedPost.IsSuccess);
+        Assert.NotNull(upvotedPost.Data);
+
+        Assert.Equal(1, upvotedPost.Data.Votes);
+
+        var userIdTwo = 3;
+        var downvotedPost = await postService.VotePost(
+            createdPost.Data.Id,
+            userIdTwo,
+            VoteType.Downvote
+        );
+
+        Assert.True(downvotedPost.IsSuccess);
+        Assert.NotNull(downvotedPost.Data);
+
+        Assert.Equal(0, downvotedPost.Data.Votes);
+    }
+
+    [Fact]
+    public async Task DoubleUpvoteShouldNegatePreviousUpvote()
+    {
+        var postService = new PostService(new PostRepository(_dbContext));
+        var createDto = new PostCreateRequestDto
+        {
+            AuthorId = _testUser.Id,
+            Title = "Test Post",
+            Description = "This is a test post",
+        };
+        var createdPost = await postService.CreatePost(createDto);
+        Assert.NotNull(createdPost.Data);
+        Assert.Equal(0, createdPost.Data.Votes);
+
+        var userId = 2;
+        var upvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
+        Assert.True(upvotedPost.IsSuccess);
+        Assert.NotNull(upvotedPost.Data);
+        Assert.Equal(1, upvotedPost.Data.Votes);
+
+        var upvotedPostAgain = await postService.VotePost(
             createdPost.Data.Id,
             userId,
             VoteType.Upvote
         );
-
-        Assert.True(removedUpvotePost.IsSuccess);
-        Assert.NotNull(removedUpvotePost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Empty(removedUpvotePost.Data.UpvotedUserIds);
-            Assert.DoesNotContain(userId, removedUpvotePost.Data.UpvotedUserIds);
-            Assert.Empty(removedUpvotePost.Data.DownvotedUserIds);
-            Assert.DoesNotContain(userId, removedUpvotePost.Data.DownvotedUserIds);
-        });
+        Assert.True(upvotedPostAgain.IsSuccess);
+        Assert.NotNull(upvotedPostAgain.Data);
+        Assert.Equal(0, upvotedPostAgain.Data.Votes);
     }
 
     [Fact]
-    public async Task DownvoteShouldAddUserIdToDownvotedList()
+    public async Task DoubleDownvoteShouldNegatePreviousDownvote()
     {
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
@@ -212,142 +322,28 @@ public class PostIntegrationTest : IAsyncLifetime
             Title = "Test Post",
             Description = "This is a test post",
         };
-
         var createdPost = await postService.CreatePost(createDto);
         Assert.NotNull(createdPost.Data);
-        Assert.Empty(createdPost.Data.UpvotedUserIds);
-        Assert.Empty(createdPost.Data.DownvotedUserIds);
+        Assert.Equal(0, createdPost.Data.Votes);
 
-        var userId = 1;
+        var userId = 2;
         var downvotedPost = await postService.VotePost(
             createdPost.Data.Id,
             userId,
             VoteType.Downvote
         );
-
         Assert.True(downvotedPost.IsSuccess);
         Assert.NotNull(downvotedPost.Data);
+        Assert.Equal(-1, downvotedPost.Data.Votes);
 
-        Assert.Multiple(() =>
-        {
-            Assert.Empty(downvotedPost.Data.UpvotedUserIds);
-            Assert.DoesNotContain(userId, downvotedPost.Data.UpvotedUserIds);
-            Assert.Single(downvotedPost.Data.DownvotedUserIds);
-            Assert.Contains(userId, downvotedPost.Data.DownvotedUserIds);
-        });
-
-        var removedDownvotePost = await postService.VotePost(
+        var downvotedPostAgain = await postService.VotePost(
             createdPost.Data.Id,
             userId,
             VoteType.Downvote
         );
-
-        Assert.True(removedDownvotePost.IsSuccess);
-        Assert.NotNull(removedDownvotePost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Empty(removedDownvotePost.Data.UpvotedUserIds);
-            Assert.DoesNotContain(userId, removedDownvotePost.Data.UpvotedUserIds);
-            Assert.Empty(removedDownvotePost.Data.DownvotedUserIds);
-            Assert.DoesNotContain(userId, removedDownvotePost.Data.DownvotedUserIds);
-        });
-    }
-
-    [Fact]
-    public async Task UpvoteShouldRemoveUserFromDownvoteListIfExists()
-    {
-        var postService = new PostService(new PostRepository(_dbContext));
-        var createDto = new PostCreateRequestDto
-        {
-            AuthorId = _testUser.Id,
-            Title = "Test Post",
-            Description = "This is a test post",
-        };
-
-        var createdPost = await postService.CreatePost(createDto);
-        Assert.NotNull(createdPost.Data);
-        Assert.Empty(createdPost.Data.UpvotedUserIds);
-        Assert.Empty(createdPost.Data.DownvotedUserIds);
-
-        var userId = 1;
-        var downvotedPost = await postService.VotePost(
-            createdPost.Data.Id,
-            userId,
-            VoteType.Downvote
-        );
-
-        Assert.True(downvotedPost.IsSuccess);
-        Assert.NotNull(downvotedPost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Empty(downvotedPost.Data.UpvotedUserIds);
-            Assert.DoesNotContain(userId, downvotedPost.Data.UpvotedUserIds);
-            Assert.Single(downvotedPost.Data.DownvotedUserIds);
-            Assert.Contains(userId, downvotedPost.Data.DownvotedUserIds);
-        });
-
-        var upvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
-
-        Assert.True(upvotedPost.IsSuccess);
-        Assert.NotNull(upvotedPost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Single(upvotedPost.Data.UpvotedUserIds);
-            Assert.Contains(userId, upvotedPost.Data.UpvotedUserIds);
-            Assert.Empty(upvotedPost.Data.DownvotedUserIds);
-            Assert.DoesNotContain(userId, upvotedPost.Data.DownvotedUserIds);
-        });
-    }
-
-    [Fact]
-    public async Task DownvoteShouldRemoveUserFromUpvoteListIfExists()
-    {
-        var postService = new PostService(new PostRepository(_dbContext));
-        var createDto = new PostCreateRequestDto
-        {
-            AuthorId = _testUser.Id,
-            Title = "Test Post",
-            Description = "This is a test post",
-        };
-
-        var createdPost = await postService.CreatePost(createDto);
-        Assert.NotNull(createdPost.Data);
-        Assert.Empty(createdPost.Data.UpvotedUserIds);
-        Assert.Empty(createdPost.Data.DownvotedUserIds);
-
-        var userId = 1;
-        var upvotedPost = await postService.VotePost(createdPost.Data.Id, userId, VoteType.Upvote);
-
-        Assert.True(upvotedPost.IsSuccess);
-        Assert.NotNull(upvotedPost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Single(upvotedPost.Data.UpvotedUserIds);
-            Assert.Contains(userId, upvotedPost.Data.UpvotedUserIds);
-            Assert.Empty(upvotedPost.Data.DownvotedUserIds);
-            Assert.DoesNotContain(userId, upvotedPost.Data.DownvotedUserIds);
-        });
-
-        var downvotedPost = await postService.VotePost(
-            createdPost.Data.Id,
-            userId,
-            VoteType.Downvote
-        );
-
-        Assert.True(downvotedPost.IsSuccess);
-        Assert.NotNull(downvotedPost.Data);
-
-        Assert.Multiple(() =>
-        {
-            Assert.Empty(downvotedPost.Data.UpvotedUserIds);
-            Assert.DoesNotContain(userId, downvotedPost.Data.UpvotedUserIds);
-            Assert.Single(downvotedPost.Data.DownvotedUserIds);
-            Assert.Contains(userId, downvotedPost.Data.DownvotedUserIds);
-        });
+        Assert.True(downvotedPostAgain.IsSuccess);
+        Assert.NotNull(downvotedPostAgain.Data);
+        Assert.Equal(0, downvotedPostAgain.Data.Votes);
     }
 
     [Fact]
