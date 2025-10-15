@@ -5,6 +5,7 @@
 - Ensure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 - Ensure you have [.NET 9](https://dotnet.microsoft.com/en-us/download).
 - Ensure you have .env files setup
+  - The .env files should be in the /server folder
   - To run the dev environment, you will need .env.development (even if empty) or docker compose will error
   - To run the prod environment, you will need .env.production (even if empty) or docker compose will error
 
@@ -37,6 +38,8 @@ docker compose down
 ```
 
 To run migrations
+
+**NOTE: You may need to run migrations when initially running the app to populate your database. It is NOT automatically done.**
 
 ```sh
 docker compose --profile migrate up ourcity.migrate.dev --build
