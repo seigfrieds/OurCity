@@ -14,7 +14,8 @@ public class PostIntegrationTest : IAsyncLifetime
         .WithImage("postgres:16.10")
         .Build();
     private AppDbContext _dbContext = null!; //null! -> tell compiler to trust it will be initialized
-
+    private User _testUser = null!;
+    
     public async Task InitializeAsync()
     {
         await _postgres.StartAsync();
@@ -26,6 +27,18 @@ public class PostIntegrationTest : IAsyncLifetime
         _dbContext = new AppDbContext(options);
 
         await _dbContext.Database.EnsureCreatedAsync();
+
+        // Seed a generic user for tests
+        _testUser = new User
+        {
+            Id = 1,
+            DisplayName = "Dummy",
+            IsDeleted = false,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        _dbContext.Users.Add(_testUser);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DisposeAsync()
@@ -51,6 +64,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -83,6 +97,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -108,6 +123,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -144,6 +160,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -191,6 +208,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -242,6 +260,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -289,6 +308,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
@@ -336,6 +356,7 @@ public class PostIntegrationTest : IAsyncLifetime
         var postService = new PostService(new PostRepository(_dbContext));
         var createDto = new PostCreateRequestDto
         {
+            AuthorId = _testUser.Id,
             Title = "Test Post",
             Description = "This is a test post",
         };
