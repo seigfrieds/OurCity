@@ -1,3 +1,4 @@
+# ChatGPT used to guide various parts of docker compose setup
 services:
   ourcity.api.prod:
     container_name: ourcity.api.prod
