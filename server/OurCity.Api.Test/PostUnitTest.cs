@@ -5,10 +5,12 @@
 using Moq;
 using OurCity.Api.Common.Dtos.Post;
 using OurCity.Api.Common.Enum;
-using OurCity.Api.Services;
 using OurCity.Api.Infrastructure;
 using OurCity.Api.Infrastructure.Database;
+using OurCity.Api.Services;
 
+[Trait("Type", "Unit")]
+[Trait("Domain", "Post")]
 public class PostUnitTest
 {
     private readonly Mock<IPostRepository> _mockRepo;
@@ -24,10 +26,21 @@ public class PostUnitTest
     public async Task GetPostsWithExistingPosts()
     {
         // Arrange
-        var posts = new List<Post> {
-      new Post { Id = 1, Title = "Test Post 1", Description = "Test Description 1" },
-      new Post { Id = 2, Title = "Test Post 2", Description = "Test Description 2" },
-    };
+        var posts = new List<Post>
+        {
+            new Post
+            {
+                Id = 1,
+                Title = "Test Post 1",
+                Description = "Test Description 1",
+            },
+            new Post
+            {
+                Id = 2,
+                Title = "Test Post 2",
+                Description = "Test Description 2",
+            },
+        };
         _mockRepo.Setup(r => r.GetAllPosts()).ReturnsAsync(posts as IEnumerable<Post>);
 
         // Act
@@ -59,7 +72,12 @@ public class PostUnitTest
     public async Task GetPostByIdWithExistingPost()
     {
         // Arrange
-        var post = new Post { Id = 1, Title = "Test Post", Description = "Test Description" };
+        var post = new Post
+        {
+            Id = 1,
+            Title = "Test Post",
+            Description = "Test Description",
+        };
         _mockRepo.Setup(r => r.GetPostById(1)).ReturnsAsync(post);
 
         // Act
@@ -91,7 +109,14 @@ public class PostUnitTest
     public async Task UserDidUpvote()
     {
         // Arrange
-        var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int> { 5 } };
+        var post = new Post
+        {
+            Id = 1,
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test",
+            UpvotedUserIds = new List<int> { 5 },
+        };
         _mockRepo.Setup(r => r.GetPostById(1)).ReturnsAsync(post);
 
         // Act
@@ -109,7 +134,14 @@ public class PostUnitTest
     public async Task UserDidNotUpvote()
     {
         // Arrange
-        var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int> { 7 } };
+        var post = new Post
+        {
+            Id = 1,
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test",
+            UpvotedUserIds = new List<int> { 7 },
+        };
         _mockRepo.Setup(r => r.GetPostById(1)).ReturnsAsync(post);
 
         // Act
@@ -142,7 +174,14 @@ public class PostUnitTest
     public async Task UserDidDownvote()
     {
         // Arrange
-        var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test", DownvotedUserIds = new List<int> { 5 } };
+        var post = new Post
+        {
+            Id = 1,
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test",
+            DownvotedUserIds = new List<int> { 5 },
+        };
         _mockRepo.Setup(r => r.GetPostById(1)).ReturnsAsync(post);
 
         // Act
@@ -160,7 +199,14 @@ public class PostUnitTest
     public async Task UserDidNotDownvote()
     {
         // Arrange
-        var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test", DownvotedUserIds = new List<int> { 7 } };
+        var post = new Post
+        {
+            Id = 1,
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test",
+            DownvotedUserIds = new List<int> { 7 },
+        };
         _mockRepo.Setup(r => r.GetPostById(1)).ReturnsAsync(post);
 
         // Act
@@ -193,8 +239,19 @@ public class PostUnitTest
     public async Task CreatePostWhenValid()
     {
         // Arrange
-        var dto = new PostCreateRequestDto { AuthorId = 10, Title = "Test Post", Description = "Test Description" };
-        var post = new Post { Id = 1, AuthorId = 10, Title = "Test Post", Description = "Test Description" };
+        var dto = new PostCreateRequestDto
+        {
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test Description",
+        };
+        var post = new Post
+        {
+            Id = 1,
+            AuthorId = 10,
+            Title = "Test Post",
+            Description = "Test Description",
+        };
         _mockRepo.Setup(r => r.CreatePost(It.IsAny<Post>())).ReturnsAsync(post);
 
         // Act
@@ -214,9 +271,23 @@ public class PostUnitTest
     {
         // Arrange
         var postId = 1;
-        var updateDto = new PostUpdateRequestDto { Title = "Updated Title", Description = "Updated Description" };
-        var existingPost = new Post { Id = postId, Title = "Old Title", Description = "Old Description" };
-        var updatedPost = new Post { Id = postId, Title = "Updated Title", Description = "Updated Description" };
+        var updateDto = new PostUpdateRequestDto
+        {
+            Title = "Updated Title",
+            Description = "Updated Description",
+        };
+        var existingPost = new Post
+        {
+            Id = postId,
+            Title = "Old Title",
+            Description = "Old Description",
+        };
+        var updatedPost = new Post
+        {
+            Id = postId,
+            Title = "Updated Title",
+            Description = "Updated Description",
+        };
 
         _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
         _mockRepo.Setup(r => r.UpdatePost(It.IsAny<Post>())).ReturnsAsync(updatedPost);
@@ -239,8 +310,20 @@ public class PostUnitTest
         var postId = 1;
         var userId = 42;
         var voteType = VoteType.Upvote;
-        var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int>() };
-        var updatedPost = new Post { Id = postId, Title = "Test Post", Description = "Test", UpvotedUserIds = new List<int> { userId } };
+        var existingPost = new Post
+        {
+            Id = postId,
+            Title = "Test Post",
+            Description = "Test",
+            UpvotedUserIds = new List<int>(),
+        };
+        var updatedPost = new Post
+        {
+            Id = postId,
+            Title = "Test Post",
+            Description = "Test",
+            UpvotedUserIds = new List<int> { userId },
+        };
 
         _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
         _mockRepo.Setup(r => r.UpdatePost(It.IsAny<Post>())).ReturnsAsync(updatedPost);
@@ -260,7 +343,12 @@ public class PostUnitTest
     {
         // Arrange
         var postId = 1;
-        var existingPost = new Post { Id = postId, Title = "Test Post", Description = "Test" };
+        var existingPost = new Post
+        {
+            Id = postId,
+            Title = "Test Post",
+            Description = "Test",
+        };
 
         _mockRepo.Setup(r => r.GetPostById(postId)).ReturnsAsync(existingPost);
         _mockRepo.Setup(r => r.DeletePost(existingPost)).ReturnsAsync(existingPost);
