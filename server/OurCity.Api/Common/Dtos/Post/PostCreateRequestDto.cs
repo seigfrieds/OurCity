@@ -6,6 +6,7 @@ namespace OurCity.Api.Common.Dtos.Post;
 public class PostCreateRequestDto
 {
     [Required(ErrorMessage = "AuthorId is required")]
+    [Range(1, int.MaxValue, ErrorMessage = "AuthorId must be a positive integer")]
     public required int AuthorId { get; set; }
 
     [Required(ErrorMessage = "Title is required")]

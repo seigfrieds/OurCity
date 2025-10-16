@@ -97,6 +97,11 @@ public class PostController : ControllerBase
     {
         var post = await _postService.CreatePost(postCreateRequestDto);
 
+        if (!post.IsSuccess)
+        {
+            return BadRequest(post.Error);
+        }
+
         return CreatedAtAction(nameof(GetPosts), new { id = post.Data?.Id }, post.Data);
     }
 

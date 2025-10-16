@@ -33,10 +33,12 @@ public interface IPostService
 public class PostService : IPostService
 {
     private readonly IPostRepository _postRepository;
+    private readonly IUserRepository _userRepository;
 
-    public PostService(IPostRepository postRepository)
+    public PostService(IPostRepository postRepository, IUserRepository userRepository)
     {
         _postRepository = postRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<Result<IEnumerable<PostResponseDto>>> GetPosts()
@@ -99,9 +101,17 @@ public class PostService : IPostService
 
     public async Task<Result<PostResponseDto>> CreatePost(PostCreateRequestDto postCreateRequestDto)
     {
+        var author = await _userRepository.GetUserById(postCreateRequestDto.AuthorId);
+        
+        if (author == null)
+        {
+            return Result<PostResponseDto>.Failure("Author does not exist");
+        }
+
         var createdPost = await _postRepository.CreatePost(
             postCreateRequestDto.CreateDtoToEntity()
         );
+
         return Result<PostResponseDto>.Success(createdPost.ToDto());
     }
 
