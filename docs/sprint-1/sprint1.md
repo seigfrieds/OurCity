@@ -26,21 +26,21 @@ Top 3 tests for each category:
 
 ### Unit Tests:
 
-- [/server/OurCity.Api.Test/PostUnitTest.cs](/server/OurCity.Api.Test/PostUnitTest.cs): 
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L72](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L72): 
     ```cs
     GetPostByIdWithNoExistingPost()
     ```
     - Tests that when getting a post that does not exist with the given ID, it returns a failure message.
     - This ensures that this crucial method is able to handle incorrect data and can prevent silent failures and crashing pages.
 
-- [/server/OurCity.Api.Test/PostUnitTest.cs](/server/OurCity.Api.Test/PostUnitTest.cs) 
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L26](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L26) 
     ```cs
     GetPostsWithExistingPosts()
     ```
     - Tests that a list of posts is returned when there are existing posts.
     - This is part of the core functionality of our app which confirms that the main screen of our app works as expected.
 
-- [/server/OurCity.Api.Test/PostUnitTest.cs](/server/OurCity.Api.Test/PostUnitTest.cs) 
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L239](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/PostUnitTest.cs#L239) 
     ```cs
     CreatePostWhenValid()
     ```
@@ -48,19 +48,21 @@ Top 3 tests for each category:
     - This ensures that posts can be successfully created by the user and confirms that the data is in a valid state so as to not break any API calls later on.
 
 ### Integration Tests:
-- [/server/OurCity.Api.Test/IntegrationTests/UserIntegrationTests.cs](/server/OurCity.Api.Test/IntegrationTests/UserIntegrationTests.cs)
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/UserIntegrationTests.cs#L88](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/UserIntegrationTests.cs#L88)
     ```cs
     CreateUserWithExistingUsernameShouldFail()
     ```
     - Tests that the same username cannot be associated with multiple users in our database.
     - This enforces the constraint that usernames must be unique.
-- [/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs](/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs)
+
+- [/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs#L294)
     ```cs
     DoubleUpvoteShouldNegatePreviousUpvote()
     ```
     - Tests the case where if a post is upvoted, and then upvoted again, the original upvote is negated.
     - Ensures our upvoting logic is correct for edge cases like this.
-- [/server/OurCity.Api.Test/IntegrationTests/CommentIntegrationTests.cs](/server/OurCity.Api.Test/IntegrationTests/CommentIntegrationTests.cs)
+
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/CommentIntegrationTests.cs#L129](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/CommentIntegrationTests.cs#L129)
     ```cs
     GettingCommentsByPostIdShouldReturnComments()
     ```
