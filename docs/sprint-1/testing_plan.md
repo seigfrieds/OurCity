@@ -79,9 +79,9 @@ cd webapp
 npm i
 npm test
 ```
-## Reporting and Results  
-Explain where to find test reports (HTML, console, CI output) and how to interpret them.  
-Include screenshots or links if applicable (e.g., `/coverage/index.html`).
+## Reporting and Results
+
+### How to generate and access test coverage reports:
 
 **Backend `/server`**
 - `/OurCity.Api.Test/TestResults/`
