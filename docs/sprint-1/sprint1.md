@@ -11,7 +11,7 @@ The backend is missing unit tests for users and comments.
 
 This is because we felt that there was less importance towards them as it was just using mocking tools. To make up for that and to ensure quality, we put more emphasis on the integration tests.
 
-Can access the coverage report file at [/server/coveragereport/index.html](/server/coveragereport/index.html) (screenshot below). 
+After running the report generation command (see [/server/README.md](/server/README.md) for instructions), you can access the coverage report file at `/server/coveragereport/index.html` (screenshot below). 
 
 ![Backend coverage report](/docs/sprint-1/images/backend_coverage.png)
 
@@ -20,7 +20,7 @@ The frontend is missing unit tests for a few components.
 
 In general, the testing in the frontend was incomplete as we had run out of time to create them. To ensure quality, we were able to manually test these UI components which was simple because they only really checked that button presses emitted the correct signals and checked that text was rendered as expected.
 
-Can access the coverage report file at [/webapp/coverage/index.html](/webapp/coverage/index.html) (screenshot below)
+After running the report geneation command (see [/webapp/README.md](/webapp/README.md) for instructions), you can access the coverage report file at `/webapp/coverage/index.html` (screenshot below)
 
 ![Frontend coverage report](/docs/sprint-1/images/frontend_coverage.png)
 

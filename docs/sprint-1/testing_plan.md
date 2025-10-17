@@ -87,13 +87,13 @@ Include screenshots or links if applicable (e.g., `/coverage/index.html`).
 - `/OurCity.Api.Test/TestResults/`
     - Stores test coverage reports from XUnit/Coverlet
     - `coverage.cobertura.xml` contains the coverage details
-    - To produce test results and the coverage report, please follow instructions provided in the 'Run the tests' section in the `/server` [README.md](/server/README.md). There is a 'Produce a coverage report' subsection which provides the complete command.
-    - Coverage report will be generated in [/server/coveragereport/index.html](/server/coveragereport/index.html)
+    - To produce test results and the coverage report, please follow instructions provided in the 'Run the tests' section in the `/server` [README.md](/server/README.md). There is a 'Produce a coverage report' subsection which provides the complete command and instructions.
+    - Coverage report will be generated in `/server/coveragereport/index.html`
 
 **Frontend `/webapp`**
 - To generate a test coverage report for the frontend tests, the `npm test -- --coverage` command can be run.
 - You may need to install the coverage package beforehand locally, or, the command may prompt you to install the package during execution if not already installed.
-- Coverage report will be generated in [/webapp/coverage/index.html](/webapp/coverage/index.html)
+- Coverage report will be generated in `/webapp/coverage/index.html`
 
 ## Test Data and Environment Setup  
 No specific configuration or setup required for testing other than the initial project docker container setups for the frontend and backend. 
