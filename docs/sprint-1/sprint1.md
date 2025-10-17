@@ -7,14 +7,18 @@
 ## 2. Unit / Integration / Acceptance Testing
 
 ### Backend:
-The backend is missing unit tests for users and comments. This is because we felt that there was less importance towards them as it was just using mocking tools. To make up for that and to ensure quality, we put more emphasis on the integration tests.
+The backend is missing unit tests for users and comments.
+
+This is because we felt that there was less importance towards them as it was just using mocking tools. To make up for that and to ensure quality, we put more emphasis on the integration tests.
 
 Can access the coverage report file at [/server/coveragereport/index.html](/server/coveragereport/index.html) (screenshot below). 
 
 ![Backend coverage report](/docs/sprint-1/images/backend_coverage.png)
 
 ### Frontend: 
-The frontend is missing unit tests for a few components. In general, the testing in the frontend was incomplete as we had run out of time to create them. To ensure quality, we were able to manually test these components which was simple because they only really checked that button presses emitted the correct signals and checked that text was rendered as expected.
+The frontend is missing unit tests for a few components.
+
+In general, the testing in the frontend was incomplete as we had run out of time to create them. To ensure quality, we were able to manually test these UI components which was simple because they only really checked that button presses emitted the correct signals and checked that text was rendered as expected.
 
 Can access the coverage report file at [/webapp/coverage/index.html](/webapp/coverage/index.html) (screenshot below)
 
