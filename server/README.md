@@ -101,13 +101,16 @@ dotnet test --filter "Domain=Comment"
 etc
 ```
 
-Getting coverage
+**Produce a coverage report:**
 
-This works for MacOS (verified). Other shells may need different separators between commands (e.g. ;)
+The following works for MacOS (verified). Other shells may need different separators between commands (e.g. ;)
+
+In `/server`, run the following command to produce the coverage report:
 
 ```sh
 dotnet test --collect:"XPlat Code Coverage" && dotnet reportgenerator -reports:"**/OurCity.Api.Test/TestResults/**/coverage.cobertura.xml" -targetdir:"coveragereport" -reporttypes:Html && open coveragereport/index.html
 ```
+`/server/coveragereport/index.html` will contain the produced coverage report. 
 
 Note: The coverage generation creates a TestResults entry in OurCity.Api.Test. If you don't delete, future runs for checking coverage might include them.
 

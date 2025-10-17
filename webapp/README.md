@@ -103,6 +103,12 @@ Run tests on code change (watching for changes)
 npm run test:watch
 ```
 
+Run the tests and generate a coverage report
+
+```sh
+npm test -- --coverage
+```
+
 ### Linting and Formatting
 
 Run lint
