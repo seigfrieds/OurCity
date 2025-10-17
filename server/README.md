@@ -101,7 +101,7 @@ dotnet test --filter "Domain=Comment"
 etc
 ```
 
-Getting coverage
+Produce a coverage report
 
 This works for MacOS (verified). Other shells may need different separators between commands (e.g. ;)
 
