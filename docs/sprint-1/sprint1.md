@@ -59,7 +59,7 @@ Top 3 tests for each category:
     - Tests that the same username cannot be associated with multiple users in our database.
     - This enforces the constraint that usernames must be unique.
 
-- [/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs#L294)
+- [https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs#L294](https://github.com/seigfrieds/OurCity/blob/main/server/OurCity.Api.Test/IntegrationTests/PostIntegrationTests.cs#L294)
     ```cs
     DoubleUpvoteShouldNegatePreviousUpvote()
     ```
